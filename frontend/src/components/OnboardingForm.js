@@ -16,17 +16,28 @@ const OnboardingForm = () => {
 
     try {
       // Make API call
-      const response = await axios.post("https://skill-match-bot.onrender.com/api/matches", {
-        skills: skills.split(",").map((skill) => skill.trim()),
-        interests: interests.split(",").map((interest) => interest.trim()),
-      });
+      const response = await axios.post(
+        "https://skill-match-bot.onrender.com/api/matches",
+        {
+          skills: skills.split(",").map((skill) => skill.trim()),
+          interests: interests.split(",").map((interest) => interest.trim()),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       // Update matches state with response data
       setMatches(response.data);
       console.log("Matches:", response.data);
     } catch (err) {
       console.error("Error fetching matches:", err);
-      setError("An error occurred while fetching matches. Please try again.");
+      setError(
+        err.response?.data?.error ||
+          "An error occurred while fetching matches. Please try again."
+      );
     } finally {
       setLoading(false); // Stop loading
     }
@@ -34,133 +45,150 @@ const OnboardingForm = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>Find Your Perfect Side Hustle</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Enter Your Skills (comma-separated):</label>
-          <input
-            type="text"
-            value={skills}
-            onChange={(e) => setSkills(e.target.value)}
-            placeholder="e.g., coding, writing"
-            style={styles.input}
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label}>Enter Your Interests (comma-separated):</label>
-          <input
-            type="text"
-            value={interests}
-            onChange={(e) => setInterests(e.target.value)}
-            placeholder="e.g., design, photography"
-            style={styles.input}
-          />
-        </div>
-        <button
-          type="submit"
-          style={styles.button}
-          disabled={loading} // Disable button while loading
-        >
-          {loading ? "Finding Matches..." : "Find Matches"}
-        </button>
-      </form>
+      <div style={styles.card}>
+        <h1 style={styles.heading}>Find Your Perfect Side Hustle</h1>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Enter Your Skills (comma-separated):</label>
+            <input
+              type="text"
+              value={skills}
+              onChange={(e) => setSkills(e.target.value)}
+              placeholder="e.g., coding, writing"
+              style={styles.input}
+            />
+          </div>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Enter Your Interests (comma-separated):</label>
+            <input
+              type="text"
+              value={interests}
+              onChange={(e) => setInterests(e.target.value)}
+              placeholder="e.g., design, photography"
+              style={styles.input}
+            />
+          </div>
+          <button
+            type="submit"
+            style={styles.button}
+            disabled={loading} // Disable button while loading
+          >
+            {loading ? "Finding Matches..." : "Find Matches"}
+          </button>
+        </form>
 
-      {/* Display Error Message */}
-      {error && <div style={styles.error}>{error}</div>}
+        {/* Display Error Message */}
+        {error && <div style={styles.error}>{error}</div>}
 
-      {/* Display Matches */}
-      {matches.length > 0 && (
-        <div style={styles.results}>
-          <h2 style={styles.resultsHeading}>Recommended Side Hustles</h2>
-          <ul style={styles.resultsList}>
-            {matches.map((match, index) => (
-              <li key={index} style={styles.resultItem}>
-                {match}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {/* Display Matches */}
+        {matches.length > 0 && (
+          <div style={styles.results}>
+            <h2 style={styles.resultsHeading}>Recommended Side Hustles</h2>
+            <ul style={styles.resultsList}>
+              {matches.map((match, index) => (
+                <li key={index} style={styles.resultItem}>
+                  {match}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
 const styles = {
   container: {
-    padding: "10px",
-    fontFamily: "Arial, sans-serif",
-    maxWidth: "600px",
-    margin: "0 auto",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #2a2a72, #009ffd)", // Elegant gradient
+    padding: "20px",
+  },
+  card: {
+    background: "#fff", // White background
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+    borderRadius: "12px",
+    maxWidth: "500px",
+    width: "100%",
+    padding: "30px",
+    textAlign: "center",
   },
   heading: {
-    textAlign: "center",
     fontSize: "24px",
+    color: "#333",
     marginBottom: "20px",
-    color: "#fff", // White text
-    backgroundColor: "#007BFF", // Blue background
-    padding: "10px",
-    borderRadius: "5px",
+    fontWeight: "bold",
   },
   form: {
     marginBottom: "20px",
   },
   inputGroup: {
     marginBottom: "15px",
+    textAlign: "left",
   },
   label: {
     display: "block",
-    fontWeight: "bold",
+    fontWeight: "600",
     marginBottom: "5px",
-    fontSize: "16px",
+    fontSize: "14px",
+    color: "#555",
   },
   input: {
     width: "100%",
     padding: "12px",
-    borderRadius: "5px",
+    borderRadius: "8px",
     border: "1px solid #ccc",
     fontSize: "16px",
     boxSizing: "border-box",
+    transition: "border-color 0.2s",
   },
   button: {
     width: "100%",
     padding: "12px",
-    backgroundColor: "#28a745", // Green background
-    color: "#fff", // White text
+    backgroundColor: "#007BFF",
+    color: "#fff",
     border: "none",
-    borderRadius: "5px",
+    borderRadius: "8px",
     cursor: "pointer",
     fontSize: "16px",
-    marginTop: "10px",
+    transition: "background-color 0.3s",
+  },
+  buttonHover: {
+    backgroundColor: "#0056b3",
   },
   error: {
     color: "red",
     marginTop: "10px",
-    textAlign: "center",
+    fontWeight: "bold",
   },
   results: {
-    marginTop: "20px",
-    backgroundColor: "#f1f1f1", // Light grey background
-    padding: "15px",
-    borderRadius: "5px",
+    marginTop: "30px",
+    backgroundColor: "#f9f9f9",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
   },
   resultsHeading: {
-    fontSize: "20px",
-    marginBottom: "10px",
-    textAlign: "center",
-    color: "#333", // Darker text for contrast
+    fontSize: "18px",
+    color: "#333",
+    marginBottom: "15px",
   },
   resultsList: {
     listStyleType: "none",
     padding: 0,
   },
   resultItem: {
-    backgroundColor: "#ffffff", // White background
+    backgroundColor: "#fff",
     padding: "10px",
-    borderRadius: "5px",
-    marginBottom: "5px",
+    borderRadius: "8px",
+    marginBottom: "10px",
     textAlign: "center",
-    color: "#007BFF", // Blue text
-    border: "1px solid #ccc", // Add a border for better visibility
+    color: "#007BFF",
+    border: "1px solid #ddd",
+    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.05)",
   },
 };
 

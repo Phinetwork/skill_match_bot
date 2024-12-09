@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.INFO)
 # Allow cross-origin requests (CORS configuration)
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://skill-match-bot-frontend.onrender.com")
 CORS(app, resources={r"/*": {"origins": FRONTEND_URL}})
+app.logger.info(f"CORS enabled for: {FRONTEND_URL}")
 
 # Initialize database session (if connected)
 try:
@@ -28,6 +29,7 @@ except Exception as e:
 @app.route("/api/matches", methods=["POST"])
 def side_hustle_matches():
     app.logger.info("Request received at /api/matches")
+    app.logger.info(f"Request headers: {request.headers}")
     try:
         if request.method != "POST":
             app.logger.warning("Invalid method used for /api/matches")
@@ -49,6 +51,7 @@ def side_hustle_matches():
 @app.route("/api/skills", methods=["POST"])
 def skill_creation():
     app.logger.info("Request received at /api/skills")
+    app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.json
         app.logger.info(f"Request data: {data}")
@@ -66,6 +69,7 @@ def skill_creation():
 @app.route("/api/habits", methods=["POST"])
 def habit_tracker():
     app.logger.info("Request received at /api/habits")
+    app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.json
         app.logger.info(f"Request data: {data}")
