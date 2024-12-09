@@ -39,5 +39,5 @@ The Skill Match Bot is a web application that helps users discover side hustles 
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/your-repo/skill-match-bot.git
+git clone https://github.com/Phinetwork/skill-match-bot.git
 cd skill-match-bot 
