@@ -6,7 +6,11 @@ from skill_engine import recommend_skills
 from habit_engine import get_habit_recommendations
 from sentence_transformers import SentenceTransformer
 import os
-import logging
+import logging  # For logging
+from dotenv import load_dotenv
+
+# Load environment variables from the .env file
+load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -16,8 +20,9 @@ logging.basicConfig(level=logging.INFO)
 app.logger.info("Initializing the Skill Match Bot Backend")
 
 # Load the SentenceTransformer model globally to prevent reloading on every request
-model = SentenceTransformer("all-MiniLM-L6-v2")
-app.logger.info("SentenceTransformer model loaded successfully.")
+model_name = os.getenv("MODEL_NAME", "all-MiniLM-L6-v2")
+model = SentenceTransformer(model_name)
+app.logger.info(f"SentenceTransformer model '{model_name}' loaded successfully.")
 
 # Allow cross-origin requests (CORS configuration)
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://skill-match-bot-frontend.onrender.com")
@@ -35,7 +40,6 @@ except Exception as e:
 @app.route("/api/matches", methods=["POST"])
 def side_hustle_matches():
     app.logger.info("Request received at /api/matches")
-    app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.get_json()
         if not data:
@@ -57,7 +61,6 @@ def side_hustle_matches():
 @app.route("/api/skills", methods=["POST"])
 def skill_creation():
     app.logger.info("Request received at /api/skills")
-    app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.get_json()
         if not data:
@@ -78,7 +81,6 @@ def skill_creation():
 @app.route("/api/habits", methods=["POST"])
 def habit_tracker():
     app.logger.info("Request received at /api/habits")
-    app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.get_json()
         if not data:
@@ -108,4 +110,4 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", 5001))
     app.logger.info(f"Starting the app on port {port}")
     # Bind to 0.0.0.0 for external access
-    app.run(debug=True, host="0.0.0.0", port=port)
+    app.run(debug=False, host="0.0.0.0", port=port)
