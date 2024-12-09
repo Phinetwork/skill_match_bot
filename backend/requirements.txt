@@ -5,3 +5,4 @@ sqlalchemy
 sentence-transformers
 torch
 numpy
+gunicorn
