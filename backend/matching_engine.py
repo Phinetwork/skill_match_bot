@@ -86,3 +86,4 @@ def get_side_hustles(skills):
     except Exception as e:
         logger.error(f"Error while matching skills to side hustles: {e}")
         return [f"Error processing skills: {e}"]
+
