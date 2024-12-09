@@ -10,6 +10,12 @@
   z-index: 1000; /* Keeps it above other elements */
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .logo img {
   height: 60px; /* Slightly larger for better visibility */
   transition: transform 0.3s ease; /* Smooth scaling effect */
@@ -21,7 +27,7 @@
 
 .menu-toggle {
   display: none; /* Hidden by default for larger screens */
-  font-size: 1.5rem;
+  font-size: 1.8rem; /* Slightly larger for better visibility */
   background: none;
   border: none;
   color: white;
@@ -80,13 +86,14 @@
   .nav-menu {
     display: none; /* Hide the menu by default on smaller screens */
     flex-direction: column; /* Makes menu items stack vertically */
-    background-color: rgba(0, 0, 0, 0.8); /* Background for the mobile menu */
+    background-color: rgba(0, 0, 0, 0.9); /* Background for the mobile menu */
     position: absolute;
     top: 100%;
     right: 0; /* Align menu to the right */
     width: 70%; /* Adjust the width for a cleaner layout */
     padding: 10px 0;
     z-index: 999; /* Ensure it appears above other elements */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
   }
 
   .nav-menu.open {
@@ -95,13 +102,18 @@
 
   .nav-menu ul {
     flex-direction: column; /* Makes menu items stack vertically */
-    gap: 10px; /* Adjust spacing for vertical layout */
+    gap: 15px; /* Adjust spacing for vertical layout */
     text-align: left; /* Align text to the left for better readability */
     padding: 0 20px; /* Add padding for a neat look */
   }
 
   .nav-menu ul li a {
-    padding: 10px; /* Larger click/tap area for mobile */
+    padding: 12px; /* Larger click/tap area for mobile */
     font-size: 1.2rem; /* Slightly larger text for better readability */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Add a separator for clarity */
+  }
+
+  .nav-menu ul li a:last-child {
+    border-bottom: none; /* Remove the separator for the last item */
   }
 }

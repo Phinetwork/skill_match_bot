@@ -12,27 +12,46 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="logo">
-        <Link to="/"> {/* Use Link for routing */}
-          <img src={logo} alt="Skill Match Bot Logo" />
-        </Link>
+      <div className="header-content">
+        <div className="logo">
+          <Link to="/"> {/* Use Link for routing */}
+            <img src={logo} alt="Skill Match Bot Logo" />
+          </Link>
+        </div>
+        <button
+          className="menu-toggle"
+          onClick={toggleMenu}
+          aria-label="Toggle navigation"
+        >
+          ☰
+        </button>
       </div>
-      <button className="menu-toggle" onClick={toggleMenu} aria-label="Toggle navigation">
-        ☰
-      </button>
       <nav className={`nav-menu ${isMenuOpen ? "open" : ""}`}>
         <ul>
           <li>
-            <Link to="/">Home</Link> {/* Use Link for internal navigation */}
+            <Link to="/" onClick={() => setIsMenuOpen(false)}>
+              Home
+            </Link>
           </li>
           <li>
-            <Link to="/about">About</Link> {/* Use Link for internal navigation */}
+            <Link to="/about" onClick={() => setIsMenuOpen(false)}>
+              About
+            </Link>
           </li>
           <li>
-            <Link to="/services">Services</Link> {/* Use Link for internal navigation */}
+            <Link to="/onboarding" onClick={() => setIsMenuOpen(false)}>
+              Get Started
+            </Link>
           </li>
           <li>
-            <Link to="/contact">Contact</Link> {/* Use Link for internal navigation */}
+            <Link to="/services" onClick={() => setIsMenuOpen(false)}>
+              Services
+            </Link>
+          </li>
+          <li>
+            <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
+              Contact
+            </Link>
           </li>
         </ul>
       </nav>
