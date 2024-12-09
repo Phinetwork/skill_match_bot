@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Import Link from React Router
-import "./Header.css"; // Add CSS for styling the header
-import logo from "../assets/logo.png"; // Adjust path to your logo file
+import { Link } from "react-router-dom";
+import "./Header.css";
+import logo from "../assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,7 +14,7 @@ const Header = () => {
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <Link to="/"> {/* Use Link for routing */}
+          <Link to="/">
             <img src={logo} alt="Skill Match Bot Logo" />
           </Link>
         </div>
