@@ -44,12 +44,13 @@ except Exception as e:
     raise
 
 
-def get_side_hustles(skills):
+def get_side_hustles(skills, model):
     """
     Matches user-provided skills to potential side hustles using semantic similarity.
 
     Args:
         skills (list of str): A list of skills provided by the user.
+        model (SentenceTransformer): The preloaded SentenceTransformer model.
 
     Returns:
         list of str: A list of recommended side hustles based on input skills.
@@ -86,4 +87,5 @@ def get_side_hustles(skills):
     except Exception as e:
         logger.error(f"Error while matching skills to side hustles: {e}")
         return [f"Error processing skills: {e}"]
+
 
