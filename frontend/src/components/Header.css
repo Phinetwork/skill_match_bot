@@ -26,11 +26,6 @@
   border: none;
   color: white;
   cursor: pointer;
-  position: absolute; /* Absolutely position the toggle button */
-  right: 20px; /* Align to the right */
-  top: 50%; /* Vertically center */
-  transform: translateY(-50%); /* Adjust for perfect centering */
-  z-index: 1001; /* Ensure it stays above the menu */
 }
 
 .nav-menu {
@@ -83,11 +78,10 @@
     background-color: rgba(0, 0, 0, 0.8); /* Background for the mobile menu */
     position: absolute;
     top: 100%;
-    right: 0; /* Align menu to the right */
-    width: 60%; /* Limit menu width */
+    left: 0;
+    width: 100%;
     padding: 10px 0;
     z-index: 999; /* Ensure it appears above other elements */
-    border-radius: 0 0 8px 8px; /* Rounded corners for a polished look */
   }
 
   .nav-menu.open {
@@ -96,9 +90,8 @@
 
   .nav-menu ul {
     flex-direction: column; /* Makes menu items stack vertically */
-    gap: 15px; /* Adjust spacing for vertical layout */
-    text-align: left; /* Align items to the left */
-    margin-right: 20px; /* Add spacing from the edge */
+    gap: 10px; /* Adjust spacing for vertical layout */
+    text-align: center;
   }
 
   .nav-menu ul li a {
