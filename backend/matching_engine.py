@@ -9,14 +9,14 @@ import os
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Load the pre-trained sentence transformer model
+# Load the pre-trained SentenceTransformer model
 try:
     model_name = os.getenv("MODEL_NAME", "all-MiniLM-L6-v2")
-    logger.info(f"Loading the sentence transformer model: {model_name}...")
+    logger.info(f"Loading the SentenceTransformer model: {model_name}...")
     model = SentenceTransformer(model_name)
     logger.info("Model loaded successfully.")
 except Exception as e:
-    logger.error(f"Failed to load sentence transformer model: {e}")
+    logger.error(f"Failed to load SentenceTransformer model: {e}")
     raise
 
 # Define the mapping of side hustles
@@ -42,7 +42,8 @@ CORPUS_EMBEDDINGS_FILE = 'corpus_embeddings.pt'
 # Load precomputed corpus embeddings
 try:
     logger.info(f"Loading precomputed corpus embeddings from '{CORPUS_EMBEDDINGS_FILE}'...")
-    CORPUS_EMBEDDINGS = torch.load(CORPUS_EMBEDDINGS_FILE)
+    # Map the storage to CPU to ensure compatibility with Render's environment
+    CORPUS_EMBEDDINGS = torch.load(CORPUS_EMBEDDINGS_FILE, map_location='cpu')
     logger.info("Corpus embeddings loaded successfully.")
 except FileNotFoundError:
     logger.error(f"Embeddings file '{CORPUS_EMBEDDINGS_FILE}' not found. Please ensure it is present.")
