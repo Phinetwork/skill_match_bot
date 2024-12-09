@@ -1,6 +1,7 @@
 from sentence_transformers import SentenceTransformer, util
 import torch
 import logging
+import os
 
 # Configure logging for debugging
 logging.basicConfig(level=logging.INFO)
@@ -8,8 +9,9 @@ logger = logging.getLogger(__name__)
 
 # Load the pre-trained sentence transformer model
 try:
-    logger.info("Loading the sentence transformer model...")
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+    model_name = os.getenv("MODEL_NAME", "all-MiniLM-L6-v2")
+    logger.info(f"Loading the sentence transformer model: {model_name}...")
+    model = SentenceTransformer(model_name)
     logger.info("Model loaded successfully.")
 except Exception as e:
     logger.error(f"Failed to load sentence transformer model: {e}")
@@ -56,12 +58,12 @@ def get_side_hustles(skills):
         logger.warning("Invalid input: skills must be a non-empty list of strings.")
         return ["Please provide a valid list of skills."]
 
-    recommendations = []
-
     try:
         # Embed the user's skills for semantic comparison
         logger.info(f"Embedding user-provided skills: {skills}")
         skill_embeddings = model.encode(skills, convert_to_tensor=True)
+
+        recommendations = set()  # Use a set to automatically remove duplicates
 
         for skill, embedding in zip(skills, skill_embeddings):
             # Calculate similarity scores between the skill and the corpus
@@ -71,16 +73,16 @@ def get_side_hustles(skills):
             top_matches = torch.topk(similarity_scores, k=3)
 
             # Log similarity scores and matched indices
-            logger.info(f"Top matches for '{skill}': {top_matches.indices.tolist()}")
+            logger.debug(f"Top matches for '{skill}': {top_matches.indices.tolist()}")
 
             # Add the top matches to recommendations
             for idx in top_matches.indices:
-                recommendations.append(CORPUS[idx.item()])
+                recommendations.add(CORPUS[idx.item()])
 
-        # Return unique recommendations sorted alphabetically
-        unique_recommendations = sorted(set(recommendations))
-        logger.info(f"Generated recommendations: {unique_recommendations}")
-        return unique_recommendations
+        # Return sorted recommendations
+        sorted_recommendations = sorted(recommendations)
+        logger.info(f"Generated recommendations: {sorted_recommendations}")
+        return sorted_recommendations
     except Exception as e:
         logger.error(f"Error while matching skills to side hustles: {e}")
         return [f"Error processing skills: {e}"]

@@ -4,6 +4,7 @@ from database import SessionLocal
 from matching_engine import get_side_hustles
 from skill_engine import recommend_skills
 from habit_engine import get_habit_recommendations
+from sentence_transformers import SentenceTransformer
 import os
 import logging
 
@@ -13,6 +14,10 @@ app = Flask(__name__)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 app.logger.info("Initializing the Skill Match Bot Backend")
+
+# Load the SentenceTransformer model globally to prevent reloading on every request
+model = SentenceTransformer("all-MiniLM-L6-v2")
+app.logger.info("SentenceTransformer model loaded successfully.")
 
 # Allow cross-origin requests (CORS configuration)
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://skill-match-bot-frontend.onrender.com")
@@ -41,7 +46,8 @@ def side_hustle_matches():
         if not skills:
             return jsonify({"error": "Skills data is missing"}), 400
 
-        matches = get_side_hustles(skills)
+        # Pass the preloaded model to the matching engine
+        matches = get_side_hustles(skills, model)
         app.logger.info(f"Matches found: {matches}")
         return jsonify(matches)
     except Exception as e:
@@ -98,7 +104,7 @@ def home():
 
 # Main entry point
 if __name__ == "__main__":
-    # Use Render-provided PORT environment variable, default to 5000 if not set
+    # Use Render-provided PORT environment variable, default to 5001 if not set
     port = int(os.getenv("PORT", 5001))
     app.logger.info(f"Starting the app on port {port}")
     # Bind to 0.0.0.0 for external access
