@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: transparent; /* Completely transparent */
+  padding: 15px 20px; /* Reduced padding for better layout */
+  background-color: transparent; /* Transparent background */
   color: white;
   position: fixed; /* Sticks the header to the top */
   width: 100%; /* Ensures it spans the full width */
@@ -17,26 +17,26 @@
 }
 
 .logo img {
-  height: 60px; /* Slightly larger for better visibility */
+  height: 60px; /* Adjusted for visibility */
   transition: transform 0.3s ease; /* Smooth scaling effect */
 }
 
 .logo img:hover {
-  transform: scale(1.1); /* Logo enlarges slightly on hover */
+  transform: scale(1.1); /* Enlarge slightly on hover */
 }
 
 .menu-toggle {
-  display: none; /* Hidden by default for larger screens */
+  display: none; /* Hidden on larger screens */
   font-size: 1.8rem; /* Slightly larger for better visibility */
   background: none;
   border: none;
   color: white;
   cursor: pointer;
-  position: absolute; /* Position toggle button */
-  right: 20px; /* Align it to the right */
-  top: 50%; /* Vertically center it */
-  transform: translateY(-50%); /* Adjust for centering */
-  z-index: 1001; /* Ensure it stays above other elements */
+  position: absolute; /* Positioned relative to parent */
+  right: 20px; /* Align to the right */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Offset for perfect centering */
+  z-index: 1001; /* Stays above menu */
 }
 
 .nav-menu {
@@ -44,76 +44,47 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 20px; /* Adds spacing between menu items */
-}
-
-.nav-menu ul {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 20px;
-}
-
-.nav-menu ul li {
-  position: relative; /* For dropdown menus if needed later */
-}
-
-.nav-menu ul li a {
-  color: #f0f8ff; /* Softer white for readability */
-  text-decoration: none;
-  font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.nav-menu ul li a:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent hover effect */
-  color: #fff; /* Contrasting white text on hover */
+  gap: 20px; /* Space between items */
 }
 
 .nav-menu.open {
-  display: flex; /* Ensures the menu is displayed when open */
-  flex-direction: column; /* Stacks items vertically */
+  display: flex; /* Display menu when open */
+  flex-direction: column; /* Stack items vertically */
+  background-color: rgba(0, 0, 0, 0.9); /* Mobile menu background */
+  position: absolute;
+  top: 100%; /* Below header */
+  right: 0; /* Align to the right */
+  width: 70%; /* Adjust for cleaner layout */
+  padding: 10px 0;
+  z-index: 999; /* Ensure it stays on top */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.nav-menu ul {
+  flex-direction: column; /* Stack menu items */
+  gap: 15px; /* Spacing between items */
+  text-align: left; /* Left-align items */
+  padding: 0 20px; /* Padding for cleaner layout */
+}
+
+.nav-menu ul li a {
+  padding: 12px; /* Larger tap area */
+  font-size: 1.2rem; /* Slightly larger text */
+  color: white;
+  text-decoration: none; /* Remove underline */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Separator */
+}
+
+.nav-menu ul li a:last-child {
+  border-bottom: none; /* Remove last separator */
 }
 
 @media (max-width: 768px) {
   .menu-toggle {
-    display: block; /* Show the toggle button on smaller screens */
+    display: block; /* Show on smaller screens */
   }
 
   .nav-menu {
-    display: none; /* Hide the menu by default on smaller screens */
-    flex-direction: column; /* Makes menu items stack vertically */
-    background-color: rgba(0, 0, 0, 0.9); /* Background for the mobile menu */
-    position: absolute;
-    top: 100%;
-    right: 0; /* Align menu to the right */
-    width: 70%; /* Adjust the width for a cleaner layout */
-    padding: 10px 0;
-    z-index: 999; /* Ensure it appears above other elements */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
-  }
-
-  .nav-menu.open {
-    display: flex; /* Display the menu when it's open */
-  }
-
-  .nav-menu ul {
-    flex-direction: column; /* Makes menu items stack vertically */
-    gap: 15px; /* Adjust spacing for vertical layout */
-    text-align: left; /* Align text to the left for better readability */
-    padding: 0 20px; /* Add padding for a neat look */
-  }
-
-  .nav-menu ul li a {
-    padding: 12px; /* Larger click/tap area for mobile */
-    font-size: 1.2rem; /* Slightly larger text for better readability */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Add a separator for clarity */
-  }
-
-  .nav-menu ul li a:last-child {
-    border-bottom: none; /* Remove the separator for the last item */
+    display: none; /* Hide by default */
   }
 }
