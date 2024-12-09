@@ -7,3 +7,16 @@ services:
     envVars:
       - key: DATABASE_URL
         value: postgresql://skill_match_db_user:LaE1a5nDRxJJOSihq2kwy8z8kZblqkEw@dpg-ctb33l9opnds73ek8aa0-a.oregon-postgres.render.com/skill_match_db
+
+  - type: web
+    name: skill-match-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/build
+    routes:
+      - type: rewrite
+        source: /api/<path>
+        destination: https://skill-match-backend.onrender.com/api/<path>
+      - type: rewrite
+        source: /*
+        destination: /index.html
