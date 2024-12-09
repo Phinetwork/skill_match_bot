@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: skill-match-backend
+    env: python
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && python app.py
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://skill_match_db_user:LaE1a5nDRxJJOSihq2kwy8z8kZblqkEw@dpg-ctb33l9opnds73ek8aa0-a.oregon-postgres.render.com/skill_match_db
