@@ -99,7 +99,7 @@ def home():
 # Main entry point
 if __name__ == "__main__":
     # Use Render-provided PORT environment variable, default to 5000 if not set
-    port = int(os.getenv("PORT", 5000))
+    port = int(os.getenv("PORT", 5001))
     app.logger.info(f"Starting the app on port {port}")
     # Bind to 0.0.0.0 for external access
     app.run(debug=True, host="0.0.0.0", port=port)
