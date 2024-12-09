@@ -5,7 +5,7 @@ from matching_engine import get_side_hustles
 from skill_engine import recommend_skills
 from habit_engine import get_habit_recommendations
 import os
-import logging  # For logging
+import logging
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -33,6 +33,9 @@ def side_hustle_matches():
     app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid JSON payload"}), 400
+
         app.logger.info(f"Request data: {data}")
         skills = data.get("skills", [])
         if not skills:
@@ -51,6 +54,9 @@ def skill_creation():
     app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid JSON payload"}), 400
+
         app.logger.info(f"Request data: {data}")
         interests = data.get("interests", [])
         if not interests:
@@ -69,6 +75,9 @@ def habit_tracker():
     app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.get_json()
+        if not data:
+            return jsonify({"error": "Invalid JSON payload"}), 400
+
         app.logger.info(f"Request data: {data}")
         side_hustle = data.get("side_hustle", "")
         if not side_hustle:
@@ -89,7 +98,7 @@ def home():
 
 # Main entry point
 if __name__ == "__main__":
-    # Get the PORT from the environment (default to 5000 for local testing)
+    # Use Render-provided PORT environment variable, default to 5000 if not set
     port = int(os.getenv("PORT", 5000))
     app.logger.info(f"Starting the app on port {port}")
     # Bind to 0.0.0.0 for external access
