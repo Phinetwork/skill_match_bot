@@ -96,7 +96,10 @@ const styles = {
     textAlign: "center",
     fontSize: "24px",
     marginBottom: "20px",
-    color: "#333",
+    color: "#fff", // White text
+    backgroundColor: "#007BFF", // Blue background
+    padding: "10px",
+    borderRadius: "5px",
   },
   form: {
     marginBottom: "20px",
@@ -121,8 +124,8 @@ const styles = {
   button: {
     width: "100%",
     padding: "12px",
-    backgroundColor: "#007BFF",
-    color: "#fff",
+    backgroundColor: "#28a745", // Green background
+    color: "#fff", // White text
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
@@ -136,22 +139,28 @@ const styles = {
   },
   results: {
     marginTop: "20px",
+    backgroundColor: "#f1f1f1", // Light grey background
+    padding: "15px",
+    borderRadius: "5px",
   },
   resultsHeading: {
     fontSize: "20px",
     marginBottom: "10px",
     textAlign: "center",
+    color: "#333", // Darker text for contrast
   },
   resultsList: {
     listStyleType: "none",
     padding: 0,
   },
   resultItem: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#ffffff", // White background
     padding: "10px",
     borderRadius: "5px",
     marginBottom: "5px",
     textAlign: "center",
+    color: "#007BFF", // Blue text
+    border: "1px solid #ccc", // Add a border for better visibility
   },
 };
 
