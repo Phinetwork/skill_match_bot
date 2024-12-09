@@ -52,6 +52,16 @@ const Header = () => {
                 Contact
               </Link>
             </li>
+            <li>
+              <a
+                href="https://github.com/Phinetwork/skill_match_bot"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Open Source Code
+              </a>
+            </li>
           </ul>
         </nav>
       </div>
@@ -60,3 +70,4 @@ const Header = () => {
 };
 
 export default Header;
+
