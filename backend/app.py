@@ -4,16 +4,21 @@ from database import SessionLocal
 from matching_engine import get_side_hustles
 from skill_engine import recommend_skills
 from habit_engine import get_habit_recommendations
+import os  # For reading environment variables
 
+# Initialize Flask app
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins for development
 
-# Comment out if database is not set up yet
+# Allow cross-origin requests (CORS configuration)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+# Initialize database session (if connected)
 try:
     session = SessionLocal()
 except Exception as e:
     print("Database not connected. Proceeding without it.")
 
+# Routes
 @app.route("/api/matches", methods=["POST"])
 def side_hustle_matches():
     data = request.json
@@ -41,5 +46,14 @@ def habit_tracker():
     habits = get_habit_recommendations(side_hustle)
     return jsonify(habits)
 
+# Root endpoint to verify deployment
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "Skill Match Bot Backend is running!"})
+
+# Main entry point
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    # Get the PORT from the environment (default to 5000 for local testing)
+    port = int(os.getenv("PORT", 5000))
+    # Bind to 0.0.0.0 for external access
+    app.run(debug=True, host="0.0.0.0", port=port)
