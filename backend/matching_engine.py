@@ -1,9 +1,19 @@
 from sentence_transformers import SentenceTransformer, util
-import torch  # Required for topk functionality
-import numpy as np
+import torch
+import logging
 
-# Load a pre-trained sentence transformer model for semantic similarity
-model = SentenceTransformer("all-MiniLM-L6-v2")
+# Configure logging for debugging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Load the pre-trained sentence transformer model
+try:
+    logger.info("Loading the sentence transformer model...")
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    logger.info("Model loaded successfully.")
+except Exception as e:
+    logger.error(f"Failed to load sentence transformer model: {e}")
+    raise
 
 # Define the mapping of side hustles
 SIDE_HUSTLES = {
@@ -19,46 +29,58 @@ SIDE_HUSTLES = {
     "fitness": ["Personal trainer", "Fitness blogger", "Online fitness coach"],
 }
 
-# Create a corpus of side hustle descriptions for AI matching
-CORPUS = {key: value for key, values in SIDE_HUSTLES.items() for value in values}
+# Prepare a flat list of side hustle descriptions
+CORPUS = [description for sublist in SIDE_HUSTLES.values() for description in sublist]
 
-# Embed the side hustle descriptions for comparison
-CORPUS_EMBEDDINGS = model.encode(list(CORPUS.values()), convert_to_tensor=True)
+# Embed the side hustle descriptions for semantic similarity comparisons
+try:
+    logger.info("Embedding side hustle descriptions...")
+    CORPUS_EMBEDDINGS = model.encode(CORPUS, convert_to_tensor=True)
+    logger.info("Corpus embeddings created successfully.")
+except Exception as e:
+    logger.error(f"Failed to embed side hustle descriptions: {e}")
+    raise
 
 
 def get_side_hustles(skills):
     """
-    Matches skills to potential side hustles using semantic similarity.
+    Matches user-provided skills to potential side hustles using semantic similarity.
 
     Args:
-        skills (list): A list of skills provided by the user.
+        skills (list of str): A list of skills provided by the user.
 
     Returns:
-        list: A list of recommended side hustles based on input skills.
+        list of str: A list of recommended side hustles based on input skills.
     """
-    if not skills:
-        return ["Please provide at least one skill."]
+    if not skills or not isinstance(skills, list):
+        logger.warning("Invalid input: skills must be a non-empty list of strings.")
+        return ["Please provide a valid list of skills."]
 
     recommendations = []
 
     try:
-        # Embed user-provided skills for comparison
+        # Embed the user's skills for semantic comparison
+        logger.info(f"Embedding user-provided skills: {skills}")
         skill_embeddings = model.encode(skills, convert_to_tensor=True)
 
         for skill, embedding in zip(skills, skill_embeddings):
-            # Calculate similarity scores with CORPUS_EMBEDDINGS
+            # Calculate similarity scores between the skill and the corpus
             similarity_scores = util.pytorch_cos_sim(embedding, CORPUS_EMBEDDINGS)[0]
 
-            # Get top 3 matches
+            # Get the top 3 most similar side hustles
             top_matches = torch.topk(similarity_scores, k=3)
 
-            # Append the matching side hustles
+            # Log similarity scores and matched indices
+            logger.info(f"Top matches for '{skill}': {top_matches.indices.tolist()}")
+
+            # Add the top matches to recommendations
             for idx in top_matches.indices:
-                recommendations.append(list(CORPUS.values())[idx.item()])
+                recommendations.append(CORPUS[idx.item()])
 
-        # Return unique recommendations
-        return list(set(recommendations))
+        # Return unique recommendations sorted alphabetically
+        unique_recommendations = sorted(set(recommendations))
+        logger.info(f"Generated recommendations: {unique_recommendations}")
+        return unique_recommendations
     except Exception as e:
-        # Handle unexpected errors gracefully
+        logger.error(f"Error while matching skills to side hustles: {e}")
         return [f"Error processing skills: {e}"]
-

@@ -5,7 +5,7 @@ from matching_engine import get_side_hustles
 from skill_engine import recommend_skills
 from habit_engine import get_habit_recommendations
 import os
-import logging  # For logging
+import logging
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -36,7 +36,7 @@ def side_hustle_matches():
             return jsonify({"error": "Method not allowed"}), 405
 
         data = request.json
-        app.logger.info(f"Request data: {data}")
+        app.logger.info(f"Raw request data: {data}")
         skills = data.get("skills", [])
         if not skills:
             return jsonify({"error": "Skills data is missing"}), 400
@@ -54,7 +54,7 @@ def skill_creation():
     app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.json
-        app.logger.info(f"Request data: {data}")
+        app.logger.info(f"Raw request data: {data}")
         interests = data.get("interests", [])
         if not interests:
             return jsonify({"error": "Interests data is missing"}), 400
@@ -72,7 +72,7 @@ def habit_tracker():
     app.logger.info(f"Request headers: {request.headers}")
     try:
         data = request.json
-        app.logger.info(f"Request data: {data}")
+        app.logger.info(f"Raw request data: {data}")
         side_hustle = data.get("side_hustle", "")
         if not side_hustle:
             return jsonify({"error": "Side hustle data is missing"}), 400
@@ -89,6 +89,11 @@ def habit_tracker():
 def home():
     app.logger.info("Root endpoint accessed")
     return jsonify({"message": "Skill Match Bot Backend is running!"})
+
+@app.errorhandler(405)
+def method_not_allowed(e):
+    app.logger.warning(f"Method not allowed: {request.method}")
+    return jsonify({"error": "Method not allowed"}), 405
 
 # Main entry point
 if __name__ == "__main__":

@@ -4,18 +4,17 @@ import axios from "axios";
 const OnboardingForm = () => {
   const [skills, setSkills] = useState("");
   const [interests, setInterests] = useState("");
-  const [matches, setMatches] = useState([]); // State for storing fetched matches
-  const [loading, setLoading] = useState(false); // State for tracking loading status
-  const [error, setError] = useState(""); // State for storing error messages
+  const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
-    setError(""); // Clear previous errors
-    setMatches([]); // Clear previous matches
+    setLoading(true);
+    setError("");
+    setMatches([]);
 
     try {
-      // Make API call
       const response = await axios.post(
         "https://skill-match-bot.onrender.com/api/matches",
         {
@@ -29,9 +28,7 @@ const OnboardingForm = () => {
         }
       );
 
-      // Update matches state with response data
       setMatches(response.data);
-      console.log("Matches:", response.data);
     } catch (err) {
       console.error("Error fetching matches:", err);
       setError(
@@ -39,7 +36,7 @@ const OnboardingForm = () => {
           "An error occurred while fetching matches. Please try again."
       );
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -49,38 +46,49 @@ const OnboardingForm = () => {
         <h1 style={styles.heading}>Find Your Perfect Side Hustle</h1>
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Enter Your Skills (comma-separated):</label>
+            <label htmlFor="skills" style={styles.label}>
+              Enter Your Skills (comma-separated):
+            </label>
             <input
+              id="skills"
               type="text"
               value={skills}
               onChange={(e) => setSkills(e.target.value)}
               placeholder="e.g., coding, writing"
               style={styles.input}
+              aria-label="Enter skills"
             />
           </div>
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Enter Your Interests (comma-separated):</label>
+            <label htmlFor="interests" style={styles.label}>
+              Enter Your Interests (comma-separated):
+            </label>
             <input
+              id="interests"
               type="text"
               value={interests}
               onChange={(e) => setInterests(e.target.value)}
               placeholder="e.g., design, photography"
               style={styles.input}
+              aria-label="Enter interests"
             />
           </div>
           <button
             type="submit"
-            style={styles.button}
-            disabled={loading} // Disable button while loading
+            style={{
+              ...styles.button,
+              backgroundColor: loading ? "#ccc" : "#007BFF",
+              cursor: loading ? "not-allowed" : "pointer",
+            }}
+            disabled={loading}
+            aria-label="Submit to find matches"
           >
             {loading ? "Finding Matches..." : "Find Matches"}
           </button>
         </form>
 
-        {/* Display Error Message */}
         {error && <div style={styles.error}>{error}</div>}
 
-        {/* Display Matches */}
         {matches.length > 0 && (
           <div style={styles.results}>
             <h2 style={styles.resultsHeading}>Recommended Side Hustles</h2>
@@ -104,12 +112,13 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #2a2a72, #009ffd)", // Elegant gradient
+    background: "linear-gradient(135deg, #2a2a72, #009ffd)",
     padding: "20px",
+    boxSizing: "border-box",
   },
   card: {
-    background: "#fff", // White background
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+    background: "#fff",
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
     borderRadius: "12px",
     maxWidth: "500px",
     width: "100%",
@@ -148,16 +157,10 @@ const styles = {
   button: {
     width: "100%",
     padding: "12px",
-    backgroundColor: "#007BFF",
-    color: "#fff",
-    border: "none",
     borderRadius: "8px",
-    cursor: "pointer",
+    color: "#fff",
     fontSize: "16px",
     transition: "background-color 0.3s",
-  },
-  buttonHover: {
-    backgroundColor: "#0056b3",
   },
   error: {
     color: "red",
