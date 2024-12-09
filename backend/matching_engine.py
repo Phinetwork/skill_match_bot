@@ -70,12 +70,14 @@ def get_side_hustles(skills):
     try:
         logger.info(f"Embedding user-provided skills: {skills}")
         skill_embeddings = model.encode(skills, convert_to_tensor=True)
+        logger.info("Skill embeddings generated successfully.")
 
         recommendations = set()  # Use a set to automatically remove duplicates
 
         for skill, embedding in zip(skills, skill_embeddings):
             logger.info(f"Calculating similarity for skill: '{skill}'")
             similarity_scores = util.pytorch_cos_sim(embedding, CORPUS_EMBEDDINGS)[0]
+            logger.info(f"Similarity scores computed for skill: '{skill}'")
 
             # Get the top 3 most similar side hustles
             top_matches = torch.topk(similarity_scores, k=3)
@@ -83,7 +85,9 @@ def get_side_hustles(skills):
 
             # Add the top matches to recommendations
             for idx in top_matches.indices:
-                recommendations.add(CORPUS[idx.item()])
+                recommended_side_hustle = CORPUS[idx.item()]
+                logger.info(f"Adding side hustle: '{recommended_side_hustle}'")
+                recommendations.add(recommended_side_hustle)
 
         # Return sorted recommendations
         sorted_recommendations = sorted(recommendations)

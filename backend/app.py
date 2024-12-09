@@ -1,3 +1,5 @@
+# app.py
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from database import SessionLocal
@@ -18,12 +20,20 @@ app = Flask(__name__)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
+app.logger.setLevel(logging.INFO)
 app.logger.info("Initializing the Skill Match Bot Backend")
 
+# Configure allowed origins for CORS
+# Fetch ALLOWED_ORIGINS from environment variables, separated by commas
+# Example: ALLOWED_ORIGINS=https://skill-match-bot-frontend.onrender.com,http://localhost:3000
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://skill-match-bot-frontend.onrender.com").split(",")
+
+# Strip any whitespace from origins
+ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS]
+
 # Allow cross-origin requests (CORS configuration)
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://skill-match-bot-frontend.onrender.com")
-CORS(app, resources={r"/*": {"origins": FRONTEND_URL}})
-app.logger.info(f"CORS enabled for frontend URL: {FRONTEND_URL}")
+CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
+app.logger.info(f"CORS enabled for frontend URLs: {ALLOWED_ORIGINS}")
 
 # Initialize database session (if connected)
 try:
@@ -87,32 +97,34 @@ def set_cached_matches(skills, matches):
     except Exception as e:
         app.logger.error(f"Error setting cache for key '{key}': {e}")
 
-# Implement LRU Cache for get_side_hustles (optional additional caching layer)
-# from functools import lru_cache
-# @lru_cache(maxsize=128)
-# def cached_get_side_hustles(skills_tuple):
-#     skills = list(skills_tuple)
-#     return get_side_hustles(skills)
-
 # Routes
 @app.route("/api/matches", methods=["POST"])
 def side_hustle_matches():
     app.logger.info("Request received at /api/matches")
     try:
         data = request.get_json()
-        if not data:
-            app.logger.warning("Invalid JSON payload received.")
-            return jsonify({"error": "Invalid JSON payload"}), 400
+        if not data or "skills" not in data:
+            app.logger.warning("Invalid JSON payload received or 'skills' missing.")
+            return jsonify({"error": "Invalid JSON payload or 'skills' missing"}), 400
 
-        app.logger.info(f"Request data: {data}")
+        # Check for unexpected fields
+        allowed_keys = {"skills"}
+        extra_keys = set(data.keys()) - allowed_keys
+        if extra_keys:
+            app.logger.warning(f"Unexpected fields in request: {extra_keys}")
+            return jsonify({"error": f"Unexpected fields: {', '.join(extra_keys)}"}), 400
+
         skills = data.get("skills", [])
         if not skills:
-            app.logger.warning("Skills data is missing in the request.")
-            return jsonify({"error": "Skills data is missing"}), 400
+            app.logger.warning("'skills' list is empty.")
+            return jsonify({"error": "'skills' list cannot be empty"}), 400
+
+        app.logger.info(f"Processing skills: {skills}")
 
         # Check cache first
         cached = get_cached_matches(skills)
         if cached:
+            app.logger.info("Returning cached matches.")
             return jsonify(cached)
 
         # If not cached, compute the matches
@@ -132,16 +144,25 @@ def skill_creation():
     app.logger.info("Request received at /api/skills")
     try:
         data = request.get_json()
-        if not data:
-            app.logger.warning("Invalid JSON payload received.")
-            return jsonify({"error": "Invalid JSON payload"}), 400
+        if not data or "interests" not in data:
+            app.logger.warning("Invalid JSON payload received or 'interests' missing.")
+            return jsonify({"error": "Invalid JSON payload or 'interests' missing"}), 400
 
-        app.logger.info(f"Request data: {data}")
+        # Check for unexpected fields
+        allowed_keys = {"interests"}
+        extra_keys = set(data.keys()) - allowed_keys
+        if extra_keys:
+            app.logger.warning(f"Unexpected fields in request: {extra_keys}")
+            return jsonify({"error": f"Unexpected fields: {', '.join(extra_keys)}"}), 400
+
         interests = data.get("interests", [])
         if not interests:
-            app.logger.warning("Interests data is missing in the request.")
-            return jsonify({"error": "Interests data is missing"}), 400
+            app.logger.warning("'interests' list is empty.")
+            return jsonify({"error": "'interests' list cannot be empty"}), 400
 
+        app.logger.info(f"Processing interests: {interests}")
+
+        # Proceed with recommending skills
         recommended_skills = recommend_skills(interests)
         app.logger.info(f"Recommended skills: {recommended_skills}")
         return jsonify(recommended_skills)
@@ -154,16 +175,25 @@ def habit_tracker():
     app.logger.info("Request received at /api/habits")
     try:
         data = request.get_json()
-        if not data:
-            app.logger.warning("Invalid JSON payload received.")
-            return jsonify({"error": "Invalid JSON payload"}), 400
+        if not data or "side_hustle" not in data:
+            app.logger.warning("Invalid JSON payload received or 'side_hustle' missing.")
+            return jsonify({"error": "Invalid JSON payload or 'side_hustle' missing"}), 400
 
-        app.logger.info(f"Request data: {data}")
+        # Check for unexpected fields
+        allowed_keys = {"side_hustle"}
+        extra_keys = set(data.keys()) - allowed_keys
+        if extra_keys:
+            app.logger.warning(f"Unexpected fields in request: {extra_keys}")
+            return jsonify({"error": f"Unexpected fields: {', '.join(extra_keys)}"}), 400
+
         side_hustle = data.get("side_hustle", "")
         if not side_hustle:
-            app.logger.warning("Side hustle data is missing in the request.")
-            return jsonify({"error": "Side hustle data is missing"}), 400
+            app.logger.warning("'side_hustle' is empty.")
+            return jsonify({"error": "'side_hustle' cannot be empty"}), 400
 
+        app.logger.info(f"Processing side hustle: {side_hustle}")
+
+        # Proceed with habit recommendations
         habits = get_habit_recommendations(side_hustle)
         app.logger.info(f"Recommended habits: {habits}")
         return jsonify(habits)
