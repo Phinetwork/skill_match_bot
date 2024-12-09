@@ -26,6 +26,11 @@
   border: none;
   color: white;
   cursor: pointer;
+  position: absolute; /* Position toggle button */
+  right: 20px; /* Align it to the right */
+  top: 50%; /* Vertically center it */
+  transform: translateY(-50%); /* Adjust for centering */
+  z-index: 1001; /* Ensure it stays above other elements */
 }
 
 .nav-menu {
@@ -78,8 +83,8 @@
     background-color: rgba(0, 0, 0, 0.8); /* Background for the mobile menu */
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
+    right: 0; /* Align menu to the right */
+    width: 70%; /* Adjust the width for a cleaner layout */
     padding: 10px 0;
     z-index: 999; /* Ensure it appears above other elements */
   }
@@ -91,7 +96,8 @@
   .nav-menu ul {
     flex-direction: column; /* Makes menu items stack vertically */
     gap: 10px; /* Adjust spacing for vertical layout */
-    text-align: center;
+    text-align: left; /* Align text to the left for better readability */
+    padding: 0 20px; /* Add padding for a neat look */
   }
 
   .nav-menu ul li a {

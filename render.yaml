@@ -18,5 +18,5 @@ services:
         source: /api/<path>
         destination: https://skill-match-backend.onrender.com/api/<path>
       - type: rewrite
-        source: /*
+        source: /.*
         destination: /index.html
