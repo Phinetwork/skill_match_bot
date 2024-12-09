@@ -8,9 +8,9 @@ const OnboardingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/matches", {
+      const response = await axios.post("https://skill-match-bot.onrender.com/api/matches", {
         skills: skills.split(",").map((skill) => skill.trim()),
-        interests: interests.split(",").map((interest) => interest.trim()),
+        interests: interests.split(",").map((interest) => skill.trim()),
       });
       console.log("Matches:", response.data);
     } catch (error) {
