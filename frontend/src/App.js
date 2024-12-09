@@ -4,6 +4,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import OnboardingForm from "./components/OnboardingForm";
 import About from "./components/About"; // Import the About component
+import Services from "./components/Services"; // Import the Services component
+import Contact from "./components/Contact"; // Import the Contact component
 import logo from "./logo.svg"; // Import the logo
 
 function App() {
@@ -13,12 +15,11 @@ function App() {
         <Header />
         <main style={styles.main}>
           <Routes>
-            <Route
-              path="/"
-              element={<Home />}
-            />
+            <Route path="/" element={<Home />} />
             <Route path="/onboarding" element={<OnboardingForm />} />
             <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} /> {/* Add Services route */}
+            <Route path="/contact" element={<Contact />} /> {/* Add Contact route */}
           </Routes>
         </main>
         <Footer />

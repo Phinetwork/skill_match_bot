@@ -1,0 +1,85 @@
+.contact-page {
+  padding: 20px;
+  background: linear-gradient(135deg, #00274d, #00509e); /* Background gradient */
+  color: #f0f8ff; /* Light color for text contrast */
+  min-height: 100vh; /* Ensures the page covers full height */
+  box-sizing: border-box;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contact-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.contact-header p {
+  font-size: 1.2rem;
+  color: #dcdcdc;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  color: #333333;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #00509e;
+  box-shadow: 0 0 5px rgba(0, 80, 158, 0.5);
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background: #00509e;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background: #003d7a;
+}
+
+.success-message {
+  margin-top: 20px;
+  color: #28a745;
+  font-size: 1rem;
+  text-align: center;
+}
