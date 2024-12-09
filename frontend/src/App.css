@@ -1,7 +1,17 @@
+/* App container styling */
 .App {
   text-align: center;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* Subtle gradient background */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #ffffff; /* Text color for high contrast */
 }
 
+/* Logo styling */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -13,26 +23,73 @@
   }
 }
 
+/* Header section styling */
 .App-header {
-  background-color: #282c34;
+  background: linear-gradient(135deg, #111827, #1e40af); /* Dark gradient for a sleek look */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: calc(12px + 2vmin); /* Responsive font size */
+  color: #e5e7eb; /* Softer white for better readability */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
+/* Links styling */
 .App-link {
-  color: #61dafb;
+  color: #38bdf8; /* Eye-catching blue link */
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #2563eb; /* Vibrant button-style background */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.App-link:hover {
+  background-color: #1d4ed8; /* Slightly darker blue on hover */
+  transform: scale(1.05); /* Subtle zoom effect */
+}
+
+/* Keyframes for spinning animation */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Footer styling */
+.App-footer {
+  background: #1f2937; /* Deep gray background */
+  color: #9ca3af; /* Light gray text */
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile-first design optimizations */
+@media (max-width: 768px) {
+  .App-header {
+    font-size: calc(10px + 2vmin); /* Slightly smaller font for mobile */
+    padding: 15px;
+  }
+
+  .App-link {
+    font-size: 1rem;
+    padding: 8px 16px; /* Adjusted padding for smaller screens */
+  }
+
+  .App-footer {
+    font-size: 0.8rem;
+    padding: 10px;
   }
 }

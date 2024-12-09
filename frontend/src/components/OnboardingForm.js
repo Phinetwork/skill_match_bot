@@ -1,7 +1,6 @@
-// OnboardingForm.js
-
 import React, { useState } from "react";
 import axios from "axios";
+import "./OnboardingForm.css"; // Import the global CSS file
 
 const OnboardingForm = () => {
   const [skills, setSkills] = useState("");
@@ -23,37 +22,21 @@ const OnboardingForm = () => {
     setSelectedSideHustle("");
 
     try {
-      // Fetch side hustles based on skills
       if (skills.trim() !== "") {
         const skillsResponse = await axios.post(
           "https://skill-match-bot.onrender.com/api/matches",
-          {
-            skills: skills.split(",").map((skill) => skill.trim()),
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+          { skills: skills.split(",").map((skill) => skill.trim()) },
+          { headers: { "Content-Type": "application/json" } }
         );
-
         setMatches(skillsResponse.data);
       }
 
-      // Fetch recommended skills based on interests
       if (interests.trim() !== "") {
         const interestsResponse = await axios.post(
           "https://skill-match-bot.onrender.com/api/skills",
-          {
-            interests: interests.split(",").map((interest) => interest.trim()),
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+          { interests: interests.split(",").map((interest) => interest.trim()) },
+          { headers: { "Content-Type": "application/json" } }
         );
-
         setRecommendedSkills(interestsResponse.data);
       }
     } catch (err) {
@@ -75,16 +58,9 @@ const OnboardingForm = () => {
     try {
       const response = await axios.post(
         "https://skill-match-bot.onrender.com/api/habits",
-        {
-          side_hustle: sideHustle,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { side_hustle: sideHustle },
+        { headers: { "Content-Type": "application/json" } }
       );
-
       setHabits(response.data);
     } catch (err) {
       console.error("Error fetching habits:", err);
@@ -96,12 +72,12 @@ const OnboardingForm = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.heading}>Find Your Perfect Side Hustle</h1>
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.inputGroup}>
-            <label htmlFor="skills" style={styles.label}>
+    <div className="page-container">
+      <div className="form-card">
+        <h1 className="form-heading">Find Your Perfect Side Hustle</h1>
+        <form onSubmit={handleSubmit} className="form">
+          <div className="form-group">
+            <label htmlFor="skills" className="form-label">
               Enter Your Skills (comma-separated):
             </label>
             <input
@@ -110,12 +86,12 @@ const OnboardingForm = () => {
               value={skills}
               onChange={(e) => setSkills(e.target.value)}
               placeholder="e.g., coding, writing"
-              style={styles.input}
+              className="form-input"
               aria-label="Enter skills"
             />
           </div>
-          <div style={styles.inputGroup}>
-            <label htmlFor="interests" style={styles.label}>
+          <div className="form-group">
+            <label htmlFor="interests" className="form-label">
               Enter Your Interests (comma-separated):
             </label>
             <input
@@ -124,17 +100,13 @@ const OnboardingForm = () => {
               value={interests}
               onChange={(e) => setInterests(e.target.value)}
               placeholder="e.g., design, photography"
-              style={styles.input}
+              className="form-input"
               aria-label="Enter interests"
             />
           </div>
           <button
             type="submit"
-            style={{
-              ...styles.button,
-              backgroundColor: loading ? "#ccc" : "#007BFF",
-              cursor: loading ? "not-allowed" : "pointer",
-            }}
+            className={`form-button ${loading ? "disabled" : ""}`}
             disabled={loading}
             aria-label="Submit to find matches"
           >
@@ -142,17 +114,17 @@ const OnboardingForm = () => {
           </button>
         </form>
 
-        {error && <div style={styles.error}>{error}</div>}
+        {error && <div className="form-error">{error}</div>}
 
         {matches.length > 0 && (
-          <div style={styles.results}>
-            <h2 style={styles.resultsHeading}>Recommended Side Hustles</h2>
-            <ul style={styles.resultsList}>
+          <div className="results">
+            <h2 className="results-heading">Recommended Side Hustles</h2>
+            <ul className="results-list">
               {matches.map((match, index) => (
-                <li key={index} style={styles.resultItem}>
+                <li key={index} className="result-item">
                   <button
                     onClick={() => handleSideHustleSelect(match)}
-                    style={styles.resultButton}
+                    className="result-button"
                     aria-label={`Select ${match} to get habit recommendations`}
                   >
                     {match}
@@ -164,11 +136,11 @@ const OnboardingForm = () => {
         )}
 
         {recommendedSkills.length > 0 && (
-          <div style={styles.results}>
-            <h2 style={styles.resultsHeading}>Recommended Skills</h2>
-            <ul style={styles.resultsList}>
+          <div className="results">
+            <h2 className="results-heading">Recommended Skills</h2>
+            <ul className="results-list">
               {recommendedSkills.map((skill, index) => (
-                <li key={index} style={styles.resultItem}>
+                <li key={index} className="result-item">
                   {skill}
                 </li>
               ))}
@@ -177,13 +149,13 @@ const OnboardingForm = () => {
         )}
 
         {selectedSideHustle !== "" && habits.length > 0 && (
-          <div style={styles.results}>
-            <h2 style={styles.resultsHeading}>
+          <div className="results">
+            <h2 className="results-heading">
               Recommended Habits for {selectedSideHustle}
             </h2>
-            <ul style={styles.resultsList}>
+            <ul className="results-list">
               {habits.map((habit, index) => (
-                <li key={index} style={styles.resultItem}>
+                <li key={index} className="result-item">
                   {habit}
                 </li>
               ))}
@@ -193,104 +165,6 @@ const OnboardingForm = () => {
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh",
-    background: "linear-gradient(135deg, #2a2a72, #009ffd)",
-    padding: "20px",
-    boxSizing: "border-box",
-  },
-  card: {
-    background: "#fff",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-    borderRadius: "12px",
-    maxWidth: "600px",
-    width: "100%",
-    padding: "30px",
-    textAlign: "center",
-  },
-  heading: {
-    fontSize: "24px",
-    color: "#333",
-    marginBottom: "20px",
-    fontWeight: "bold",
-  },
-  form: {
-    marginBottom: "20px",
-  },
-  inputGroup: {
-    marginBottom: "15px",
-    textAlign: "left",
-  },
-  label: {
-    display: "block",
-    fontWeight: "600",
-    marginBottom: "5px",
-    fontSize: "14px",
-    color: "#555",
-  },
-  input: {
-    width: "100%",
-    padding: "12px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-    boxSizing: "border-box",
-    transition: "border-color 0.2s",
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    borderRadius: "8px",
-    color: "#fff",
-    fontSize: "16px",
-    border: "none",
-    transition: "background-color 0.3s",
-  },
-  error: {
-    color: "red",
-    marginTop: "10px",
-    fontWeight: "bold",
-  },
-  results: {
-    marginTop: "30px",
-    backgroundColor: "#f9f9f9",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-  },
-  resultsHeading: {
-    fontSize: "18px",
-    color: "#333",
-    marginBottom: "15px",
-  },
-  resultsList: {
-    listStyleType: "none",
-    padding: 0,
-  },
-  resultItem: {
-    backgroundColor: "#fff",
-    padding: "10px",
-    borderRadius: "8px",
-    marginBottom: "10px",
-    textAlign: "center",
-    color: "#007BFF",
-    border: "1px solid #ddd",
-    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.05)",
-  },
-  resultButton: {
-    background: "none",
-    border: "none",
-    color: "#007BFF",
-    cursor: "pointer",
-    fontSize: "16px",
-    textDecoration: "underline",
-  },
 };
 
 export default OnboardingForm;
