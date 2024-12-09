@@ -1,5 +1,3 @@
-# skill_engine.py
-
 from sentence_transformers import SentenceTransformer, util
 import torch
 import logging
@@ -13,7 +11,7 @@ logger = logging.getLogger(__name__)
 try:
     model_name = os.getenv("MODEL_NAME", "all-MiniLM-L6-v2")
     logger.info(f"Loading the sentence transformer model: {model_name}...")
-    model = SentenceTransformer(model_name)
+    model = SentenceTransformer(model_name, device="cpu")  # Force CPU for Render
     logger.info("Model loaded successfully.")
 except Exception as e:
     logger.error(f"Failed to load sentence transformer model: {e}")
@@ -31,15 +29,20 @@ SKILLS = [
 SKILL_EMBEDDINGS_FILE = 'skill_embeddings.pt'
 
 try:
-    SKILL_EMBEDDINGS = torch.load(SKILL_EMBEDDINGS_FILE)
+    logger.info("Loading skill embeddings...")
+    SKILL_EMBEDDINGS = torch.load(SKILL_EMBEDDINGS_FILE, map_location=torch.device("cpu"))
     logger.info("Skill embeddings loaded successfully.")
 except FileNotFoundError:
     logger.info(f"Skill embeddings file '{SKILL_EMBEDDINGS_FILE}' not found. Creating embeddings...")
-    SKILL_EMBEDDINGS = model.encode(SKILLS, convert_to_tensor=True)
-    torch.save(SKILL_EMBEDDINGS, SKILL_EMBEDDINGS_FILE)
-    logger.info("Skill embeddings created and saved successfully.")
+    try:
+        SKILL_EMBEDDINGS = model.encode(SKILLS, convert_to_tensor=True)
+        torch.save(SKILL_EMBEDDINGS, SKILL_EMBEDDINGS_FILE)
+        logger.info("Skill embeddings created and saved successfully.")
+    except Exception as e:
+        logger.error(f"Error creating skill embeddings: {e}")
+        raise
 except Exception as e:
-    logger.error(f"Failed to load or create skill embeddings: {e}")
+    logger.error(f"Failed to load skill embeddings: {e}")
     raise
 
 
@@ -69,6 +72,9 @@ def recommend_skills(interests):
 
             # Get the top 3 most similar skills
             top_matches = torch.topk(similarity_scores, k=3)
+
+            # Log detailed similarity scores and matched indices
+            logger.debug(f"Similarity scores for '{interest}': {similarity_scores.tolist()}")
             logger.debug(f"Top matches indices for '{interest}': {top_matches.indices.tolist()}")
 
             # Add the top matches to recommendations
