@@ -33,43 +33,32 @@ const OnboardingForm = () => {
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1>Find Your Perfect Side Hustle</h1>
-      <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
-        <div style={{ marginBottom: "10px" }}>
-          <label style={{ display: "block", fontWeight: "bold" }}>
-            Enter Your Skills (comma-separated):
-          </label>
+    <div style={styles.container}>
+      <h1 style={styles.heading}>Find Your Perfect Side Hustle</h1>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Enter Your Skills (comma-separated):</label>
           <input
             type="text"
             value={skills}
             onChange={(e) => setSkills(e.target.value)}
             placeholder="e.g., coding, writing"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={styles.input}
           />
         </div>
-        <div style={{ marginBottom: "10px" }}>
-          <label style={{ display: "block", fontWeight: "bold" }}>
-            Enter Your Interests (comma-separated):
-          </label>
+        <div style={styles.inputGroup}>
+          <label style={styles.label}>Enter Your Interests (comma-separated):</label>
           <input
             type="text"
             value={interests}
             onChange={(e) => setInterests(e.target.value)}
             placeholder="e.g., design, photography"
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={styles.input}
           />
         </div>
         <button
           type="submit"
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#007BFF",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
+          style={styles.button}
           disabled={loading} // Disable button while loading
         >
           {loading ? "Finding Matches..." : "Find Matches"}
@@ -77,15 +66,15 @@ const OnboardingForm = () => {
       </form>
 
       {/* Display Error Message */}
-      {error && <div style={{ color: "red", marginBottom: "20px" }}>{error}</div>}
+      {error && <div style={styles.error}>{error}</div>}
 
       {/* Display Matches */}
       {matches.length > 0 && (
-        <div>
-          <h2>Recommended Side Hustles</h2>
-          <ul>
+        <div style={styles.results}>
+          <h2 style={styles.resultsHeading}>Recommended Side Hustles</h2>
+          <ul style={styles.resultsList}>
             {matches.map((match, index) => (
-              <li key={index} style={{ marginBottom: "5px" }}>
+              <li key={index} style={styles.resultItem}>
                 {match}
               </li>
             ))}
@@ -94,6 +83,76 @@ const OnboardingForm = () => {
       )}
     </div>
   );
+};
+
+const styles = {
+  container: {
+    padding: "10px",
+    fontFamily: "Arial, sans-serif",
+    maxWidth: "600px",
+    margin: "0 auto",
+  },
+  heading: {
+    textAlign: "center",
+    fontSize: "24px",
+    marginBottom: "20px",
+    color: "#333",
+  },
+  form: {
+    marginBottom: "20px",
+  },
+  inputGroup: {
+    marginBottom: "15px",
+  },
+  label: {
+    display: "block",
+    fontWeight: "bold",
+    marginBottom: "5px",
+    fontSize: "16px",
+  },
+  input: {
+    width: "100%",
+    padding: "12px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    fontSize: "16px",
+    boxSizing: "border-box",
+  },
+  button: {
+    width: "100%",
+    padding: "12px",
+    backgroundColor: "#007BFF",
+    color: "#fff",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "16px",
+    marginTop: "10px",
+  },
+  error: {
+    color: "red",
+    marginTop: "10px",
+    textAlign: "center",
+  },
+  results: {
+    marginTop: "20px",
+  },
+  resultsHeading: {
+    fontSize: "20px",
+    marginBottom: "10px",
+    textAlign: "center",
+  },
+  resultsList: {
+    listStyleType: "none",
+    padding: 0,
+  },
+  resultItem: {
+    backgroundColor: "#f9f9f9",
+    padding: "10px",
+    borderRadius: "5px",
+    marginBottom: "5px",
+    textAlign: "center",
+  },
 };
 
 export default OnboardingForm;
