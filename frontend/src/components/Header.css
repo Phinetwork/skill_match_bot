@@ -2,49 +2,53 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  background-color: transparent; /* Completely transparent */
-  color: white;
-  position: fixed; /* Sticks the header to the top */
-  width: 100%; /* Ensures it spans the full width */
-  z-index: 1000; /* Keeps it above other elements */
+  padding: 15px 30px;
+  background-color: transparent;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
 }
 
 .header-content {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
 .logo img {
-  height: 60px; /* Slightly larger for better visibility */
-  transition: transform 0.3s ease; /* Smooth scaling effect */
+  height: 60px;
+  transition: transform 0.3s ease;
 }
 
 .logo img:hover {
-  transform: scale(1.1); /* Logo enlarges slightly on hover */
+  transform: scale(1.1);
 }
 
+/* Hamburger Icon */
 .menu-toggle {
-  display: none; /* Hidden by default for larger screens */
-  font-size: 2rem; /* Larger for better visibility */
+  display: none;
+  font-size: 1.8rem;
   background: none;
   border: none;
   color: white;
   cursor: pointer;
-  position: absolute; /* Position toggle button */
-  right: 20px; /* Align it to the right */
-  top: 50%; /* Vertically center it */
-  transform: translateY(-50%); /* Adjust for centering */
-  z-index: 1001; /* Ensure it stays above other elements */
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  width: 50px;
+  height: 50px;
 }
 
+/* Navigation Menu */
 .nav-menu {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 20px; /* Adds spacing between menu items */
+  gap: 20px;
 }
 
 .nav-menu ul {
@@ -56,11 +60,11 @@
 }
 
 .nav-menu ul li {
-  position: relative; /* For dropdown menus if needed later */
+  position: relative;
 }
 
 .nav-menu ul li a {
-  color: #f0f8ff; /* Softer white for readability */
+  color: #f0f8ff;
   text-decoration: none;
   font-weight: bold;
   padding: 5px 10px;
@@ -69,55 +73,46 @@
 }
 
 .nav-menu ul li a:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent hover effect */
-  color: #fff; /* Contrasting white text on hover */
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
-.nav-menu.open {
-  display: flex; /* Ensures the menu is displayed when open */
-  flex-direction: column; /* Stacks items vertically */
-}
-
+/* Mobile Specific Styles */
 @media (max-width: 768px) {
   .menu-toggle {
-    display: block; /* Show the toggle button on smaller screens */
+    display: block;
   }
 
   .nav-menu {
-    display: none; /* Hide the menu by default on smaller screens */
-    flex-direction: column; /* Makes menu items stack vertically */
-    background-color: rgba(0, 0, 0, 0.9); /* Background for the mobile menu */
+    display: none;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.9);
     position: absolute;
     top: 100%;
-    right: 0; /* Align menu to the right */
-    width: 70%; /* Adjust the width for a cleaner layout */
-    padding: 15px 0;
-    z-index: 999; /* Ensure it appears above other elements */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
+    right: 0;
+    width: 70%;
+    padding: 10px 0;
+    z-index: 999;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   }
 
   .nav-menu.open {
-    display: flex; /* Display the menu when it's open */
+    display: flex;
   }
 
   .nav-menu ul {
-    flex-direction: column; /* Makes menu items stack vertically */
-    gap: 20px; /* Adjust spacing for vertical layout */
-    text-align: center; /* Align text to the center for better readability */
-    padding: 0 20px; /* Add padding for a neat look */
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 20px;
   }
 
   .nav-menu ul li a {
-    padding: 12px; /* Larger click/tap area for mobile */
-    font-size: 1.2rem; /* Slightly larger text for better readability */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Add a separator for clarity */
+    padding: 12px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .nav-menu ul li a:last-child {
-    border-bottom: none; /* Remove the separator for the last item */
-  }
-
-  .header-content {
-    padding-right: 50px; /* Add space between the logo and menu */
+    border-bottom: none;
   }
 }
