@@ -22,7 +22,10 @@ const AuthProvider = ({ children }) => {
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/dashboard`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error("Invalid token");
+      if (!res.ok) {
+        console.error("Dashboard request failed:", res.status, res.statusText);
+        throw new Error("Invalid token");
+      }
       const data = await res.json();
       setUser(data);
     } catch (error) {
@@ -31,9 +34,9 @@ const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
-  const login = async (token) => {
+  async function login(token) {
     localStorage.setItem("authToken", token);
     try {
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/dashboard`, {
@@ -47,7 +50,7 @@ const AuthProvider = ({ children }) => {
       console.error("Login error:", err);
       logout();
     }
-  };
+  }
 
   const logout = () => {
     localStorage.removeItem("authToken");
