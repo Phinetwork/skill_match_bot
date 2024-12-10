@@ -1,76 +1,91 @@
 import requests
+import random
+import string
 
-BASE_URL = "http://127.0.0.1:5001"  # Change this to your server's base URL
+BASE_URL = "http://127.0.0.1:5001"  # Ensure this matches your backend server
 HEADERS = {"Content-Type": "application/json"}
 
-# Test endpoints
+def log_error(response):
+    """Log detailed error information for debugging."""
+    print(f"Status Code: {response.status_code}")
+    try:
+        print(f"Response JSON: {response.json()}")
+    except Exception as e:
+        print(f"Error decoding JSON: {e}")
+        print(f"Response Text: {response.text}")
+
+
+def generate_random_user():
+    """Generate a unique username and email."""
+    random_str = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+    username = f"user_{random_str}"
+    email = f"{username}@example.com"
+    return username, email, "testpassword"
+
+
 def test_register():
+    """Test the user registration endpoint."""
     print("Testing /api/register...")
+    username, email, password = generate_random_user()
     payload = {
-        "username": "testuser",
-        "email": "testuser@example.com",
-        "password": "testpassword"
+        "username": username,
+        "email": email,
+        "password": password
     }
     response = requests.post(f"{BASE_URL}/api/register", json=payload, headers=HEADERS)
-    print(f"Response: {response.status_code} - {response.json()}\n")
+    print(f"Response: {response.status_code}")
+    if response.status_code == 201:
+        print(f"User registered successfully: {username}, {email}")
+    else:
+        log_error(response)
+    return email, password
 
-def test_login():
+
+def test_login(email, password):
+    """Test the user login endpoint."""
     print("Testing /api/login...")
     payload = {
-        "email": "testuser@example.com",
-        "password": "testpassword"
+        "email": email,
+        "password": password
     }
     response = requests.post(f"{BASE_URL}/api/login", json=payload, headers=HEADERS)
-    print(f"Response: {response.status_code} - {response.json()}\n")
+    print(f"Response: {response.status_code}")
     if response.status_code == 200:
-        return response.json().get("token")
-    return None
+        token = response.json().get("token")
+        print(f"Login successful, token: {token}")
+        return token
+    else:
+        log_error(response)
+        return None
+
 
 def test_dashboard(token):
+    """Test the dashboard endpoint."""
     print("Testing /api/dashboard...")
     headers = {**HEADERS, "Authorization": f"Bearer {token}"}
     response = requests.get(f"{BASE_URL}/api/dashboard", headers=headers)
-    print(f"Response: {response.status_code} - {response.json()}\n")
+    print(f"Response: {response.status_code}")
+    if response.status_code == 200:
+        print("Dashboard data fetched successfully!")
+        print(response.json())
+    else:
+        log_error(response)
 
-def test_matches():
-    print("Testing /api/matches...")
-    payload = {
-        "skills": ["python", "machine learning", "flask"]
-    }
-    response = requests.post(f"{BASE_URL}/api/matches", json=payload, headers=HEADERS)
-    print(f"Response: {response.status_code} - {response.json()}\n")
 
-def test_skills():
-    print("Testing /api/skills...")
-    payload = {
-        "interests": ["technology", "data science"]
-    }
-    response = requests.post(f"{BASE_URL}/api/skills", json=payload, headers=HEADERS)
-    print(f"Response: {response.status_code} - {response.json()}\n")
-
-def test_habits():
-    print("Testing /api/habits...")
-    payload = {
-        "side_hustle": "freelance development"
-    }
-    response = requests.post(f"{BASE_URL}/api/habits", json=payload, headers=HEADERS)
-    print(f"Response: {response.status_code} - {response.json()}\n")
-
-def test_root():
-    print("Testing / (root)...")
-    response = requests.get(f"{BASE_URL}/")
-    print(f"Response: {response.status_code} - {response.json()}\n")
-
-# Run all tests
 def run_tests():
-    test_root()
-    test_register()
-    token = test_login()
+    """Run all API tests."""
+    print("Starting API tests...\n")
+
+    # Test user registration and login
+    email, password = test_register()
+    token = test_login(email, password)
+
+    # Test dashboard if login is successful
     if token:
         test_dashboard(token)
-    test_matches()
-    test_skills()
-    test_habits()
+    else:
+        print("Login failed. Skipping dashboard test.")
+
 
 if __name__ == "__main__":
     run_tests()

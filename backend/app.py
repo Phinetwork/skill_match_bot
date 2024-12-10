@@ -246,7 +246,8 @@ def login():
         if not user or not check_password_hash(user.hashed_password, password):
             return jsonify({"error": "Invalid email or password!"}), 401
 
-        access_token = create_access_token(identity=user.id)
+        # Include a subject claim (sub) in the token
+        access_token = create_access_token(identity=user.id, additional_claims={"sub": str(user.id)})
         return jsonify({"token": access_token}), 200
     except Exception as e:
         app.logger.error(f"Error in /api/login: {e}", exc_info=True)
