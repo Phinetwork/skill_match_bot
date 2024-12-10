@@ -13,7 +13,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #001f3f; /* Consistent blue background color */
+  background-color: #00509e; /* Consistent blue background color */
   color: #fff; /* Light text for dark background */
   min-height: 100vh;
   display: flex;
