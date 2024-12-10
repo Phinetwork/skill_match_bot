@@ -68,15 +68,15 @@
 .login-redirect {
   margin-top: 20px;
   font-size: 14px;
-  color: #333; /* Ensure the text has good contrast */
+  color: #444; /* Darker gray for better visibility on white background */
 }
 
-.login-link {
+.login-redirect .login-link {
   color: #007bff; /* Link color matches the button */
   cursor: pointer;
   text-decoration: underline;
 }
 
-.login-link:hover {
+.login-redirect .login-link:hover {
   color: #0056b3; /* Darker blue on hover for better visibility */
 }
