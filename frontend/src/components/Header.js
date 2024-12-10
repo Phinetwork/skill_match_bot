@@ -41,40 +41,56 @@ const Header = () => {
                 Home
               </Link>
             </li>
-            <li>
-              <Link to="/about" onClick={() => setIsMenuOpen(false)}>
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/onboarding" onClick={() => setIsMenuOpen(false)}>
-                Get Started
-              </Link>
-            </li>
-            <li>
-              <Link to="/services" onClick={() => setIsMenuOpen(false)}>
-                Services
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
-                Contact
-              </Link>
-            </li>
-            <li>
-              <a
-                href="https://github.com/Phinetwork/skill_match_bot"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Open Source Code
-              </a>
-            </li>
 
-            {/* Conditional links based on authentication */}
-            {isAuthenticated ? (
+            {/* Links visible only to logged-out users */}
+            {!isAuthenticated && (
               <>
+                <li>
+                  <Link to="/about" onClick={() => setIsMenuOpen(false)}>
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/services" onClick={() => setIsMenuOpen(false)}>
+                    Services
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/Phinetwork/skill_match_bot"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Open Source Code
+                  </a>
+                </li>
+                <li>
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
+
+            {/* Links visible only to logged-in users */}
+            {isAuthenticated && (
+              <>
+                <li>
+                  <Link to="/onboarding" onClick={() => setIsMenuOpen(false)}>
+                    Get Started
+                  </Link>
+                </li>
                 <li>
                   <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
                     Dashboard
@@ -94,19 +110,6 @@ const Header = () => {
                   >
                     Logout
                   </button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                    Login
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                    Register
-                  </Link>
                 </li>
               </>
             )}
