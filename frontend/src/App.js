@@ -1,30 +1,46 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { Route, Routes, Navigate, Link } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import OnboardingForm from "./components/OnboardingForm";
-import About from "./components/About"; // Import the About component
-import Services from "./components/Services"; // Import the Services component
-import Contact from "./components/Contact"; // Import the Contact component
-import logo from "./logo.svg"; // Import the logo
+import About from "./components/About";
+import Services from "./components/Services";
+import Contact from "./components/Contact";
+import Register from "./components/Register";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+import { useAuth } from "./auth/AuthContext"; // Ensure AuthContext is correctly imported
+import logo from "./assets/logo.png"; // Ensure the logo path is correct
 
 function App() {
+  const { user, isAuthenticated } = useAuth(); // Added `isAuthenticated` for clarity
+
   return (
-    <Router>
-      <div className="App">
-        <Header />
-        <main style={styles.main}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/onboarding" element={<OnboardingForm />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} /> {/* Add Services route */}
-            <Route path="/contact" element={<Contact />} /> {/* Add Contact route */}
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <div className="App">
+      <Header />
+      <main style={styles.main}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/onboarding" element={<OnboardingForm />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route
+            path="/register"
+            element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />}
+          />
+          <Route
+            path="/login"
+            element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}
+          />
+          <Route
+            path="/dashboard"
+            element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
+          />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
   );
 }
 
@@ -55,7 +71,7 @@ const styles = {
     flexDirection: "column",
     minHeight: "calc(100vh - 120px)", // Adjusting for header and footer height
     padding: "20px",
-    background: "linear-gradient(135deg, #00274d, #00509e)", // Higher contrast background
+    background: "linear-gradient(135deg, #00274d, #00509e)", // High-contrast background
     boxSizing: "border-box",
   },
   homeContent: {
@@ -63,7 +79,7 @@ const styles = {
     maxWidth: "600px",
     width: "100%",
     margin: "0 auto",
-    padding: "10px", // Added padding for mobile
+    padding: "10px", // Padding for mobile
   },
   logo: {
     height: "100px", // Adjust height as needed
@@ -77,7 +93,7 @@ const styles = {
   },
   paragraph: {
     fontSize: "1.2rem",
-    color: "#e6f7ff", // Slightly softer light color
+    color: "#e6f7ff", // Softer light color
     marginBottom: "30px",
     lineHeight: "1.6",
   },
