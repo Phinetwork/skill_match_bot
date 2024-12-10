@@ -278,7 +278,15 @@ def dashboard():
     except Exception as e:
         app.logger.error(f"Error in /api/dashboard: {e}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
-
+    
+# Serve React's index.html for any non-API route
+@app.route('/<path:path>', methods=["GET"])
+def serve(path):
+    if path.startswith("api/"):
+        return "Not Found", 404  # Return 404 for API routes, if needed
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
+    
 # Main entry point
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5001))
