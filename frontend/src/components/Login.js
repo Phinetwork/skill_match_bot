@@ -4,22 +4,22 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext"; // Ensure correct path
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState(""); // State for email input
+  const [password, setPassword] = useState(""); // State for password input
+  const [error, setError] = useState(""); // State for error messages
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // Use AuthContext for login
+  const { login, isAuthenticated } = useContext(AuthContext); // Access AuthContext for login
 
+  // Redirect to dashboard if already authenticated
   useEffect(() => {
-    // Redirect to dashboard if already authenticated
-    if (localStorage.getItem("authToken")) {
+    if (isAuthenticated) {
       navigate("/dashboard");
     }
-  }, [navigate]);
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setError(""); // Clear previous errors
 
     try {
       const response = await axios.post(
@@ -33,11 +33,12 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        login(response.data.token); // Log the user in
-        navigate("/dashboard"); // Redirect to dashboard
+        login(response.data.token); // Log the user in via AuthContext
+      } else {
+        throw new Error("Unexpected response status");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
       setError(
         err.response?.data?.error || "Invalid email or password. Please try again."
       );
@@ -47,7 +48,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <h1>Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>} {/* Display error messages */}
       <form onSubmit={handleLogin}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
