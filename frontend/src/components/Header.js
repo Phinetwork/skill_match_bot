@@ -88,7 +88,7 @@ const Header = () => {
               <>
                 <li>
                   <Link to="/onboarding" onClick={() => setIsMenuOpen(false)}>
-                    Get Started
+                    SkillMatch AI
                   </Link>
                 </li>
                 <li>
