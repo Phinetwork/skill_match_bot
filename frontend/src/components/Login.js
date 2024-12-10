@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
+import "./Login.css"; // Import the new CSS file
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -50,8 +51,8 @@ const Login = () => {
   return (
     <div className="login-container">
       <h1>Login</h1>
-      {error && <p style={{ color: "red", fontWeight: "bold" }}>{error}</p>} {/* Highlight errors */}
-      <form onSubmit={handleLogin}>
+      {error && <div className="error-message">{error}</div>} {/* Highlight errors */}
+      <form onSubmit={handleLogin} className="login-form">
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -78,6 +79,14 @@ const Login = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+      <div className="register-redirect">
+        <p>
+          Don't have an account?{" "}
+          <span onClick={() => navigate("/register")} className="register-link">
+            Register here
+          </span>.
+        </p>
+      </div>
     </div>
   );
 };
