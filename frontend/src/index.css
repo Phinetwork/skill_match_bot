@@ -13,7 +13,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #2a2a72, #009ffd); /* Engaging gradient */
+  background-color: #001f3f; /* Consistent blue background color */
   color: #fff; /* Light text for dark background */
   min-height: 100vh;
   display: flex;
@@ -25,7 +25,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 20px 0;
   font-weight: bold;
   text-align: center;
-  color: #fff;
+  color: #ffffff;
   text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for headers */
 }
 
@@ -59,10 +59,10 @@ a:hover {
 
 /* Header Styling */
 header {
-  background: rgba(0, 0, 0, 0.7); /* Transparent black */
+  background: transparent; /* Transparent header */
   padding: 20px 0;
   text-align: center;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  box-shadow: none; /* No shadow for a cleaner design */
 }
 
 header h1 {
@@ -74,7 +74,7 @@ header h1 {
 /* Footer Styling */
 footer {
   margin-top: auto; /* Push footer to the bottom */
-  background: rgba(0, 0, 0, 0.8);
+  background: #001f3f; /* Consistent with body background */
   text-align: center;
   padding: 15px 0;
   color: #e0e0e0;
