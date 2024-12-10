@@ -60,9 +60,9 @@ const Home = () => {
       <img src={logo} alt="Skill Match Bot Logo" style={styles.logo} />
       <h1 style={styles.heading}>Welcome to Skill Match Bot</h1>
       <p style={styles.paragraph}>
-        Discover your side hustles and skill-building opportunities.
+      Discover personalized side hustles and skill-building with an AI-driven platform that adapts, tailors, and coaches you to success.
       </p>
-      <Link to="/onboarding" style={styles.link}>
+      <Link to="/register" style={styles.link}>
         Get Started
       </Link>
     </div>
