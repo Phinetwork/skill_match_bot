@@ -13,7 +13,12 @@ import { useAuth } from "./auth/AuthContext";
 import logo from "./assets/logo.png";
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth(); // Add `loading` to manage fallback states
+
+  if (loading) {
+    // Display a loading spinner or fallback while authentication is verified
+    return <div style={styles.loading}>Loading...</div>;
+  }
 
   return (
     <div className="App">
@@ -37,7 +42,7 @@ function App() {
             path="/dashboard"
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
           />
-          <Route path="*" element={<Navigate to="/" replace />} /> {/* Fallback route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
       <Footer />
@@ -74,6 +79,15 @@ const styles = {
     padding: "20px",
     background: "linear-gradient(135deg, #00274d, #00509e)",
     boxSizing: "border-box",
+  },
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    fontSize: "1.5rem",
+    color: "#f0f8ff",
+    background: "linear-gradient(135deg, #00274d, #00509e)",
   },
   homeContent: {
     textAlign: "center",

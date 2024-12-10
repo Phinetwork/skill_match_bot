@@ -7,12 +7,12 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // Added loading state
+  const [loading, setLoading] = useState(false); // Loading state for button and spinner
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   useEffect(() => {
-    // Redirect to dashboard if already logged in
+    // Redirect to dashboard if already authenticated
     const token = localStorage.getItem("authToken");
     if (token) {
       navigate("/dashboard");
@@ -21,8 +21,8 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
-    setLoading(true); // Start loading
+    setError(""); // Clear previous error messages
+    setLoading(true); // Show loading spinner
 
     try {
       const response = await axios.post(
@@ -34,23 +34,23 @@ const Login = () => {
       const { token } = response.data;
 
       if (token) {
-        login(token); // Update context and state
-        navigate("/dashboard"); // Redirect to dashboard
+        login(token); // Pass token to AuthContext
+        navigate("/dashboard"); // Redirect to dashboard after successful login
       } else {
-        setError("Login failed. Please try again.");
+        setError("Unexpected error occurred. Please try again.");
       }
     } catch (err) {
       console.error("Login error:", err);
-      setError(err.response?.data?.error || "Failed to connect to the server.");
+      setError(err.response?.data?.error || "Failed to connect to the server. Please try again.");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false); // Hide loading spinner
     }
   };
 
   return (
     <div className="login-container">
       <h1>Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: "red", fontWeight: "bold" }}>{error}</p>} {/* Highlight errors */}
       <form onSubmit={handleLogin}>
         <div className="form-group">
           <label htmlFor="email">Email</label>

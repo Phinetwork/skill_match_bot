@@ -8,12 +8,13 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Initialize and validate token on app load
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
       validateToken(token);
     } else {
-      setLoading(false);
+      setLoading(false); // Stop loading if no token is present
     }
   }, []);
 
@@ -27,43 +28,43 @@ const AuthProvider = ({ children }) => {
         throw new Error("Invalid token");
       }
       const data = await res.json();
-      setUser(data);
+      setUser(data); // Update user state with validated user data
     } catch (error) {
-      console.error("Error during token validation:", error);
-      logout();
+      console.error("Token validation failed:", error);
+      logout(); // Logout on invalid token
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading after validation
     }
   };
 
   const login = async (token) => {
-    localStorage.setItem("authToken", token);
+    localStorage.setItem("authToken", token); // Store token in localStorage
     try {
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/dashboard`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
-        console.error(`Login failed with status ${res.status}: ${res.statusText}`);
+        console.error(`Login validation failed with status ${res.status}: ${res.statusText}`);
         throw new Error("Failed to fetch user info");
       }
       const userData = await res.json();
-      setUser(userData);
-      navigate("/dashboard");
+      setUser(userData); // Update user state with fetched data
+      navigate("/dashboard"); // Navigate to dashboard on successful login
     } catch (error) {
-      console.error("Login error:", error);
-      logout();
+      console.error("Login failed:", error);
+      logout(); // Clear token and navigate to login on failure
     }
   };
 
   const logout = () => {
-    localStorage.removeItem("authToken");
-    setUser(null);
-    navigate("/login");
+    localStorage.removeItem("authToken"); // Remove token from localStorage
+    setUser(null); // Clear user state
+    navigate("/login"); // Navigate to login page
   };
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading, isAuthenticated: !!user }}>
-      {!loading && children}
+      {!loading && children} {/* Render children only after loading is complete */}
     </AuthContext.Provider>
   );
 };
