@@ -23,34 +23,37 @@ const AuthProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
-        console.error("Dashboard request failed:", res.status, res.statusText);
+        console.warn(`Token validation failed with status ${res.status}: ${res.statusText}`);
         throw new Error("Invalid token");
       }
       const data = await res.json();
       setUser(data);
     } catch (error) {
-      console.error("Token validation failed:", error);
+      console.error("Error during token validation:", error);
       logout();
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
-  async function login(token) {
+  const login = async (token) => {
     localStorage.setItem("authToken", token);
     try {
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/dashboard`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error("Failed to fetch user info");
+      if (!res.ok) {
+        console.error(`Login failed with status ${res.status}: ${res.statusText}`);
+        throw new Error("Failed to fetch user info");
+      }
       const userData = await res.json();
       setUser(userData);
-      navigate("/dashboard"); // Redirect after successful login
-    } catch (err) {
-      console.error("Login error:", err);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
       logout();
     }
-  }
+  };
 
   const logout = () => {
     localStorage.removeItem("authToken");

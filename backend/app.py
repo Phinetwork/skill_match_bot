@@ -258,19 +258,21 @@ def dashboard():
     app.logger.info("Request received at /api/dashboard")
     try:
         user_id = get_jwt_identity()
-        app.logger.info(f"JWT Identity (user_id): {user_id}")  # Log the user_id
+        app.logger.info(f"Extracted user_id from token: {user_id}")
 
+        # Fetch the user from the database
         user = g.db.query(User).filter_by(id=user_id).first()
         if not user:
-            app.logger.warning(f"User with id {user_id} not found.")
+            app.logger.warning("User not found!")
             return jsonify({"error": "User not found!"}), 404
 
+        # Example user-specific data; adjust as needed
         data = {
             "username": user.username,
             "email": user.email,
-            "created_at": user.created_at.isoformat(),
+            "created_at": user.created_at.isoformat()
         }
-        app.logger.info(f"User data for dashboard: {data}")
+        app.logger.info(f"Dashboard data for user_id {user_id}: {data}")
         return jsonify(data), 200
     except Exception as e:
         app.logger.error(f"Error in /api/dashboard: {e}", exc_info=True)
