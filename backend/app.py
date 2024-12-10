@@ -280,9 +280,12 @@ def dashboard():
         app.logger.error(f"Error in /api/dashboard: {e}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
     
-# Set the correct path to the frontend's build folder
-frontend_build_path = os.path.join(os.getcwd(), "frontend", "build")
+# Set the correct path to the frontend's build folder (sibling to backend)
+frontend_build_path = os.path.join(os.path.dirname(os.getcwd()), "frontend", "build")
 app.static_folder = frontend_build_path
+
+# Log the resolved path for debugging
+app.logger.info(f"Frontend build path set to: {frontend_build_path}")
 
 # Serve React's index.html for any non-API route
 @app.route('/<path:path>', methods=["GET"])
@@ -291,13 +294,21 @@ def serve(path):
         return "Not Found", 404  # Return 404 for API routes, if needed
     else:
         # Serve index.html from the frontend's build folder
-        return send_from_directory(frontend_build_path, 'index.html')
+        try:
+            return send_from_directory(frontend_build_path, 'index.html')
+        except FileNotFoundError:
+            app.logger.error(f"index.html not found in {frontend_build_path}")
+            return "Frontend build not found", 404
 
 # Fallback for root path to serve index.html
 @app.route('/', methods=["GET"])
 def serve_index():
-    return send_from_directory(frontend_build_path, 'index.html')
-    
+    try:
+        return send_from_directory(frontend_build_path, 'index.html')
+    except FileNotFoundError:
+        app.logger.error(f"index.html not found in {frontend_build_path}")
+        return "Frontend build not found", 404
+
 # Main entry point
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5001))
