@@ -13,7 +13,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #00509e; /* Consistent blue background color */
+  background: linear-gradient(135deg, #00274d, #00509e); /* Updated gradient background */
+  background-color: #00274d; /* Fallback for older browsers */
   color: #fff; /* Light text for dark background */
   min-height: 100vh;
   display: flex;
