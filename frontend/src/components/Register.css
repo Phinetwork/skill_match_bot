@@ -68,7 +68,7 @@
 .login-redirect {
   margin-top: 20px;
   font-size: 14px;
-  color: #444; /* Darker gray for better visibility on white background */
+  color: #000000; /* Darker gray for better visibility on white background */
 }
 
 .login-redirect .login-link {
