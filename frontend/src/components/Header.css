@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  background-color: transparent;
+  background-color: transparent; /* Keeps the header transparent at all times */
   position: fixed;
   top: 0;
   width: 100%;
