@@ -4,6 +4,8 @@ import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress, Button, Grid, Card, Typography } from "@mui/material";
 import { Bar } from "react-chartjs-2";
+import "@fontsource/roboto"; // Import Roboto font
+import "./dashboard.css"; // Import the custom CSS for the dashboard
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -57,27 +59,6 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  if (loading) {
-    return (
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
-        <CircularProgress />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-        <Button variant="contained" color="primary" onClick={handleLogout}>
-          Logout
-        </Button>
-      </div>
-    );
-  }
-
   const barChartData = {
     labels: ["January", "February", "March", "April"],
     datasets: [
@@ -88,51 +69,76 @@ const Dashboard = () => {
         borderWidth: 1,
         hoverBackgroundColor: "rgba(75,192,192,0.6)",
         hoverBorderColor: "rgba(75,192,192,1)",
-        data: [6500, 5900, 8000, 8100],
+        data: userData?.monthlyRevenue || [0, 0, 0, 0], // Ensure data fallback
       },
     ],
   };
 
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+        <Button variant="contained" color="primary" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="dashboard-container">
       <Typography variant="h4" align="center" gutterBottom>
         Dashboard
       </Typography>
-      {userData && (
+      {userData ? (
         <Typography variant="h5" align="center">
-          Welcome, {userData.username}!
+          Welcome, {userData.username || "User"}!
+        </Typography>
+      ) : (
+        <Typography variant="h5" align="center">
+          Welcome to your Dashboard!
         </Typography>
       )}
 
       <Grid container spacing={3} style={{ marginTop: "20px" }}>
         <Grid item xs={12} sm={6} md={4}>
-          <Card style={{ padding: "20px", textAlign: "center" }}>
+          <Card className="card">
             <Typography variant="h6">Total Users</Typography>
             <Typography variant="h4">{userData?.totalUsers || "N/A"}</Typography>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
-          <Card style={{ padding: "20px", textAlign: "center" }}>
+          <Card className="card">
             <Typography variant="h6">Active Users</Typography>
             <Typography variant="h4">{userData?.activeUsers || "N/A"}</Typography>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
-          <Card style={{ padding: "20px", textAlign: "center" }}>
+          <Card className="card">
             <Typography variant="h6">Monthly Revenue</Typography>
-            <Typography variant="h4">{userData?.monthlyRevenue || "N/A"}</Typography>
+            <Typography variant="h4">{userData?.monthlyRevenueTotal || "N/A"}</Typography>
           </Card>
         </Grid>
       </Grid>
 
-      <div style={{ marginTop: "30px" }}>
+      <div className="chart-container">
         <Typography variant="h6" align="center" gutterBottom>
           Monthly Revenue Trend
         </Typography>
         <Bar data={barChartData} />
       </div>
 
-      <div style={{ textAlign: "center", marginTop: "30px" }}>
+      <div className="logout-button">
         <Button variant="contained" color="secondary" onClick={handleLogout}>
           Logout
         </Button>
