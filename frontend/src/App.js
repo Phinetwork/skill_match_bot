@@ -9,11 +9,11 @@ import Contact from "./components/Contact";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
-import { useAuth } from "./auth/AuthContext"; // Ensure AuthContext is correctly imported
-import logo from "./assets/logo.png"; // Ensure the logo path is correct
+import { useAuth } from "./auth/AuthContext";
+import logo from "./assets/logo.png";
 
 function App() {
-  const { user, isAuthenticated } = useAuth(); // Added `isAuthenticated` for clarity
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="App">
@@ -37,6 +37,7 @@ function App() {
             path="/dashboard"
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />}
           />
+          <Route path="*" element={<Navigate to="/" replace />} /> {/* Fallback route */}
         </Routes>
       </main>
       <Footer />
@@ -46,7 +47,7 @@ function App() {
 
 const Home = () => {
   React.useEffect(() => {
-    document.title = "Skill Match Bot - Home"; // Set the page title dynamically
+    document.title = "Skill Match Bot - Home";
   }, []);
 
   return (
@@ -69,9 +70,9 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    minHeight: "calc(100vh - 120px)", // Adjusting for header and footer height
+    minHeight: "calc(100vh - 120px)",
     padding: "20px",
-    background: "linear-gradient(135deg, #00274d, #00509e)", // High-contrast background
+    background: "linear-gradient(135deg, #00274d, #00509e)",
     boxSizing: "border-box",
   },
   homeContent: {
@@ -79,34 +80,32 @@ const styles = {
     maxWidth: "600px",
     width: "100%",
     margin: "0 auto",
-    padding: "10px", // Padding for mobile
+    padding: "10px",
   },
   logo: {
-    height: "100px", // Adjust height as needed
+    height: "100px",
     marginBottom: "20px",
-    animation: "spin 20s linear infinite", // Optional animation
   },
   heading: {
     fontSize: "2.5rem",
-    color: "#f0f8ff", // Light color for better contrast
+    color: "#f0f8ff",
     marginBottom: "20px",
   },
   paragraph: {
     fontSize: "1.2rem",
-    color: "#e6f7ff", // Softer light color
+    color: "#e6f7ff",
     marginBottom: "30px",
     lineHeight: "1.6",
   },
   link: {
     display: "inline-block",
     padding: "15px 30px",
-    backgroundColor: "#00aaff", // Vibrant button color
+    backgroundColor: "#00aaff",
     color: "#fff",
     textDecoration: "none",
     borderRadius: "8px",
     fontSize: "1.1rem",
     fontWeight: "bold",
-    transition: "background-color 0.3s ease",
     textAlign: "center",
   },
 };

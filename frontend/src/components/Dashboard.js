@@ -1,69 +1,85 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { decode as jwtDecode } from "jwt-decode"; // Correct import for jwt-decode@4.x.x
+import jwtDecode from "jwt-decode"; // Correct import for jwt-decode
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const [userData, setUserData] = useState(null); // State for storing user data
-  const [loading, setLoading] = useState(true); // State for loading indicator
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // State for error messages
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
 
     if (!token) {
-      navigate("/login"); // Redirect to login if no token is found
+      navigate("/login");
       return;
     }
 
     try {
-      jwtDecode(token); // Decode the token to verify its structure
-      fetchDashboardData(); // Fetch user-specific dashboard data
+      const decodedToken = jwtDecode(token);
+      const isTokenExpired = decodedToken.exp * 1000 < Date.now();
+      if (isTokenExpired) {
+        console.error("Token expired");
+        localStorage.removeItem("authToken");
+        navigate("/login");
+        return;
+      }
+      fetchDashboardData(token);
     } catch (err) {
       console.error("Invalid token:", err);
-      localStorage.removeItem("token"); // Clear invalid token
+      localStorage.removeItem("authToken");
       navigate("/login");
     }
   }, [navigate]);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = async (token) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/api/dashboard`, // Use dynamic backend URL
+        `${process.env.REACT_APP_BACKEND_URL}/api/dashboard`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      setUserData(response.data); // Update user data
+      setUserData(response.data);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
-      localStorage.removeItem("token"); // Clear token if fetching fails
-      navigate("/login"); // Redirect to login
+      setError("Failed to load dashboard data. Please try again.");
     } finally {
-      setLoading(false); // Stop loading indicator
+      setLoading(false);
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove token from localStorage
-    navigate("/login"); // Redirect to login
+    localStorage.removeItem("authToken");
+    navigate("/login");
   };
+
+  if (loading) return <p>Loading...</p>;
+
+  if (error) {
+    return (
+      <div>
+        <p>{error}</p>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h1>Dashboard</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : userData ? (
+      {userData ? (
         <div>
           <h2>Welcome, {userData.username}</h2>
           <p>Your email: {userData.email}</p>
           <button onClick={handleLogout}>Logout</button>
         </div>
       ) : (
-        <p>Error loading dashboard data. Please try logging in again.</p>
+        <p>No user data available.</p>
       )}
     </div>
   );
