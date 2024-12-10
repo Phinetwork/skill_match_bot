@@ -123,6 +123,9 @@ const Register = () => {
           Register
         </button>
       </form>
+      <div className="login-redirect">
+        <p>Already registered? <span onClick={() => navigate("/login")} className="login-link">Log in here</span>.</p>
+      </div>
     </div>
   );
 };
