@@ -23,9 +23,15 @@ const Header = () => {
     <header className="header">
       <div className="header-content">
         <div className="logo">
-          <Link to="/">
-            <img src={logo} alt="Skill Match Bot Logo" />
-          </Link>
+          {isAuthenticated ? (
+            <Link to="/dashboard">
+              <img src={logo} alt="Skill Match Bot Logo" />
+            </Link>
+          ) : (
+            <Link to="/">
+              <img src={logo} alt="Skill Match Bot Logo" />
+            </Link>
+          )}
         </div>
         <button
           className="menu-toggle"
@@ -36,12 +42,6 @@ const Header = () => {
         </button>
         <nav className={`nav-menu ${isMenuOpen ? "open" : ""}`}>
           <ul>
-            <li>
-              <Link to="/" onClick={() => setIsMenuOpen(false)}>
-                Home
-              </Link>
-            </li>
-
             {/* Links visible only to logged-out users */}
             {!isAuthenticated && (
               <>
