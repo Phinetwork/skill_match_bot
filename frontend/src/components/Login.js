@@ -7,12 +7,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   useEffect(() => {
-    // Redirect if already logged in
-    if (localStorage.getItem("authToken")) {
+    // Redirect to dashboard if already logged in
+    const token = localStorage.getItem("authToken");
+    if (token) {
       navigate("/dashboard");
     }
   }, [navigate]);
@@ -20,6 +22,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true); // Start loading
 
     try {
       const response = await axios.post(
@@ -28,16 +31,19 @@ const Login = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      if (response.status === 200) {
-        const { token } = response.data;
+      const { token } = response.data;
+
+      if (token) {
         login(token); // Update context and state
-        navigate("/dashboard");
+        navigate("/dashboard"); // Redirect to dashboard
       } else {
-        setError("Unexpected error during login.");
+        setError("Login failed. Please try again.");
       }
     } catch (err) {
       console.error("Login error:", err);
-      setError(err.response?.data?.error || "Invalid email or password.");
+      setError(err.response?.data?.error || "Failed to connect to the server.");
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -68,8 +74,8 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="login-button">
-          Login
+        <button type="submit" className="login-button" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>
