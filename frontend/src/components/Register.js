@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-import "./Register.css"; // Create a CSS file for styling the register form
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../auth/AuthContext"; // Ensure AuthContext is properly configured
+import "./Register.css";
 
 const Register = () => {
+  const { login } = useContext(AuthContext); // Used to log in the user automatically
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -14,10 +19,7 @@ const Register = () => {
   const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -25,39 +27,40 @@ const Register = () => {
     setError("");
     setSuccess("");
 
+    // Basic validation for matching passwords
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
     try {
+      // Call the backend API
       const response = await axios.post(
-        "https://your-backend-url.com/api/register",
+        `${process.env.REACT_APP_BACKEND_URL}/api/register`,
         {
           username: formData.username,
           email: formData.email,
           password: formData.password,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
+
       if (response.status === 201) {
-        setSuccess("Registration successful! You can now log in.");
-        setFormData({
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        });
+        setSuccess("Registration successful! Redirecting...");
+        
+        // If backend sends a token, log the user in
+        if (response.data.token) {
+          login(response.data.token);
+          setTimeout(() => navigate("/dashboard"), 1500); // Redirect to dashboard
+        } else {
+          // Otherwise, redirect to login page
+          setTimeout(() => navigate("/login"), 1500);
+        }
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
       setError(
-        error.response?.data?.message ||
-          "An error occurred while registering. Please try again."
+        err.response?.data?.error || "An error occurred while registering. Please try again."
       );
     }
   };

@@ -1,52 +1,82 @@
 from flask import Blueprint, request, jsonify
-from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User
-from utils.token import generate_token
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import create_access_token, jwt_required, JWTManager
+from datetime import timedelta
+import sqlite3
 
-auth = Blueprint('auth', __name__)
+# Initialize Flask extensions
+bcrypt = Bcrypt()
+auth_bp = Blueprint('auth', __name__)
 
-# Register endpoint
-@auth.route('/api/register', methods=['POST'])
+# Set up database connection
+def get_db_connection():
+    conn = sqlite3.connect('database.db')  # Replace with your database path
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# Register route
+@auth_bp.route('/register', methods=['POST'])
 def register():
-    data = request.json
+    data = request.get_json()
+
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
     # Validate input
     if not username or not email or not password:
-        return jsonify({"message": "All fields are required"}), 400
+        return jsonify({"error": "Missing required fields"}), 400
 
-    # Check if the user already exists
-    if User.query.filter_by(email=email).first():
-        return jsonify({"message": "Email is already registered"}), 400
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    # Create a new user
-    hashed_password = generate_password_hash(password)
-    new_user = User(username=username, email=email, password=hashed_password)
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-    db.session.add(new_user)
-    db.session.commit()
+    # Check if email or username already exists
+    cursor.execute("SELECT * FROM users WHERE email = ? OR username = ?", (email, username))
+    existing_user = cursor.fetchone()
+
+    if existing_user:
+        return jsonify({"error": "Email or username already exists"}), 400
+
+    # Insert new user
+    cursor.execute(
+        "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+        (username, email, hashed_password)
+    )
+    conn.commit()
+    conn.close()
 
     return jsonify({"message": "User registered successfully"}), 201
 
-# Login endpoint
-@auth.route('/api/login', methods=['POST'])
+
+# Login route
+@auth_bp.route('/login', methods=['POST'])
 def login():
-    data = request.json
+    data = request.get_json()
+
     email = data.get('email')
     password = data.get('password')
 
     # Validate input
     if not email or not password:
-        return jsonify({"message": "Email and password are required"}), 400
+        return jsonify({"error": "Missing required fields"}), 400
 
-    # Authenticate user
-    user = User.query.filter_by(email=email).first()
-    if not user or not check_password_hash(user.password, password):
-        return jsonify({"message": "Invalid email or password"}), 401
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-    # Generate a token for the user
-    token = generate_token(user.id)
+    # Fetch user
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+    user = cursor.fetchone()
 
-    return jsonify({"message": "Login successful", "token": token}), 200
+    if not user:
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    # Check password
+    if not bcrypt.check_password_hash(user['password'], password):
+        return jsonify({"error": "Invalid email or password"}), 401
+
+    # Generate JWT token
+    access_token = create_access_token(identity={"username": user['username'], "email": user['email']}, expires_delta=timedelta(hours=1))
+
+    return jsonify({"token": access_token, "message": "Login successful"}), 200

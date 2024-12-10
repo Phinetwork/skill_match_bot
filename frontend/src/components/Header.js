@@ -1,13 +1,22 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../auth/AuthContext"; // Updated to use the 'auth' folder
 import "./Header.css";
 import logo from "../assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsMenuOpen(false); // Close menu after logout
+    navigate("/"); // Redirect to the homepage or login page after logout
   };
 
   return (
@@ -62,6 +71,45 @@ const Header = () => {
                 Open Source Code
               </a>
             </li>
+
+            {/* Conditional links based on authentication */}
+            {isAuthenticated ? (
+              <>
+                <li>
+                  <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="logout-btn"
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "inherit",
+                      fontSize: "inherit",
+                    }}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                    Login
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                    Register
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>
@@ -70,4 +118,3 @@ const Header = () => {
 };
 
 export default Header;
-
