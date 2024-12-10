@@ -68,15 +68,15 @@
 .login-redirect {
   margin-top: 20px;
   font-size: 14px;
-  color: #000000; /* Darker gray for better visibility on white background */
+  color: #000; /* Explicit black for better visibility on white background */
 }
 
-.login-redirect .login-link {
-  color: #007bff; /* Link color matches the button */
+.login-redirect span {
+  color: #007bff; /* Link color for "Log in here" */
   cursor: pointer;
   text-decoration: underline;
 }
 
-.login-redirect .login-link:hover {
-  color: #0056b3; /* Darker blue on hover for better visibility */
+.login-redirect span:hover {
+  color: #0056b3; /* Darker blue on hover */
 }
