@@ -5,8 +5,10 @@
   padding: 15px 30px;
   background-color: transparent;
   position: fixed;
+  top: 0;
   width: 100%;
   z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: adds a slight shadow for separation */
 }
 
 .header-content {
@@ -25,7 +27,11 @@
   transform: scale(1.1);
 }
 
-/* Hamburger Icon */
+/* Ensure the main content starts below the header */
+body {
+  margin-top: 90px; /* Adjust based on header height (60px + 15px padding x2) */
+}
+
 .menu-toggle {
   display: none;
   font-size: 1.8rem;
