@@ -1,54 +1,50 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../auth/AuthContext"; // Ensure correct path
+import { AuthContext } from "../auth/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState(""); // State for email input
-  const [password, setPassword] = useState(""); // State for password input
-  const [error, setError] = useState(""); // State for error messages
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useContext(AuthContext); // Access AuthContext for login
+  const { login } = useContext(AuthContext);
 
-  // Redirect to dashboard if already authenticated
   useEffect(() => {
-    if (isAuthenticated) {
+    // Redirect if already logged in
+    if (localStorage.getItem("authToken")) {
       navigate("/dashboard");
     }
-  }, [isAuthenticated, navigate]);
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError("");
 
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/login`,
         { email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
 
       if (response.status === 200) {
-        login(response.data.token); // Log the user in via AuthContext
+        const { token } = response.data;
+        login(token); // Update context and state
+        navigate("/dashboard");
       } else {
-        throw new Error("Unexpected response status");
+        setError("Unexpected error during login.");
       }
     } catch (err) {
       console.error("Login error:", err);
-      setError(
-        err.response?.data?.error || "Invalid email or password. Please try again."
-      );
+      setError(err.response?.data?.error || "Invalid email or password.");
     }
   };
 
   return (
     <div className="login-container">
       <h1>Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>} {/* Display error messages */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleLogin}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
