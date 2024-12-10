@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { CircularProgress, Button, Grid, Card, Typography } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import "@fontsource/roboto"; // Import Roboto font
-import "./dashboard.css"; // Import the custom CSS for the dashboard
+import "./Dashboard.css"; // Import the custom CSS for the dashboard
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
