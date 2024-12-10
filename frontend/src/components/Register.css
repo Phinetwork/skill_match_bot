@@ -10,7 +10,7 @@
 
 .register-container h1 {
   margin-bottom: 20px;
-  color: #333;
+  color: #333; /* Ensures the heading has sufficient contrast */
 }
 
 .register-form .form-group {
@@ -22,7 +22,7 @@
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #555;
+  color: #333; /* Dark text for labels */
 }
 
 .register-form input {
@@ -32,6 +32,8 @@
   border: 1px solid #ddd;
   box-sizing: border-box;
   font-size: 14px;
+  background-color: #fff; /* Ensure a clean white background */
+  color: #333; /* Dark text for inputs */
 }
 
 .register-button {
@@ -52,11 +54,29 @@
 }
 
 .error-message {
-  color: red;
+  color: #d9534f; /* Bootstrap-like red for error messages */
   margin-bottom: 15px;
+  font-weight: bold;
 }
 
 .success-message {
-  color: green;
+  color: #5cb85c; /* Bootstrap-like green for success messages */
   margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.login-redirect {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #333; /* Ensure the text has good contrast */
+}
+
+.login-link {
+  color: #007bff; /* Link color matches the button */
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.login-link:hover {
+  color: #0056b3; /* Darker blue on hover for better visibility */
 }
