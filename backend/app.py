@@ -3,6 +3,7 @@ load_dotenv()  # Load environment variables first
 
 from flask import Flask, request, jsonify, g
 from flask_cors import CORS
+from flask import Flask, send_from_directory
 from database import SessionLocal, Base, User  # Import after loading .env
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -279,13 +280,23 @@ def dashboard():
         app.logger.error(f"Error in /api/dashboard: {e}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
     
+# Set the correct path to the frontend's build folder
+frontend_build_path = os.path.join(os.getcwd(), "frontend", "build")
+app.static_folder = frontend_build_path
+
 # Serve React's index.html for any non-API route
 @app.route('/<path:path>', methods=["GET"])
 def serve(path):
     if path.startswith("api/"):
         return "Not Found", 404  # Return 404 for API routes, if needed
     else:
-        return send_from_directory(app.static_folder, 'index.html')
+        # Serve index.html from the frontend's build folder
+        return send_from_directory(frontend_build_path, 'index.html')
+
+# Fallback for root path to serve index.html
+@app.route('/', methods=["GET"])
+def serve_index():
+    return send_from_directory(frontend_build_path, 'index.html')
     
 # Main entry point
 if __name__ == "__main__":
