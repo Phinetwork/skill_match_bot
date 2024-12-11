@@ -25,7 +25,7 @@ const LiveHeatmap = () => {
           <YAxis type="number" dataKey="y" name="Computational Depth" />
           <ZAxis type="number" dataKey="z" range={[0, 100]} name="Node Relevance Index" />
           <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-          <Scatter name="Heat Points" data={data}>
+          <Scatter name="Node ID" data={data}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={getColor(entry.z)} />
             ))}
