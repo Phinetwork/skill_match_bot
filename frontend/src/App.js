@@ -13,15 +13,14 @@ import { useAuth } from "./auth/AuthContext";
 import logo from "./assets/logo.png";
 
 function App() {
-  const { isAuthenticated, loading } = useAuth(); // Add `loading` to manage fallback states
+  const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    // Display a loading spinner or fallback while authentication is verified
     return <div style={styles.loading}>Loading...</div>;
   }
 
   return (
-    <div className="App">
+    <div className="app-container" style={styles.appContainer}>
       <Header />
       <main style={styles.main}>
         <Routes>
@@ -60,7 +59,7 @@ const Home = () => {
       <img src={logo} alt="Skill Match Bot Logo" style={styles.logo} />
       <h1 style={styles.heading}>Welcome to Skill Match Bot</h1>
       <p style={styles.paragraph}>
-      Unlock personalized side hustle opportunities, master profitable skills, and build success-driven habits with an AI-powered platform that adapts to you. 
+        Unlock personalized side hustle opportunities, master profitable skills, and build success-driven habits with an AI-powered platform that adapts to you.
       </p>
       <Link to="/register" style={styles.link}>
         Get Started
@@ -70,12 +69,17 @@ const Home = () => {
 };
 
 const styles = {
+  appContainer: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh",
+  },
   main: {
+    flex: 1, // Ensures main content takes up available space
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    minHeight: "calc(100vh - 120px)",
     padding: "20px",
     background: "linear-gradient(135deg, #00274d, #00509e)",
     boxSizing: "border-box",
