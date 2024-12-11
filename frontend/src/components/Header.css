@@ -41,7 +41,7 @@ body {
   cursor: pointer;
   position: absolute;
   right: 20px;
-  top: 50%;
+  top: 50%; /* Default centering */
   transform: translateY(-50%);
   z-index: 1001;
   width: 50px;
@@ -87,6 +87,8 @@ body {
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
+    top: 35%; /* Slight adjustment to align better with the logo */
+    transform: translateY(-50%);
   }
 
   .nav-menu {
