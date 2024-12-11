@@ -313,7 +313,7 @@ const Dashboard = () => {
       </div>
 
       <div className="chart-container">
-        <h2>Interactive Insight Map</h2>
+        <h2>Interactive Neural Node Map</h2>
         <LiveHeatmap />
       </div>
 
