@@ -308,17 +308,17 @@ const Dashboard = () => {
       </div>
 
       <div className="chart-container">
-        <h2>Live Trend Visualizer</h2>
+        <h2>Global Trend Tracker</h2>
         <LiveTrendVisualizer />
       </div>
 
       <div className="chart-container">
-        <h2>Live Heatmap</h2>
+        <h2>Interactive Insight Map</h2>
         <LiveHeatmap />
       </div>
 
       <div className="live-chart-container">
-        <h2>Live Data Chart</h2>
+        <h2>AI Pulse</h2>
         <Line
           data={{
             labels: liveChartData.labels,
