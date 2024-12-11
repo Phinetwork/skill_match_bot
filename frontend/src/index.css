@@ -135,7 +135,7 @@ button:hover {
 }
 
 .results h2 {
-  color: #ffcc00;
+  color: #25d007;
 }
 
 .results ul {
@@ -160,8 +160,8 @@ button:hover {
 /* Buttons in Results */
 .results button {
   background: none;
-  border: 1px solid #ffcc00;
-  color: #ffcc00;
+  border: 1px solid #03d41f;
+  color: #07dd03;
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 8px;
@@ -170,6 +170,6 @@ button:hover {
 }
 
 .results button:hover {
-  background: #ffcc00;
+  background: #00d335;
   color: #000;
 }
