@@ -41,7 +41,7 @@ body {
   cursor: pointer;
   position: absolute;
   right: 20px;
-  top: 30%; /* Slight adjustment to align better with the logo */
+  top: 30%; /* Ensures it's vertically aligned with the logo */
   transform: translateY(-50%);
   z-index: 1001;
   width: 50px;
@@ -56,8 +56,10 @@ body {
 /* Yellow background when menu is open, reduced size */
 .menu-toggle.active {
   background: #ffc107; /* Yellow background for the toggle when active */
-  width: 25px; /* Reduced width (50% smaller) */
-  height: 25px; /* Reduced height (50% smaller) */
+  width: 30px; /* Reduced width for a smaller yellow area */
+  height: 30px; /* Reduced height for a smaller yellow area */
+  border-radius: 50%; /* Makes it a circle */
+  transform: translate(-50%, -50%); /* Ensures it's centered */
 }
 
 /* Navigation Menu */
