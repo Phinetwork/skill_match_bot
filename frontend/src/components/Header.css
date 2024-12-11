@@ -35,21 +35,29 @@ body {
 .menu-toggle {
   display: none;
   font-size: 1.8rem;
-  background: #ffc107; /* Yellow background for the toggle */
+  background: none; /* Default background is none */
   border: none;
   color: white;
   cursor: pointer;
   position: absolute;
   right: 20px;
-  top: 50%; /* Default centering */
+  top: 30%; /* Slight adjustment to align better with the logo */
   transform: translateY(-50%);
   z-index: 1001;
-  width: 60px; /* Increased width for yellow alignment */
-  height: 60px; /* Increased height for yellow alignment */
+  width: 50px;
+  height: 50px;
   border-radius: 8px; /* Slight rounding for a modern look */
   display: flex;
   align-items: center; /* Centers the hamburger icon vertically */
   justify-content: center; /* Centers the hamburger icon horizontally */
+  transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease; /* Smooth transition for hover or click states */
+}
+
+/* Yellow background when menu is open, reduced size */
+.menu-toggle.active {
+  background: #ffc107; /* Yellow background for the toggle when active */
+  width: 25px; /* Reduced width (50% smaller) */
+  height: 25px; /* Reduced height (50% smaller) */
 }
 
 /* Navigation Menu */
@@ -91,8 +99,6 @@ body {
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
-    top: 30%; /* Slight adjustment to align better with the logo */
-    transform: translateY(-50%);
   }
 
   .nav-menu {
