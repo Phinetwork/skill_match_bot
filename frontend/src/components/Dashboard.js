@@ -3,7 +3,8 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { Bar, Line } from "react-chartjs-2";
-import RealTimeCandlestickChart from "./RealTimeCandlestickChart";
+import LiveTrendVisualizer from "./LiveTrendVisualizer";
+import LiveHeatmap from "./LiveHeatmap";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -307,8 +308,13 @@ const Dashboard = () => {
       </div>
 
       <div className="chart-container">
-        <h2>Real-Time Candlestick Chart</h2>
-        <RealTimeCandlestickChart />
+        <h2>Live Trend Visualizer</h2>
+        <LiveTrendVisualizer />
+      </div>
+
+      <div className="chart-container">
+        <h2>Live Heatmap</h2>
+        <LiveHeatmap />
       </div>
 
       <div className="live-chart-container">
