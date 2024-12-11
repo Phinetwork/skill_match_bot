@@ -324,7 +324,7 @@ const Dashboard = () => {
             labels: liveChartData.labels,
             datasets: [
               {
-                label: "Live Data",
+                label: "Neural Signal",
                 data: liveChartData.data,
                 borderColor: "rgba(255, 99, 132, 1)",
                 backgroundColor: "rgba(255, 99, 132, 0.2)",
@@ -353,7 +353,7 @@ const Dashboard = () => {
                 beginAtZero: true,
                 title: {
                   display: true,
-                  text: "Value",
+                  text: "Processing Intensity",
                 },
               },
             },

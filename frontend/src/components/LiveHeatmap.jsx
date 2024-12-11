@@ -17,13 +17,13 @@ const getColor = (value) => {
 const LiveHeatmap = () => {
   return (
     <div className="heatmap-container">
-      <h2>Live Heatmap</h2>
+      <h2>Dynamic Neural Network</h2>
       <ResponsiveContainer width="100%" height={400}>
         <ScatterChart>
           <CartesianGrid />
-          <XAxis type="number" dataKey="x" name="Longitude" />
-          <YAxis type="number" dataKey="y" name="Latitude" />
-          <ZAxis type="number" dataKey="z" range={[0, 100]} name="Intensity" />
+          <XAxis type="number" dataKey="x" name="Decision Pathway" />
+          <YAxis type="number" dataKey="y" name="Computational Depth" />
+          <ZAxis type="number" dataKey="z" range={[0, 100]} name="Node Relevance Index" />
           <Tooltip cursor={{ strokeDasharray: "3 3" }} />
           <Scatter name="Heat Points" data={data}>
             {data.map((entry, index) => (

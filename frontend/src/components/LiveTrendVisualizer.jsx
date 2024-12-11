@@ -17,7 +17,7 @@ const LiveTrendVisualizer = () => {
 
   return (
     <div style={{ marginTop: "20px" }}>
-      <h2>Live Trend Visualizer</h2>
+      <h2>AI Insight Tracker</h2>
       <VictoryChart theme={VictoryTheme.material}>
         <VictoryLine
           data={trendData}
