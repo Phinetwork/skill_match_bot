@@ -87,7 +87,7 @@ body {
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
-    top: 35%; /* Slight adjustment to align better with the logo */
+    top: 30%; /* Slight adjustment to align better with the logo */
     transform: translateY(-50%);
   }
 
