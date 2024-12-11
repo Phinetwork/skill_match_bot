@@ -35,7 +35,7 @@ body {
 .menu-toggle {
   display: none;
   font-size: 1.8rem;
-  background: none;
+  background: #ffc107; /* Yellow background for the toggle */
   border: none;
   color: white;
   cursor: pointer;
@@ -44,8 +44,12 @@ body {
   top: 50%; /* Default centering */
   transform: translateY(-50%);
   z-index: 1001;
-  width: 50px;
-  height: 50px;
+  width: 60px; /* Increased width for yellow alignment */
+  height: 60px; /* Increased height for yellow alignment */
+  border-radius: 8px; /* Slight rounding for a modern look */
+  display: flex;
+  align-items: center; /* Centers the hamburger icon vertically */
+  justify-content: center; /* Centers the hamburger icon horizontally */
 }
 
 /* Navigation Menu */
