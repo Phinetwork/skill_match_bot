@@ -33,7 +33,7 @@ body {
 }
 
 .menu-toggle {
-  display: none;
+  display: none; /* Default is hidden on desktop */
   font-size: 1.8rem;
   background: none; /* Default background is none */
   border: none;
@@ -41,8 +41,8 @@ body {
   cursor: pointer;
   position: absolute;
   right: 20px;
-  top: 30%; /* Ensures it's vertically aligned with the logo */
-  transform: translateY(-50%);
+  top: 30%; /* Ensures it's vertically centered */
+  transform: translateY(-50%); /* Centers the hamburger vertically */
   z-index: 1001;
   width: 50px;
   height: 50px;
@@ -53,13 +53,13 @@ body {
   transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease; /* Smooth transition for hover or click states */
 }
 
-/* Yellow background when menu is open, reduced size */
+/* Yellow background when menu is open, properly centered */
 .menu-toggle.active {
   background: #ffc107; /* Yellow background for the toggle when active */
-  width: 30px; /* Reduced width for a smaller yellow area */
-  height: 30px; /* Reduced height for a smaller yellow area */
+  width: 40px; /* Adjusted width for proper scaling */
+  height: 40px; /* Adjusted height for proper scaling */
   border-radius: 50%; /* Makes it a circle */
-  transform: translate(-50%, -50%); /* Ensures it's centered */
+  transform: translate(0%, -50%); /* Ensures perfect horizontal and vertical alignment */
 }
 
 /* Navigation Menu */
@@ -100,7 +100,7 @@ body {
 /* Mobile Specific Styles */
 @media (max-width: 768px) {
   .menu-toggle {
-    display: block;
+    display: block; /* Only display the menu toggle on mobile devices */
   }
 
   .nav-menu {
