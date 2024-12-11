@@ -125,17 +125,22 @@ button:hover {
   background: #ffd633;
 }
 
-/* Results Section Styling */
 .results {
   margin-top: 20px;
-  background: rgba(255, 255, 255, 0.1); /* Slight transparency */
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)); /* Subtle gradient for depth */
+  padding: 25px; /* Slightly increased padding for a polished look */
+  border-radius: 15px; /* Smooth curves for a modern aesthetic */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.4); /* Deeper shadow for a premium feel */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* A subtle border to define the section */
+  backdrop-filter: blur(10px); /* Frosted glass effect for elegance */
+  color: #ffffff; /* Ensures text is readable on the background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Clean, modern font */
+  font-size: 1rem; /* Clear text size */
+  line-height: 1.6; /* Comfortable line spacing for readability */
 }
 
 .results h2 {
-  color: #25d007;
+  color: #2563eb;
 }
 
 .results ul {
@@ -160,8 +165,8 @@ button:hover {
 /* Buttons in Results */
 .results button {
   background: none;
-  border: 1px solid #03d41f;
-  color: #07dd03;
+  border: 1px solid #2563eb;
+  color: #2563eb;
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 8px;
@@ -170,6 +175,6 @@ button:hover {
 }
 
 .results button:hover {
-  background: #00d335;
+  background: #2563eb;
   color: #000;
 }
