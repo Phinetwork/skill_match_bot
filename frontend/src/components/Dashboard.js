@@ -3,6 +3,17 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -34,7 +45,7 @@ const Dashboard = () => {
           return;
         }
 
-        await Promise.all([
+        await Promise.allSettled([
           fetchDashboardData(token),
           fetchChartData(token),
           fetchQuote(),
@@ -89,8 +100,9 @@ const Dashboard = () => {
 
   const fetchQuote = async () => {
     try {
-      const response = await axios.get("https://zenquotes.io/api/random");
-      const quoteText = response.data[0]?.q + " - " + response.data[0]?.a;
+      const response = await axios.get("https://api.allorigins.win/get?url=" + encodeURIComponent("https://zenquotes.io/api/random"));
+      const parsedResponse = JSON.parse(response.data.contents);
+      const quoteText = parsedResponse[0]?.q + " - " + parsedResponse[0]?.a;
       setQuote(quoteText);
     } catch (err) {
       console.error("Error fetching motivational quote:", err);
