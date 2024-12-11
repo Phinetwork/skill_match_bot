@@ -2,22 +2,25 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { Bar } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const [chartData, setChartData] = useState([]);
+  const [liveChartData, setLiveChartData] = useState({ labels: [], data: [] });
   const [quote, setQuote] = useState("");
   const [habits, setHabits] = useState([]);
   const [educationResources, setEducationResources] = useState([]);
@@ -62,6 +65,12 @@ const Dashboard = () => {
     };
 
     fetchAllData();
+
+    const interval = setInterval(() => {
+      updateLiveChartData();
+    }, 1000); // Update every second
+
+    return () => clearInterval(interval);
   }, [navigate]);
 
   const fetchDashboardData = async (token) => {
@@ -110,13 +119,68 @@ const Dashboard = () => {
     }
   };
 
-  const fetchHabits = async () => {
-    try {
-      setHabits(["Exercise daily", "Read 20 minutes", "Write a journal"]); // Fallback habit ideas
-    } catch (err) {
-      console.error("Error fetching habit ideas:", err);
-      setHabits(["Default Habit 1", "Default Habit 2", "Default Habit 3"]);
-    }
+  const fetchHabits = () => {
+    const habitList = [
+      "Exercise daily",
+      "Read 20 minutes",
+      "Write a journal",
+      "Practice mindfulness",
+      "Learn a new skill",
+      "Drink more water",
+      "Declutter one area",
+      "Plan tomorrow's tasks",
+      "Practice gratitude",
+      "Stretch for 10 minutes",
+      "Limit screen time",
+      "Go for a walk",
+      "Meditate for 5 minutes",
+      "Write a to-do list",
+      "Call a friend or family member",
+      "Learn a new word",
+      "Cook a healthy meal",
+      "Practice deep breathing",
+      "Spend time in nature",
+      "Reflect on your day",
+      "Limit caffeine intake",
+      "Read a motivational quote",
+      "Track your expenses",
+      "Organize your workspace",
+      "Take a power nap",
+      "Smile at a stranger",
+      "Do 15 minutes of cardio",
+      "Write down a goal",
+      "Compliment someone",
+      "Focus on a single task",
+      "Avoid procrastination",
+      "Limit social media",
+      "Journal about gratitude",
+      "Set a new habit",
+      "Break a bad habit",
+      "Watch an educational video",
+      "Learn a hobby",
+      "Spend time with loved ones",
+      "Volunteer for a cause",
+      "Reflect on your strengths",
+      "Set a daily affirmation",
+      "Do a random act of kindness",
+      "Focus on posture",
+      "Set a digital detox day",
+      "Drink herbal tea",
+      "Write about your dreams",
+      "Spend time with a pet",
+      "Work on a personal project",
+      "Learn a new recipe",
+    ];
+
+    const rotateHabits = () => {
+      const shuffledHabits = habitList.sort(() => 0.5 - Math.random());
+      setHabits(shuffledHabits.slice(0, 3));
+    };
+
+    rotateHabits(); // Initial shuffle
+    const interval = setInterval(rotateHabits, 5000); // Rotate every 5 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
   };
 
   const fetchEducationResources = async () => {
@@ -129,6 +193,22 @@ const Dashboard = () => {
       console.error("Error fetching education resources:", err);
       setEducationResources([]);
     }
+  };
+
+  const updateLiveChartData = () => {
+    setLiveChartData((prevState) => {
+      const now = new Date();
+      const timeLabel = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+      const newData = [...prevState.data, Math.random() * 100];
+      const newLabels = [...prevState.labels, timeLabel];
+
+      if (newData.length > 10) {
+        newData.shift();
+        newLabels.shift();
+      }
+
+      return { labels: newLabels, data: newData };
+    });
   };
 
   const handleLogout = () => {
@@ -223,6 +303,50 @@ const Dashboard = () => {
         ) : (
           <Bar data={generatePlaceholderChartData()} options={chartOptions} />
         )}
+      </div>
+
+      <div className="live-chart-container">
+        <h2>Live Data Chart</h2>
+        <Line
+          data={{
+            labels: liveChartData.labels,
+            datasets: [
+              {
+                label: "Live Data",
+                data: liveChartData.data,
+                borderColor: "rgba(255, 99, 132, 1)",
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+              },
+            ],
+          }}
+          options={{
+            responsive: true,
+            plugins: {
+              legend: {
+                display: true,
+              },
+            },
+            animation: {
+              duration: 0,
+            },
+            scales: {
+              x: {
+                type: "category",
+                title: {
+                  display: true,
+                  text: "Time",
+                },
+              },
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Value",
+                },
+              },
+            },
+          }}
+        />
       </div>
     </div>
   );
