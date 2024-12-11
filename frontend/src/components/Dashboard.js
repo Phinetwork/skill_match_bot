@@ -3,6 +3,9 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { Bar, Line } from "react-chartjs-2";
+import LiveTrendVisualizer from "./LiveTrendVisualizer";
+import LiveHeatmap from "./LiveHeatmap";
+import RealTimeCandlestickChart from "./RealTimeCandlestickChart";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -272,38 +275,53 @@ const Dashboard = () => {
       </div>
 
       <div className="education-container">
-        <h2>Education Resources</h2>
-        <ul>
-          {educationResources.map((resource, index) => (
-            <li key={index}>
-              <a href={resource.link} target="_blank" rel="noopener noreferrer">
-                {resource.name}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+  <h2>Education Resources</h2>
+  <ul>
+    {educationResources.map((resource, index) => (
+      <li key={index}>
+        <a href={resource.link} target="_blank" rel="noopener noreferrer">
+          {resource.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
 
-      <div className="chart-container">
-        <h2>Your Progress</h2>
-        {chartData.length > 0 ? (
-          <Bar
-            data={{
-              labels: chartData.map((item) => item.name || "Unknown Skill"),
-              datasets: [
-                {
-                  label: "Skill Progress",
-                  data: chartData.map((item) => item.progress || 0),
-                  backgroundColor: "rgba(75, 192, 192, 0.6)",
-                },
-              ],
-            }}
-            options={chartOptions}
-          />
-        ) : (
-          <Bar data={generatePlaceholderChartData()} options={chartOptions} />
-        )}
-      </div>
+<div className="chart-container">
+  <h2>Your Progress</h2>
+  {chartData.length > 0 ? (
+    <Bar
+      data={{
+        labels: chartData.map((item) => item.name || "Unknown Skill"),
+        datasets: [
+          {
+            label: "Skill Progress",
+            data: chartData.map((item) => item.progress || 0),
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+          },
+        ],
+      }}
+      options={chartOptions}
+    />
+  ) : (
+    <Bar data={generatePlaceholderChartData()} options={chartOptions} />
+  )}
+</div>
+
+<div className="chart-container">
+  <h2>Live Trend Visualizer</h2>
+  <LiveTrendVisualizer />
+</div>
+
+<div className="chart-container">
+  <h2>Live Heatmap</h2>
+  <LiveHeatmap />
+</div>
+
+<div className="chart-container">
+  <h2>Real-Time Candlestick Chart</h2>
+  <RealTimeCandlestickChart />
+</div>
 
       <div className="live-chart-container">
         <h2>Live Data Chart</h2>
