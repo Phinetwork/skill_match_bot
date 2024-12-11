@@ -33,7 +33,7 @@ body {
 }
 
 .menu-toggle {
-  display: none; /* Default is hidden on desktop */
+  display: none; /* Default is hidden on all screens */
   font-size: 1.8rem;
   background: none; /* Default background is none */
   border: none;
