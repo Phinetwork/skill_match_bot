@@ -72,6 +72,30 @@ def test_dashboard(token):
         log_error(response)
 
 
+def test_ai_coach(token):
+    """Test the AI coach endpoint."""
+    print("Testing /api/ai-coach...")
+    headers = {**HEADERS, "Authorization": f"Bearer {token}"}
+
+    # Test with a valid message
+    payload = {"message": "How can I improve my productivity?"}
+    response = requests.post(f"{BASE_URL}/api/ai-coach", json=payload, headers=headers)
+    print(f"Response: {response.status_code}")
+    if response.status_code == 200:
+        print("AI Coach Response:", response.json())
+    else:
+        log_error(response)
+
+    # Test with an invalid payload (no message)
+    payload = {}
+    response = requests.post(f"{BASE_URL}/api/ai-coach", json=payload, headers=headers)
+    print(f"Response: {response.status_code}")
+    if response.status_code == 400:
+        print("AI Coach correctly handled missing message:", response.json())
+    else:
+        log_error(response)
+
+
 def run_tests():
     """Run all API tests."""
     print("Starting API tests...\n")
@@ -80,11 +104,12 @@ def run_tests():
     email, password = test_register()
     token = test_login(email, password)
 
-    # Test dashboard if login is successful
+    # Test dashboard and AI Coach if login is successful
     if token:
         test_dashboard(token)
+        test_ai_coach(token)
     else:
-        print("Login failed. Skipping dashboard test.")
+        print("Login failed. Skipping dashboard and AI Coach tests.")
 
 
 if __name__ == "__main__":

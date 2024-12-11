@@ -137,6 +137,46 @@ def side_hustle_matches():
     except Exception as e:
         app.logger.error(f"Error in /api/matches: {e}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
+    
+@app.route("/api/ai-coach", methods=["POST"])
+def ai_coach():
+    app.logger.info("Request received at /api/ai-coach")
+    try:
+        data = request.get_json()
+        if not data or "message" not in data:
+            app.logger.warning("Invalid payload: 'message' is required")
+            return jsonify({"error": "Message is required"}), 400
+
+        user_message = data.get("message")
+
+        # Call OpenAI API
+        openai.api_key = os.getenv("OPENAI_API_KEY")  # Ensure this environment variable is set
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": (
+                    "You are an empathetic, motivational, and highly knowledgeable AI coach. "
+                    "Your primary goal is to inspire and guide users toward achieving their personal and professional goals while helping them increase their income and financial stability through skill development. "
+                    "You are friendly, supportive, and positive, while also being honest and direct when needed. "
+                    "You adapt to each user's communication style and respond in a way that makes them feel understood and empowered. "
+                    "You are deeply knowledgeable in areas such as personal development, time management, productivity, skill-building, financial growth, and creating and maintaining habits. "
+                    "You help users identify the skills they need to achieve their career and financial goals and provide actionable steps to develop those skills. "
+                    "Suggest practical ways users can monetize their skills, such as freelancing, starting a side hustle, or advancing their career. "
+                    "Hold users accountable by tracking their progress, reminding them of their commitments, and encouraging consistency in building new habits. "
+                    "Provide strategies for overcoming procrastination and setbacks, helping users stay focused and motivated. "
+                    "Celebrate their progress and achievements, reinforcing positive behavior and a growth mindset. "
+                    "You also assist users in setting realistic goals and breaking them down into manageable steps. "
+                    "Maintain a balance between being motivational and providing practical, evidence-based recommendations to ensure users make measurable progress."
+                )},
+                {"role": "user", "content": user_message}
+            ]
+        )
+
+        ai_message = response['choices'][0]['message']['content']
+        return jsonify({"response": ai_message}), 200
+    except Exception as e:
+        app.logger.error(f"Unexpected error in /api/ai-coach: {e}", exc_info=True)
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/api/skills", methods=["POST"])
 def skill_creation():

@@ -1,0 +1,130 @@
+/* General body styling */
+body {
+  background: linear-gradient(to bottom, #1e3c72, #2a5298);
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+
+/* Main container for the dashboard */
+.dashboard-container {
+  padding: 20px;
+  text-align: center;
+}
+
+/* Styling for loading screen */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+/* Error message container */
+.error-container {
+  text-align: center;
+  margin-top: 20px;
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+/* Card component for user info or other widgets */
+.card {
+  padding: 20px;
+  margin: 15px auto;
+  max-width: 500px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Chart container for better layout of charts */
+.chart-container {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Logout button styling */
+.logout-button {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.logout-button button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background: #ff6b6b;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.logout-button button:hover {
+  background: #ff4b4b;
+  transform: translateY(-2px);
+}
+
+/* Table styles for any data display */
+.table-container {
+  margin-top: 20px;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #fff;
+}
+
+.table-container th,
+.table-container td {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 10px;
+  text-align: center;
+}
+
+.table-container th {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.table-container tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 10px;
+  }
+
+  .card {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .chart-container {
+    padding: 15px;
+  }
+
+  .logout-button button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}
