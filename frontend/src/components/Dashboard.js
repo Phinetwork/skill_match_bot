@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Bar, Line } from "react-chartjs-2";
 import LiveTrendVisualizer from "./LiveTrendVisualizer";
 import LiveHeatmap from "./LiveHeatmap";
+import AI_DecisionTreeVisualizer from "./DecisionTree";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -315,6 +316,11 @@ const Dashboard = () => {
       <div className="chart-container">
         <h2></h2>
         <LiveHeatmap />
+      </div>
+
+      <div className="chart-container">
+        <h2></h2>
+        <AI_DecisionTreeVisualizer />
       </div>
 
       <div className="live-chart-container">
