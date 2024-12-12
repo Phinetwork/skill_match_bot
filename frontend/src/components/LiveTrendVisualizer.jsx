@@ -4,11 +4,13 @@ import { VictoryChart, VictoryLine, VictoryTheme, VictoryTooltip, VictoryAxis } 
 const LiveTrendVisualizer = () => {
   const [trendData, setTrendData] = useState([]);
   const [lineColor, setLineColor] = useState("#00ff00"); // Default green color for upward trend
+  const [startTime] = useState(new Date());
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTrendData((prevData) => {
-        const newPoint = { x: new Date().toLocaleTimeString(), y: Math.random() * 100 };
+        const secondsElapsed = Math.floor((new Date() - startTime) / 1000);
+        const newPoint = { x: secondsElapsed, y: Math.random() * 100 };
         const previousY = prevData.length > 0 ? prevData[prevData.length - 1].y : 0;
 
         // Update line color based on trend
@@ -19,7 +21,7 @@ const LiveTrendVisualizer = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [startTime]);
 
   return (
     <div
@@ -41,23 +43,36 @@ const LiveTrendVisualizer = () => {
       >
         AI Global Trend Detector
       </h2>
+      <p
+        style={{
+          color: "#bbbbbb",
+          textAlign: "center",
+          fontSize: "14px",
+          marginBottom: "20px",
+        }}
+      >
+        This chart visualizes random trend data updated in real-time. The X-axis represents seconds elapsed, while the Y-axis shows the trend value.
+      </p>
       <VictoryChart
         theme={VictoryTheme.material}
         domainPadding={10}
         style={{ parent: { maxWidth: "100%" } }}
       >
         <VictoryAxis
-          tickFormat={(t) => `${t}`}
+          label="Seconds Elapsed"
           style={{
             axis: { stroke: "#ffffff" },
-            tickLabels: { fontSize: 12, fill: "#ffffff" },
+            axisLabel: { fontSize: 12, fill: "#ffffff", padding: 30 },
+            tickLabels: { fontSize: 10, fill: "#ffffff" },
           }}
         />
         <VictoryAxis
           dependentAxis
+          label="Trend Value"
           style={{
             axis: { stroke: "#ffffff" },
-            tickLabels: { fontSize: 12, fill: "#ffffff" },
+            axisLabel: { fontSize: 12, fill: "#ffffff", padding: 40 },
+            tickLabels: { fontSize: 10, fill: "#ffffff" },
           }}
         />
         <VictoryLine
@@ -72,10 +87,12 @@ const LiveTrendVisualizer = () => {
           }}
           animate={{ duration: 500, onLoad: { duration: 1000 } }}
           labels={({ datum }) => `${datum.y.toFixed(2)}`}
-          labelComponent={<VictoryTooltip
-            style={{ fontSize: 10, fill: "#ffffff" }}
-            flyoutStyle={{ fill: "#333", stroke: lineColor }}
-          />}
+          labelComponent={
+            <VictoryTooltip
+              style={{ fontSize: 10, fill: "#ffffff" }}
+              flyoutStyle={{ fill: "#333", stroke: lineColor }}
+            />
+          }
         />
       </VictoryChart>
       <p
