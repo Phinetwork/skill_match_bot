@@ -33,16 +33,23 @@ const PredictiveForecastChart = () => {
           throw new Error("Invalid API response");
         }
 
-        const labels = Object.keys(timeSeries).slice(0, 30).reverse(); // Last 30 days
+        // Get the last 30 days of data
+        const labels = Object.keys(timeSeries).slice(0, 30).reverse();
         const data = labels.map((date) => parseFloat(timeSeries[date]["4. close"]));
 
-        // Generate predictive data based on the last value (mock data)
-        const predictiveData = data.map((value, index) =>
-          value + Math.sin(index / 2) * 2 + Math.random() * 2 - 1 // Simulated trend
-        );
+        // Calculate prediction based on linear trend (simple regression)
+        const lastValue = data[data.length - 1];
+        const secondLastValue = data[data.length - 2];
+        const rateOfChange = lastValue - secondLastValue;
 
+        const nextDate = new Date(labels[labels.length - 1]);
+        nextDate.setDate(nextDate.getDate() + 1); // Add one day for the next prediction
+
+        const nextValue = lastValue + rateOfChange;
+
+        // Add future prediction to chart data
         setChartData({
-          labels,
+          labels: [...labels, nextDate.toLocaleDateString()],
           datasets: [
             {
               label: "Historical Data",
@@ -54,7 +61,7 @@ const PredictiveForecastChart = () => {
             },
             {
               label: "Predictive Trend",
-              data: predictiveData,
+              data: [...data, nextValue],
               borderColor: "#28A745",
               backgroundColor: "rgba(40, 167, 69, 0.2)",
               fill: true,
