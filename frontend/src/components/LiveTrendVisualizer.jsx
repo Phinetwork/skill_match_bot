@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { VictoryChart, VictoryLine, VictoryTheme, VictoryTooltip } from "victory";
+import { VictoryChart, VictoryLine, VictoryTheme, VictoryTooltip, VictoryAxis } from "victory";
 
 const LiveTrendVisualizer = () => {
   const [trendData, setTrendData] = useState([]);
@@ -8,7 +8,7 @@ const LiveTrendVisualizer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setTrendData((prevData) => {
-        const newPoint = { x: new Date(), y: Math.random() * 100 };
+        const newPoint = { x: new Date().toLocaleTimeString(), y: Math.random() * 100 };
         const previousY = prevData.length > 0 ? prevData[prevData.length - 1].y : 0;
 
         // Update line color based on trend
@@ -36,12 +36,30 @@ const LiveTrendVisualizer = () => {
           color: "#ffffff",
           textAlign: "center",
           fontFamily: "Arial, sans-serif",
-          marginBottom: "10px",
+          marginBottom: "20px",
         }}
       >
         AI Global Trend Detector
       </h2>
-      <VictoryChart theme={VictoryTheme.material} domainPadding={10}>
+      <VictoryChart
+        theme={VictoryTheme.material}
+        domainPadding={10}
+        style={{ parent: { maxWidth: "100%" } }}
+      >
+        <VictoryAxis
+          tickFormat={(t) => `${t}`}
+          style={{
+            axis: { stroke: "#ffffff" },
+            tickLabels: { fontSize: 12, fill: "#ffffff" },
+          }}
+        />
+        <VictoryAxis
+          dependentAxis
+          style={{
+            axis: { stroke: "#ffffff" },
+            tickLabels: { fontSize: 12, fill: "#ffffff" },
+          }}
+        />
         <VictoryLine
           data={trendData}
           x="x"
@@ -50,15 +68,27 @@ const LiveTrendVisualizer = () => {
             data: {
               stroke: lineColor,
               strokeWidth: 3,
-              transition: "stroke 0.3s ease-in-out", // Smooth transition for color changes
             },
-            parent: { border: "1px solid #ccc" },
           }}
           animate={{ duration: 500, onLoad: { duration: 1000 } }}
           labels={({ datum }) => `${datum.y.toFixed(2)}`}
-          labelComponent={<VictoryTooltip style={{ fontSize: 10, fill: "#ffffff" }} flyoutStyle={{ fill: "#333" }} />}
+          labelComponent={<VictoryTooltip
+            style={{ fontSize: 10, fill: "#ffffff" }}
+            flyoutStyle={{ fill: "#333", stroke: lineColor }}
+          />}
         />
       </VictoryChart>
+      <p
+        style={{
+          color: "#ffffff",
+          textAlign: "center",
+          marginTop: "10px",
+          fontSize: "14px",
+          fontStyle: "italic",
+        }}
+      >
+        "Stay ahead of the trends with real-time data visualization."
+      </p>
     </div>
   );
 };
