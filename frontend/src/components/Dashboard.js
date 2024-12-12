@@ -6,6 +6,7 @@ import { Bar, Line } from "react-chartjs-2";
 import LiveTrendVisualizer from "./LiveTrendVisualizer";
 import LiveHeatmap from "./LiveHeatmap";
 import AI_DecisionTreeVisualizer from "./DecisionTree";
+import PredictiveForecastChart from "./PredictiveForecastChart";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -321,6 +322,11 @@ const Dashboard = () => {
       <div className="chart-container">
         <h2></h2>
         <AI_DecisionTreeVisualizer />
+      </div>
+
+      <div className="chart-container">
+        <h2></h2>
+        <PredictiveForecastChart />
       </div>
 
       <div className="live-chart-container">
