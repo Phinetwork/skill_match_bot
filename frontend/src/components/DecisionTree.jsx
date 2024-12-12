@@ -61,7 +61,7 @@ const titleStyles = {
 
 const AI_DecisionTreeVisualizer = () => {
   const handleNodeClick = (nodeData) => {
-    alert(`Node: ${nodeData.name}\nDescription: ${nodeData.attributes.description}`);
+    alert(`Node: ${nodeData.name}\n${nodeData.attributes.description}`);
   };
 
   return (
@@ -85,12 +85,12 @@ const AI_DecisionTreeVisualizer = () => {
             node: {
               circle: { fill: "#007BFF", stroke: "#0056b3", strokeWidth: 2 },
               name: { fill: "#fff", fontSize: "1rem", fontFamily: "Roboto, sans-serif" },
-              attributes: { fill: "#ccc", fontSize: "0.8rem", fontFamily: "Roboto, sans-serif" },
+              attributes: { fill: "#fff", fontSize: "0.8rem", fontFamily: "Roboto, sans-serif" },
             },
             leafNode: {
               circle: { fill: "#28A745", stroke: "#1e7e34", strokeWidth: 2 },
               name: { fill: "#fff", fontSize: "1rem", fontFamily: "Roboto, sans-serif" },
-              attributes: { fill: "#ccc", fontSize: "0.8rem", fontFamily: "Roboto, sans-serif" },
+              attributes: { fill: "#fff", fontSize: "0.8rem", fontFamily: "Roboto, sans-serif" },
             },
           },
         }}

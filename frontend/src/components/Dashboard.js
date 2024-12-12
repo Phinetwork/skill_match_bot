@@ -311,6 +311,11 @@ const Dashboard = () => {
 
       <div className="chart-container">
         <h2></h2>
+        <PredictiveForecastChart />
+      </div>
+
+      <div className="chart-container">
+        <h2></h2>
         <LiveTrendVisualizer />
       </div>
 
@@ -322,11 +327,6 @@ const Dashboard = () => {
       <div className="chart-container">
         <h2></h2>
         <AI_DecisionTreeVisualizer />
-      </div>
-
-      <div className="chart-container">
-        <h2></h2>
-        <PredictiveForecastChart />
       </div>
 
       <div className="live-chart-container">

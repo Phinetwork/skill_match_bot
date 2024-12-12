@@ -37,19 +37,24 @@ const PredictiveForecastChart = () => {
         const labels = Object.keys(timeSeries).slice(0, 30).reverse();
         const data = labels.map((date) => parseFloat(timeSeries[date]["4. close"]));
 
-        // Calculate prediction based on linear trend (simple regression)
+        // Calculate predictions based on the rate of change
         const lastValue = data[data.length - 1];
         const secondLastValue = data[data.length - 2];
         const rateOfChange = lastValue - secondLastValue;
 
-        const nextDate = new Date(labels[labels.length - 1]);
-        nextDate.setDate(nextDate.getDate() + 1); // Add one day for the next prediction
+        const futureDates = [];
+        const futureValues = [];
+        let currentDate = new Date(labels[labels.length - 1]);
 
-        const nextValue = lastValue + rateOfChange;
+        for (let i = 1; i <= 3; i++) {
+          currentDate.setDate(currentDate.getDate() + 1);
+          futureDates.push(currentDate.toLocaleDateString());
+          futureValues.push(lastValue + rateOfChange * i);
+        }
 
-        // Add future prediction to chart data
+        // Combine historical and predictive data
         setChartData({
-          labels: [...labels, nextDate.toLocaleDateString()],
+          labels: [...labels, ...futureDates],
           datasets: [
             {
               label: "Historical Data",
@@ -61,7 +66,7 @@ const PredictiveForecastChart = () => {
             },
             {
               label: "Predictive Trend",
-              data: [...data, nextValue],
+              data: [...data, ...futureValues],
               borderColor: "#28A745",
               backgroundColor: "rgba(40, 167, 69, 0.2)",
               fill: true,
