@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import "./Dashboard.css";
 import { Bar, Line } from "react-chartjs-2";
 import LiveTrendVisualizer from "./LiveTrendVisualizer";
 import LiveHeatmap from "./LiveHeatmap";
