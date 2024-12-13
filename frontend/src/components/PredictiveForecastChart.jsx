@@ -10,8 +10,8 @@ const PredictiveForecastChart = () => {
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Ensure two digits
+    const day = String(today.getDate()).padStart(2, "0"); // Ensure two digits
     return `${year}-${month}-${day}`;
   };
 
@@ -20,7 +20,7 @@ const PredictiveForecastChart = () => {
       const currentDate = getCurrentDate();
       try {
         const response = await axios.get(
-          `https://api.polygon.io/v1/open-close/SPY/2024-12-11?adjusted=true&apiKey=Ecn37sRvNngNI1FqfCyQCx3FJoUWuuqh`
+          `https://api.polygon.io/v1/open-close/SPY/${currentDate}?adjusted=true&apiKey=Ecn37sRvNngNI1FqfCyQCx3FJoUWuuqh`
         );
 
         const data = response.data;
