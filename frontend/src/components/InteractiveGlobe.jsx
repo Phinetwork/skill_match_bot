@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Globe from "react-globe.gl";
+import "./InteractiveGlobe.css"; // Import the CSS file
 
 const countryCoordinates = {
   "Afghanistan": { "lat": 34.533333, "lng": 69.166667 },
@@ -213,16 +214,16 @@ const InteractiveGlobe = () => {
 
         if (data && data.documents) {
           const transformedPoints = Object.values(data.documents)
-            .filter((doc) => doc.count && countryCoordinates[doc.count]) // Match country name to coordinates
+            .filter((doc) => doc.count && countryCoordinates[doc.count]) 
             .map((doc) => {
               const { lat, lng } = countryCoordinates[doc.count];
               return {
                 lat,
                 lng,
-                size: 5, // Fixed size for simplicity
-                color: "#33FF57", // Use a consistent color
-                label: `${doc.display_title} (${doc.count})`, // Tooltip label
-                url: doc.pdfurl, // URL for click interaction
+                size: 5,
+                color: "#33FF57",
+                label: `${doc.display_title} (${doc.count})`,
+                url: doc.pdfurl,
               };
             });
 
@@ -237,14 +238,7 @@ const InteractiveGlobe = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        height: "600px",
-        border: "1px solid #ddd",
-        borderRadius: "15px",
-        overflow: "hidden",
-      }}
-    >
+    <div className="globe-container">
       <Globe
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-dark.jpg"
         pointsData={points}
@@ -256,13 +250,14 @@ const InteractiveGlobe = () => {
         atmosphereColor="#3A9BFF"
         atmosphereAltitude={0.25}
         onPointClick={(point) => {
-          if (point.url) window.open(point.url, "_blank"); // Open the URL in a new tab
+          if (point.url) window.open(point.url, "_blank");
         }}
         htmlElementsData={points}
         htmlElement={(point) => {
           const el = document.createElement("div");
+          el.className = "globe-tooltip";
           el.innerHTML = `
-            <div style='background-color: ${point.color}; padding: 5px; border-radius: 5px;'>
+            <div class="tooltip-content">
               <strong>${point.label}</strong>
             </div>`;
           return el;

@@ -1,0 +1,71 @@
+/* Container for the globe */
+.globe-container {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1f1f2f, #2c2c3d);
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .globe-container:hover {
+    transform: scale(1.01);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+  }
+  
+  /* The HTML elements created for data points */
+  .globe-tooltip {
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -120%);
+    position: absolute;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 9999; 
+  }
+  
+  /* Tooltip content styling */
+  .tooltip-content {
+    background: rgba(51, 255, 87, 0.9); /* Semi-transparent background matching point color */
+    color: #1e1e1e;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  
+  /* Smooth transitions for hover effects */
+  .globe-tooltip:hover .tooltip-content {
+    background: rgba(51, 255, 87, 1);
+  }
+  
+  /* We'll rely on the globe's built-in interactions, but we can add a subtle fade-in for tooltips */
+  .globe-tooltip[data-hover="true"] {
+    opacity: 1;
+    transform: translate(-50%, -130%);
+  }
+  
+  /* Just some styling hints for when hovering points is implemented (if you handle mouse events):
+     The globe library positions HTML elements at lat/lng coords. You can set "data-hover=true" 
+     when the user hovers over a point in JS code for a more dynamic UX if desired. */
+  
+  /* Atmosphere and globe styling is handled largely by the library, but you can customize:
+     (This depends on what classes or selectors react-globe sets.) */
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .globe-container {
+      height: 400px;
+    }
+  
+    .tooltip-content {
+      font-size: 12px;
+      padding: 6px 10px;
+    }
+  }
+  
