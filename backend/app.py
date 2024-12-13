@@ -29,10 +29,10 @@ jwt = JWTManager(app)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 app.logger.setLevel(logging.INFO)
-app.logger.info("Initializing the Skyriz Backend")
+app.logger.info("Initializing the Skill Match Bot Backend")
 
 # Configure allowed origins for CORS
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://skyriz.app/").split(",")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://skyriz.app").split(",")
 ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS]
 CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 app.logger.info(f"CORS enabled for frontend URLs: {ALLOWED_ORIGINS}")
@@ -243,7 +243,7 @@ def habit_tracker():
 @app.route("/", methods=["GET"])
 def home():
     app.logger.info("Root endpoint accessed")
-    return jsonify({"message": "Skyriz Backend is running!"})
+    return jsonify({"message": "Skill Match Bot Backend is running!"})
 
 # New Authentication Routes
 
