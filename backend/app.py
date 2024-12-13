@@ -32,10 +32,7 @@ app.logger.setLevel(logging.INFO)
 app.logger.info("Initializing the Skyriz Backend")
 
 # Configure allowed origins for CORS
-ALLOWED_ORIGINS = os.getenv(
-    "ALLOWED_ORIGINS",
-    "https://skyriz.app/,https://skill-match-bot-frontend.onrender.com/"
-).split(",")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://skyriz.app/").split(",")
 ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS]
 CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 app.logger.info(f"CORS enabled for frontend URLs: {ALLOWED_ORIGINS}")
