@@ -29,9 +29,10 @@ const Dashboard = () => {
   const [liveChartData, setLiveChartData] = useState({ labels: [], data: [] });
   const [quote, setQuote] = useState("");
   const [habits, setHabits] = useState([]);
-  const [selectedHabit, setSelectedHabit] = useState(null);
+  const [selectedHabit, setSelectedHabit] = useState(null); // Track which habit is selected
+  const [selectedHabitDescription, setSelectedHabitDescription] = useState(""); // Store habit description
   const [educationResources, setEducationResources] = useState([]);
-  const [expandedCategories, setExpandedCategories] = useState([]); // Track expanded categories
+  const [expandedCategories, setExpandedCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -229,66 +230,73 @@ const Dashboard = () => {
     generateHabits();
   };
 
-  const displayHabitDetails = (habit) => {
-    const habitDetails = {
-      "Exercise daily": "Improve your physical health and energy levels by exercising daily.",
-      "Read 20 minutes": "Expand your knowledge and vocabulary by reading every day.",
-      "Write a journal": "Reflect on your thoughts and experiences by keeping a daily journal.",
-      "Practice mindfulness": "Cultivate awareness and reduce stress through mindfulness practices.",
-      "Learn a new skill": "Develop yourself by learning something new and exciting.",
-      "Drink more water": "Stay hydrated to maintain your overall health and energy.",
-      "Declutter one area": "Organize your space and clear your mind by decluttering daily.",
-      "Plan tomorrow's tasks": "Stay organized and productive by planning your tasks in advance.",
-      "Practice gratitude": "Improve your mood and mindset by focusing on things you are grateful for.",
-      "Stretch for 10 minutes": "Increase your flexibility and relieve tension with a daily stretch.",
-      "Limit screen time": "Protect your eyes and mental health by reducing screen usage.",
-      "Go for a walk": "Boost your physical and mental health with a relaxing walk.",
-      "Meditate for 5 minutes": "Calm your mind and reduce stress with a short meditation session.",
-      "Write a to-do list": "Organize your day and achieve your goals by creating a to-do list.",
-      "Call a friend or family member": "Strengthen relationships by connecting with loved ones.",
-      "Learn a new word": "Expand your vocabulary by learning a new word every day.",
-      "Cook a healthy meal": "Take control of your diet by preparing a nutritious meal.",
-      "Practice deep breathing": "Relieve stress and improve focus with deep breathing exercises.",
-      "Spend time in nature": "Recharge and gain clarity by spending time outdoors.",
-      "Reflect on your day": "Analyze your achievements and challenges by reflecting daily.",
-      "Limit caffeine intake": "Improve your sleep and reduce anxiety by moderating caffeine consumption.",
-      "Read a motivational quote": "Stay inspired and motivated by reading uplifting quotes.",
-      "Track your expenses": "Take control of your finances by monitoring your spending habits.",
-      "Organize your workspace": "Increase productivity by keeping your workspace tidy.",
-      "Take a power nap": "Boost your energy and focus with a short nap during the day.",
-      "Smile at a stranger": "Spread positivity and kindness with a simple smile.",
-      "Do 15 minutes of cardio": "Enhance your cardiovascular health with quick daily exercise.",
-      "Write down a goal": "Clarify your aspirations and track progress by setting a goal.",
-      "Compliment someone": "Brighten someone's day and foster positivity with a genuine compliment.",
-      "Focus on a single task": "Increase productivity by concentrating on one task at a time.",
-      "Avoid procrastination": "Achieve your goals faster by staying disciplined and proactive.",
-      "Limit social media": "Protect your mental health by spending less time on social media.",
-      "Journal about gratitude": "Develop a positive mindset by writing about things you are thankful for.",
-      "Set a new habit": "Take a step toward self-improvement by establishing a new habit.",
-      "Break a bad habit": "Improve your life by identifying and stopping an unhelpful habit.",
-      "Watch an educational video": "Learn something new by watching an informative video.",
-      "Learn a hobby": "Add joy to your life by picking up a fun and creative hobby.",
-      "Spend time with loved ones": "Strengthen bonds by sharing quality time with those who matter.",
-      "Volunteer for a cause": "Make a difference by giving your time to a meaningful cause.",
-      "Reflect on your strengths": "Build confidence by acknowledging your abilities and achievements.",
-      "Set a daily affirmation": "Encourage positivity with empowering statements each day.",
-      "Do a random act of kindness": "Brighten someone's day with an unexpected kind gesture.",
-      "Focus on posture": "Prevent discomfort and boost confidence by improving your posture.",
-      "Set a digital detox day": "Recharge by spending a day away from electronic devices.",
-      "Drink herbal tea": "Relax and unwind with a calming cup of herbal tea.",
-      "Write about your dreams": "Gain insights and inspire creativity by journaling your dreams.",
-      "Spend time with a pet": "Enjoy companionship and reduce stress by spending time with a pet.",
-      "Work on a personal project": "Pursue your passion by dedicating time to a personal project.",
-      "Learn a new recipe": "Expand your culinary skills by trying out a new recipe."
-    };
-  
-    return habitDetails[habit] || "Details not available.";
-  }; 
+  const habitDescriptions = {
+    "Exercise daily": "Improve your physical health and energy levels by exercising daily.",
+    "Read 20 minutes": "Expand your knowledge and vocabulary by reading every day.",
+    "Write a journal": "Reflect on your thoughts and experiences by keeping a daily journal.",
+    "Practice mindfulness": "Cultivate awareness and reduce stress through mindfulness practices.",
+    "Learn a new skill": "Develop yourself by learning something new and exciting.",
+    "Drink more water": "Stay hydrated to maintain your overall health and energy.",
+    "Declutter one area": "Organize your space and clear your mind by decluttering daily.",
+    "Plan tomorrow's tasks": "Stay organized and productive by planning your tasks in advance.",
+    "Practice gratitude": "Improve your mood and mindset by focusing on things you are grateful for.",
+    "Stretch for 10 minutes": "Increase your flexibility and relieve tension with a daily stretch.",
+    "Limit screen time": "Protect your eyes and mental health by reducing screen usage.",
+    "Go for a walk": "Boost your physical and mental health with a relaxing walk.",
+    "Meditate for 5 minutes": "Calm your mind and reduce stress with a short meditation session.",
+    "Write a to-do list": "Organize your day and achieve your goals by creating a to-do list.",
+    "Call a friend or family member": "Strengthen relationships by connecting with loved ones.",
+    "Learn a new word": "Expand your vocabulary by learning a new word every day.",
+    "Cook a healthy meal": "Take control of your diet by preparing a nutritious meal.",
+    "Practice deep breathing": "Relieve stress and improve focus with deep breathing exercises.",
+    "Spend time in nature": "Recharge and gain clarity by spending time outdoors.",
+    "Reflect on your day": "Analyze your achievements and challenges by reflecting daily.",
+    "Limit caffeine intake": "Improve your sleep and reduce anxiety by moderating caffeine consumption.",
+    "Read a motivational quote": "Stay inspired and motivated by reading uplifting quotes.",
+    "Track your expenses": "Take control of your finances by monitoring your spending habits.",
+    "Organize your workspace": "Increase productivity by keeping your workspace tidy.",
+    "Take a power nap": "Boost your energy and focus with a short nap during the day.",
+    "Smile at a stranger": "Spread positivity and kindness with a simple smile.",
+    "Do 15 minutes of cardio": "Enhance your cardiovascular health with quick daily exercise.",
+    "Write down a goal": "Clarify your aspirations and track progress by setting a goal.",
+    "Compliment someone": "Brighten someone's day and foster positivity with a genuine compliment.",
+    "Focus on a single task": "Increase productivity by concentrating on one task at a time.",
+    "Avoid procrastination": "Achieve your goals faster by staying disciplined and proactive.",
+    "Limit social media": "Protect your mental health by spending less time on social media.",
+    "Journal about gratitude": "Develop a positive mindset by writing about things you are thankful for.",
+    "Set a new habit": "Take a step toward self-improvement by establishing a new habit.",
+    "Break a bad habit": "Improve your life by identifying and stopping an unhelpful habit.",
+    "Watch an educational video": "Learn something new by watching an informative video.",
+    "Learn a hobby": "Add joy to your life by picking up a fun and creative hobby.",
+    "Spend time with loved ones": "Strengthen bonds by sharing quality time with those who matter.",
+    "Volunteer for a cause": "Make a difference by giving your time to a meaningful cause.",
+    "Reflect on your strengths": "Build confidence by acknowledging your abilities and achievements.",
+    "Set a daily affirmation": "Encourage positivity with empowering statements each day.",
+    "Do a random act of kindness": "Brighten someone's day with an unexpected kind gesture.",
+    "Focus on posture": "Prevent discomfort and boost confidence by improving your posture.",
+    "Set a digital detox day": "Recharge by spending a day away from electronic devices.",
+    "Drink herbal tea": "Relax and unwind with a calming cup of herbal tea.",
+    "Write about your dreams": "Gain insights and inspire creativity by journaling your dreams.",
+    "Spend time with a pet": "Enjoy companionship and reduce stress by spending time with a pet.",
+    "Work on a personal project": "Pursue your passion by dedicating time to a personal project.",
+    "Learn a new recipe": "Expand your culinary skills by trying out a new recipe."
+  };
+
+  // When a habit is clicked, show details in a modal
+  const handleHabitClick = (habit) => {
+    const description = habitDescriptions[habit] || "Details not available.";
+    setSelectedHabit(habit);
+    setSelectedHabitDescription(description);
+  };
+
+  const closeHabitModal = () => {
+    setSelectedHabit(null);
+    setSelectedHabitDescription("");
+  };
 
   const fetchEducationResources = async () => {
     try {
       setEducationResources([
-        // Programming & Web Development
         { name: "freeCodeCamp", link: "https://www.freecodecamp.org/", category: "Programming & Web Development" },
         { name: "MDN Web Docs", link: "https://developer.mozilla.org/", category: "Programming & Web Development" },
         { name: "W3Schools", link: "https://www.w3schools.com/", category: "Programming & Web Development" },
@@ -296,50 +304,42 @@ const Dashboard = () => {
         { name: "Codecademy", link: "https://www.codecademy.com/", category: "Programming & Web Development" },
         { name: "The Odin Project", link: "https://www.theodinproject.com/", category: "Programming & Web Development" },
 
-        // Data Science & Machine Learning
         { name: "Kaggle Learn", link: "https://www.kaggle.com/learn", category: "Data Science & Machine Learning" },
         { name: "Fast.ai", link: "https://www.fast.ai/", category: "Data Science & Machine Learning" },
         { name: "DataCamp", link: "https://www.datacamp.com/", category: "Data Science & Machine Learning" },
         { name: "Coursera - Machine Learning by Andrew Ng", link: "https://www.coursera.org/learn/machine-learning", category: "Data Science & Machine Learning" },
 
-        // UI/UX & Design
         { name: "Interaction Design Foundation", link: "https://www.interaction-design.org/", category: "UI/UX & Design" },
         { name: "Figma Learn", link: "https://www.figma.com/resources/learn-design/", category: "UI/UX & Design" },
         { name: "Adobe XD Ideas", link: "https://xd.adobe.com/ideas/", category: "UI/UX & Design" },
         { name: "Canva Design School", link: "https://www.canva.com/learn/", category: "UI/UX & Design" },
 
-        // Mathematics & Sciences
         { name: "Khan Academy (Math & Science)", link: "https://www.khanacademy.org/science", category: "Mathematics & Sciences" },
         { name: "MIT OpenCourseWare", link: "https://ocw.mit.edu/", category: "Mathematics & Sciences" },
         { name: "Brilliant", link: "https://www.brilliant.org/", category: "Mathematics & Sciences" },
         { name: "Wolfram MathWorld", link: "https://mathworld.wolfram.com/", category: "Mathematics & Sciences" },
 
-        // Language Learning
         { name: "Duolingo", link: "https://www.duolingo.com/", category: "Language Learning" },
         { name: "Babbel", link: "https://www.babbel.com/", category: "Language Learning" },
         { name: "LingQ", link: "https://www.lingq.com/", category: "Language Learning" },
         { name: "italki", link: "https://www.italki.com/", category: "Language Learning" },
 
-        // Business & Finance
         { name: "edX Business Courses", link: "https://www.edx.org/learn/business", category: "Business & Finance" },
         { name: "Coursera Business Specializations", link: "https://www.coursera.org/browse/business", category: "Business & Finance" },
         { name: "HubSpot Academy", link: "https://academy.hubspot.com/", category: "Business & Finance" },
         { name: "Futureskilling (Udemy)", link: "https://www.udemy.com/topic/business/", category: "Business & Finance" },
 
-        // Creative Skills
         { name: "Skillshare", link: "https://www.skillshare.com/", category: "Creative Skills" },
         { name: "Domestika", link: "https://www.domestika.org/", category: "Creative Skills" },
         { name: "MasterClass", link: "https://www.masterclass.com/", category: "Creative Skills" },
         { name: "LinkedIn Learning (Creative Section)", link: "https://www.linkedin.com/learning/", category: "Creative Skills" },
 
-        // General Education & MOOCs
         { name: "Khan Academy (General)", link: "https://www.khanacademy.org/", category: "General Education & MOOCs" },
         { name: "Coursera", link: "https://www.coursera.org/", category: "General Education & MOOCs" },
         { name: "edX", link: "https://www.edx.org/", category: "General Education & MOOCs" },
         { name: "FutureLearn", link: "https://www.futurelearn.com/", category: "General Education & MOOCs" },
         { name: "OpenLearn (Open University)", link: "https://www.open.edu/openlearn/", category: "General Education & MOOCs" },
 
-        // Career Development & Professional Skills
         { name: "Google Digital Garage", link: "https://digitalgarage.withgoogle.com/", category: "Career Development & Professional Skills" },
         { name: "Alison", link: "https://alison.com/", category: "Career Development & Professional Skills" },
         { name: "Udemy Professional Skills Courses", link: "https://www.udemy.com/", category: "Career Development & Professional Skills" },
@@ -392,7 +392,6 @@ const Dashboard = () => {
     },
   };
 
-  // Toggle category expansion
   const toggleCategory = (category) => {
     setExpandedCategories((prev) =>
       prev.includes(category)
@@ -436,18 +435,30 @@ const Dashboard = () => {
         <p>{quote}</p>
       </div>
 
+      {/* Habit Ideas Section */}
       <div className="habit-container">
         <h2>Habit Ideas</h2>
         <ul>
           {habits.map((habit, index) => (
-            <li key={index} onClick={() => displayHabitDetails(habit)}>
+            <li key={index} onClick={() => handleHabitClick(habit)}>
               {habit}
             </li>
           ))}
         </ul>
         <button onClick={fetchHabits}>Generate More Habits</button>
-        {selectedHabit && <p className="habit-habit-generator-button">{selectedHabit}</p>}
       </div>
+
+      {/* Habit Details Modal */}
+      {selectedHabit && (
+        <>
+          <div className="habit-modal-overlay active" onClick={closeHabitModal}></div>
+          <div className="habit-details-modal active">
+            <h2>{selectedHabit}</h2>
+            <p>{selectedHabitDescription}</p>
+            <button onClick={closeHabitModal}>Close</button>
+          </div>
+        </>
+      )}
 
       <div className="education-container">
         <h2>Education Resources</h2>
