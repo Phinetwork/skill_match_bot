@@ -498,10 +498,10 @@ const Dashboard = () => {
         { name: "LingQ", link: "https://www.lingq.com/", category: "Language Learning" },
         { name: "italki", link: "https://www.italki.com/", category: "Language Learning" },
 
-        { name: "edX Business Courses", link: "https://www.edx.org/learn/business", category: "Business & Finance" },
+        { name: "edX Business Courses", link: "https://business.edx.org/", category: "Business & Finance" },
         { name: "Coursera Business Specializations", link: "https://www.coursera.org/browse/business", category: "Business & Finance" },
         { name: "HubSpot Academy", link: "https://academy.hubspot.com/", category: "Business & Finance" },
-        { name: "Futureskilling (Udemy)", link: "https://www.udemy.com/topic/business/", category: "Business & Finance" },
+        { name: "Futureskilling (Udemy)", link: "https://www.udemy.com/business/request-demo/?locale=en_US&mx_pg=httpcachecontextsme-list&path=request-demo-mx%2F&ref=ufb_header&user_type=visitor", category: "Business & Finance" },
 
         { name: "Skillshare", link: "https://www.skillshare.com/", category: "Creative Skills" },
         { name: "Domestika", link: "https://www.domestika.org/", category: "Creative Skills" },
