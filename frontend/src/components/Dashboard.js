@@ -7,6 +7,7 @@ import LiveTrendVisualizer from "./LiveTrendVisualizer";
 import LiveHeatmap from "./LiveHeatmap";
 import AI_DecisionTreeVisualizer from "./DecisionTree";
 import PredictiveForecastChart from "./PredictiveForecastChart";
+import InteractiveGlobe from "./InteractiveGlobe";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -312,6 +313,11 @@ const Dashboard = () => {
       <div className="chart-container">
         <h2></h2>
         <PredictiveForecastChart />
+      </div>
+      
+      <div className="chart-container">
+        <h2></h2>
+        <InteractiveGlobe />
       </div>
 
       <div className="chart-container">
