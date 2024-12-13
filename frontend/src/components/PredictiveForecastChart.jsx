@@ -20,7 +20,7 @@ const PredictiveForecastChart = () => {
       const currentDate = getCurrentDate();
       try {
         const response = await axios.get(
-          `https://api.polygon.io/v1/open-close/SPY/${currentDate}?adjusted=true&apiKey=YOUR_API_KEY`
+          `https://api.polygon.io/v1/open-close/SPY/2024-12-11?adjusted=true&apiKey=Ecn37sRvNngNI1FqfCyQCx3FJoUWuuqh`
         );
 
         const data = response.data;
