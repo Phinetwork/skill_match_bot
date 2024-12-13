@@ -13,16 +13,16 @@ const Footer = () => {
       
       {/* Optional: Social Media Links */}
       <div className="social-links">
-        <a href="https://twitter.com/skyriz" aria-label="Skyriz Twitter" target="_blank" rel="noopener noreferrer">
+        <a href="https://twitter.com/skyrizapp" aria-label="Skyriz Twitter" target="_blank" rel="noopener noreferrer">
           <FaTwitter />
         </a>
-        <a href="https://facebook.com/skyriz" aria-label="Skyriz Facebook" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.facebook.com/share/1jgCNA7tmfwQ5hJi/?mibextid=LQQJ4d" aria-label="Skyriz Facebook" target="_blank" rel="noopener noreferrer">
           <FaFacebookF />
         </a>
-        <a href="https://instagram.com/skyriz" aria-label="Skyriz Instagram" target="_blank" rel="noopener noreferrer">
+        <a href="https://instagram.com/skyriz.app" aria-label="Skyriz Instagram" target="_blank" rel="noopener noreferrer">
           <FaInstagram />
         </a>
-        <a href="https://linkedin.com/company/skyriz" aria-label="Skyriz LinkedIn" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.linkedin.com/company/skyriz" aria-label="Skyriz LinkedIn" target="_blank" rel="noopener noreferrer">
           <FaLinkedinIn />
         </a>
         {/* Add more social links as needed */}
