@@ -1,11 +1,62 @@
 /* src/components/Footer.css */
+
 .footer {
+  background: var(--bg-secondary); /* Use the secondary dark blue from root variables */
+  color: var(--light-text); /* Softer white for better readability */
   text-align: center;
-  padding: 10px 0;
-  background-color: #282c34;
-  color: white;
+  padding: 20px 10px; /* Increased padding for better spacing */
+  font-size: 0.9rem; /* Slightly smaller font for footer */
+  box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow at the top for depth */
   position: relative; /* Ensure the footer is within the normal flow */
-  bottom: 0;
   width: 100%;
   margin-top: auto; /* Push the footer to the bottom of the page content */
+}
+
+.footer p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.footer-link {
+  color: var(--accent); /* Use your accent color for visibility */
+  text-decoration: none; /* Remove default underline */
+  transition: color var(--transition-speed) ease, text-decoration var(--transition-speed) ease;
+}
+
+.footer-link:hover,
+.footer-link:focus {
+  color: var(--accent-hover); /* Brighter color on hover for interactivity */
+  text-decoration: underline;
+}
+
+/* Optional: Social Media Icons or Additional Links */
+.footer .social-links {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.footer .social-links a {
+  color: var(--light-text); /* Default icon color */
+  font-size: 1.2rem; /* Adjust size as needed */
+  transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+
+.footer .social-links a:hover,
+.footer .social-links a:focus {
+  color: var(--accent); /* Change to accent color on hover/focus */
+  transform: scale(1.1); /* Slightly enlarge on hover for interactivity */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .footer {
+    padding: 15px 10px;
+    font-size: 0.85rem;
+  }
+
+  .footer .social-links a {
+    font-size: 1rem;
+  }
 }
