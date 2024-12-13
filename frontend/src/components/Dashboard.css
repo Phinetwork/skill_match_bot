@@ -88,6 +88,7 @@ body {
   color: #00509e;
   transform: scale(1.1);
 }
+
 /* Habit generator container */
 .habit-generator {
   margin: 40px auto;
@@ -273,6 +274,7 @@ body {
   margin-bottom: 40px;
 }
 
+/* Make category headers clickable */
 .education-category h3 {
   font-size: 1.8rem;
   color: #00faff;
@@ -281,6 +283,7 @@ body {
   padding-bottom: 5px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  cursor: pointer;
 }
 
 /* Resource List Styling */

@@ -31,6 +31,7 @@ const Dashboard = () => {
   const [habits, setHabits] = useState([]);
   const [selectedHabit, setSelectedHabit] = useState(null);
   const [educationResources, setEducationResources] = useState([]);
+  const [expandedCategories, setExpandedCategories] = useState([]); // Track expanded categories
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -278,7 +279,7 @@ const Dashboard = () => {
       "Write about your dreams": "Gain insights and inspire creativity by journaling your dreams.",
       "Spend time with a pet": "Enjoy companionship and reduce stress by spending time with a pet.",
       "Work on a personal project": "Pursue your passion by dedicating time to a personal project.",
-      "Learn a new recipe": "Expand your culinary skills by trying out a new recipe.",
+      "Learn a new recipe": "Expand your culinary skills by trying out a new recipe."
     };
   
     return habitDetails[habit] || "Details not available.";
@@ -391,6 +392,15 @@ const Dashboard = () => {
     },
   };
 
+  // Toggle category expansion
+  const toggleCategory = (category) => {
+    setExpandedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -441,20 +451,25 @@ const Dashboard = () => {
 
       <div className="education-container">
         <h2>Education Resources</h2>
-        {Object.keys(categories).map((cat) => (
-          <div className="education-category" key={cat}>
-            <h3>{cat}</h3>
-            <ul>
-              {categories[cat].map((resource, index) => (
-                <li key={index}>
-                  <a href={resource.link} target="_blank" rel="noopener noreferrer">
-                    {resource.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {Object.keys(categories).map((cat) => {
+          const isExpanded = expandedCategories.includes(cat);
+          return (
+            <div className="education-category" key={cat}>
+              <h3 onClick={() => toggleCategory(cat)}>{cat}</h3>
+              {isExpanded && (
+                <ul>
+                  {categories[cat].map((resource, index) => (
+                    <li key={index}>
+                      <a href={resource.link} target="_blank" rel="noopener noreferrer">
+                        {resource.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div className="chart-container">
