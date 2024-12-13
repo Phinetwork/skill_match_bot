@@ -24,7 +24,7 @@ const OnboardingForm = () => {
     try {
       if (skills.trim() !== "") {
         const skillsResponse = await axios.post(
-          "https://skyriz.app/api/matches",
+          "https://skill-match-bot.onrender.com/api/matches",
           { skills: skills.split(",").map((skill) => skill.trim()) },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -33,7 +33,7 @@ const OnboardingForm = () => {
 
       if (interests.trim() !== "") {
         const interestsResponse = await axios.post(
-          "https://skyriz.app/api/skills",
+          "https://skill-match-bot.onrender.com/api/skills",
           { interests: interests.split(",").map((interest) => interest.trim()) },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -57,7 +57,7 @@ const OnboardingForm = () => {
 
     try {
       const response = await axios.post(
-        "https://skyriz.app/api/habits",
+        "https://skill-match-bot.onrender.com/api/habits",
         { side_hustle: sideHustle },
         { headers: { "Content-Type": "application/json" } }
       );
