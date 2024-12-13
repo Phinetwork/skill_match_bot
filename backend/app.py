@@ -11,7 +11,6 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from datetime import datetime, timedelta
 import os
 import logging
-import openai
 import redis
 import json
 
