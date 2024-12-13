@@ -1,76 +1,46 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-} from "chart.js";
 import { Line } from "react-chartjs-2";
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
+import axios from "axios";
 
 const PredictiveForecastChart = () => {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
+      const currentDate = getCurrentDate();
       try {
         const response = await axios.get(
-          `https://api.polygon.io/v1/open-close/SPY/2024-12-11?adjusted=true&apiKey=Ecn37sRvNngNI1FqfCyQCx3FJoUWuuqh`
+          `https://api.polygon.io/v1/open-close/SPY/${currentDate}?adjusted=true&apiKey=YOUR_API_KEY`
         );
 
-        const timeSeries = response.data["Time Series (Daily)"];
+        const data = response.data;
 
-        if (!timeSeries) {
+        if (!data || !data.close) {
           throw new Error("Invalid API response");
         }
 
-        // Get the last 30 days of data
-        const labels = Object.keys(timeSeries).slice(0, 30).reverse();
-        const data = labels.map((date) => parseFloat(timeSeries[date]["4. close"]));
+        const labels = ["Open", "High", "Low", "Close"];
+        const prices = [data.open, data.high, data.low, data.close];
 
-        // Calculate predictions based on the rate of change
-        const lastValue = data[data.length - 1];
-        const secondLastValue = data[data.length - 2];
-        const rateOfChange = lastValue - secondLastValue;
-
-        const futureDates = [];
-        const futureValues = [];
-        let currentDate = new Date(labels[labels.length - 1]);
-
-        for (let i = 1; i <= 3; i++) {
-          currentDate.setDate(currentDate.getDate() + 1);
-          futureDates.push(currentDate.toLocaleDateString());
-          futureValues.push(lastValue + rateOfChange * i);
-        }
-
-        // Combine historical and predictive data
         setChartData({
-          labels: [...labels, ...futureDates],
+          labels,
           datasets: [
             {
-              label: "Historical Data",
-              data,
+              label: "SPY Prices",
+              data: prices,
               borderColor: "#007BFF",
               backgroundColor: "rgba(0, 123, 255, 0.2)",
               fill: true,
-              tension: 0.4,
-            },
-            {
-              label: "Predictive Trend",
-              data: [...data, ...futureValues],
-              borderColor: "#28A745",
-              backgroundColor: "rgba(40, 167, 69, 0.2)",
-              fill: true,
-              borderDash: [5, 5],
               tension: 0.4,
             },
           ],
