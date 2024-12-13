@@ -24,27 +24,33 @@ const PredictiveForecastChart = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=SPY&apikey=R3OLRU46W8XZFG9R`
+          "https://yahoo-finance166.p.rapidapi.com/api/market/get-world-indices?region=US&language=en-US",
+          {
+            headers: {
+              "x-rapidapi-host": "yahoo-finance166.p.rapidapi.com",
+              "x-rapidapi-key": "52dd3cb0d2msh8a5d0daa5ff2079p1c6689jsna0d2f66f3083",
+            },
+            params: {
+              symbol: "SPY",
+              interval: "1d",
+              range: "1mo",
+            },
+          }
         );
 
-        const timeSeries = response.data["Time Series (Daily)"];
+        const timestamps = response.data.chart.result[0].timestamp;
+        const prices = response.data.chart.result[0].indicators.quote[0].close;
 
-        if (!timeSeries) {
-          throw new Error("Invalid API response");
-        }
+        const labels = timestamps.map((timestamp) => new Date(timestamp * 1000).toLocaleDateString());
+        const data = prices;
 
-        // Get the last 30 days of data
-        const labels = Object.keys(timeSeries).slice(0, 30).reverse();
-        const data = labels.map((date) => parseFloat(timeSeries[date]["4. close"]));
-
-        // Calculate predictions based on the rate of change
         const lastValue = data[data.length - 1];
         const secondLastValue = data[data.length - 2];
         const rateOfChange = lastValue - secondLastValue;
 
         const futureDates = [];
         const futureValues = [];
-        let currentDate = new Date(labels[labels.length - 1]);
+        let currentDate = new Date(timestamps[timestamps.length - 1] * 1000);
 
         for (let i = 1; i <= 3; i++) {
           currentDate.setDate(currentDate.getDate() + 1);
@@ -52,7 +58,6 @@ const PredictiveForecastChart = () => {
           futureValues.push(lastValue + rateOfChange * i);
         }
 
-        // Combine historical and predictive data
         setChartData({
           labels: [...labels, ...futureDates],
           datasets: [
