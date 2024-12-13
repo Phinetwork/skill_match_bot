@@ -25,11 +25,11 @@ const Header = () => {
         <div className="logo">
           {isAuthenticated ? (
             <Link to="/dashboard">
-              <img src={logo} alt="Skyriz Logo" />
+              <img src={logo} alt="Skill Match Bot Logo" />
             </Link>
           ) : (
             <Link to="/">
-              <img src={logo} alt="Skyriz Logo" />
+              <img src={logo} alt="Skill Match Bot Logo" />
             </Link>
           )}
         </div>
@@ -67,12 +67,12 @@ const Header = () => {
                 </li>
                 <li>
                   <a
-                    href="https://github.com/Phinetwork/skill_match_bot"
+                    href="https://skyriz.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Open Source Code
+                    Development Community
                   </a>
                 </li>
                 <li>
