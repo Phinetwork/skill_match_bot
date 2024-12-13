@@ -24,7 +24,7 @@ const PredictiveForecastChart = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://api.polygon.io/v1/open-close/SPY/{date}?adjusted=true&apiKey=Ecn37sRvNngNI1FqfCyQCx3FJoUWuuqh`
+          `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=SPY&apikey=R3OLRU46W8XZFG9R`
         );
 
         const timeSeries = response.data["Time Series (Daily)"];
