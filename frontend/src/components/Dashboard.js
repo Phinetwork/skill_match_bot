@@ -436,7 +436,7 @@ const Dashboard = () => {
           ))}
         </ul>
         <button onClick={fetchHabits}>Generate More Habits</button>
-        {selectedHabit && <p className="habit-details">{selectedHabit}</p>}
+        {selectedHabit && <p className="habit-habit-generator-button">{selectedHabit}</p>}
       </div>
 
       <div className="education-container">
