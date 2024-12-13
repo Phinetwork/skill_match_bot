@@ -1,19 +1,43 @@
+/* General body styling */
+body {
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #f0f8ff;
+  overflow-x: hidden;
+}
+
+/* Main dashboard container */
+.dashboard-container {
+  padding: 20px;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Header styling */
+.dashboard-container h1 {
+  font-size: 3rem;
+  color: #00d4ff;
+  text-shadow: 0px 4px 10px rgba(0, 212, 255, 0.5);
+  margin-bottom: 20px;
+}
+
 /* Loading screen */
 .loading-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* to stack spinner and text vertically */
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
   color: #00d4ff;
   font-size: 2rem;
-  font-family: 'Roboto', sans-serif;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
 }
 
-/* Add a subtle animated background effect */
+/* Animated background pattern for loading state */
 .loading-container::before {
   content: "";
   position: absolute;
@@ -33,7 +57,142 @@
   100% { transform: translate(50px,50px); }
 }
 
-/* Neon rotating ring */
+/* Card component styling */
+.card {
+  padding: 25px;
+  margin: 20px auto;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f0f8ff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s, box-shadow 0.4s;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Motivational quote container */
+.quote-container {
+  margin: 30px 0;
+  padding: 20px;
+  background: linear-gradient(145deg, #1e3c72, #2a5298);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: #f0f8ff;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+/* Habit ideas container */
+.habit-container ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.habit-container li {
+  padding: 10px 15px;
+  background: #00d4ff;
+  color: #00274d;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: transform 0.3s, background 0.3s;
+}
+
+.habit-container li:hover {
+  background: #f0f8ff;
+  color: #00509e;
+  transform: scale(1.1);
+}
+
+/* Education resources container */
+.education-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.education-container li {
+  margin: 10px 0;
+  font-size: 1.2rem;
+}
+
+.education-container a {
+  color: #00d4ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.education-container a:hover {
+  color: #00faff;
+  text-decoration: underline;
+}
+
+/* Chart container */
+.chart-container,
+.live-chart-container {
+  margin: 30px auto;
+  padding: 20px;
+  max-width: 90%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Logout button styling */
+.logout-button button {
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  color: #f0f8ff;
+  background: linear-gradient(145deg, #ff6b6b, #ff4b4b);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s, background 0.3s;
+}
+
+.logout-button button:hover {
+  background: linear-gradient(145deg, #ff4b4b, #ff6b6b);
+  transform: translateY(-3px);
+}
+
+/* Animation for smooth fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .dashboard-container h1 {
+    font-size: 2.5rem;
+  }
+
+  .card {
+    margin: 15px;
+    padding: 20px;
+  }
+
+  .logout-button button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}
+
+/* Spinner (Neon rotating ring) */
 .loader-ring {
   position: relative;
   width: 100px;
@@ -80,7 +239,6 @@
   animation: glitch 2s infinite;
 }
 
-/* Glitch animation: subtle skew and fade to create a distorted, holographic effect */
 @keyframes glitch {
   0% { transform: skew(0deg); opacity: 1; }
   20% { transform: skew(-5deg); opacity: 0.9; }
