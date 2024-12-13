@@ -72,7 +72,7 @@ const Header = () => {
                     rel="noopener noreferrer"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Development Community
+                    Collaborate
                   </a>
                 </li>
                 <li>
