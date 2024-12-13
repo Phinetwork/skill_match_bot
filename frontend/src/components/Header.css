@@ -29,7 +29,7 @@
 
 /* Ensure the main content starts below the header */
 body {
-  margin-top: 90px; /* Adjust based on header height (60px + 15px padding x2) */
+  margin-top: 120px; /* Adjust based on header height (60px + 15px padding x2) */
 }
 
 .menu-toggle {
