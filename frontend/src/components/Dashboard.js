@@ -62,11 +62,11 @@ const Dashboard = () => {
           fetchEducationResources(),
         ]);
 
-        setLoading(false); // Mark loading complete after all fetches finish
+        setLoading(false); 
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("An error occurred while loading data. Please try again later.");
-        setLoading(false); // Mark loading complete even if there’s an error
+        setLoading(false); 
       }
     };
 
@@ -109,7 +109,7 @@ const Dashboard = () => {
       setChartData(response.data || []);
     } catch (err) {
       console.error("Error fetching chart data:", err);
-      setChartData([]); // Fallback to empty chart data
+      setChartData([]);
     }
   };
 
@@ -127,55 +127,22 @@ const Dashboard = () => {
 
   const fetchHabits = () => {
     const habitList = [
-      "Exercise daily",
-      "Read 20 minutes",
-      "Write a journal",
-      "Practice mindfulness",
-      "Learn a new skill",
-      "Drink more water",
-      "Declutter one area",
-      "Plan tomorrow's tasks",
-      "Practice gratitude",
-      "Stretch for 10 minutes",
-      "Limit screen time",
-      "Go for a walk",
-      "Meditate for 5 minutes",
-      "Write a to-do list",
-      "Call a friend or family member",
-      "Learn a new word",
-      "Cook a healthy meal",
-      "Practice deep breathing",
-      "Spend time in nature",
-      "Reflect on your day",
-      "Limit caffeine intake",
-      "Read a motivational quote",
-      "Track your expenses",
-      "Organize your workspace",
-      "Take a power nap",
-      "Smile at a stranger",
-      "Do 15 minutes of cardio",
-      "Write down a goal",
-      "Compliment someone",
-      "Focus on a single task",
-      "Avoid procrastination",
-      "Limit social media",
-      "Journal about gratitude",
-      "Set a new habit",
-      "Break a bad habit",
-      "Watch an educational video",
-      "Learn a hobby",
-      "Spend time with loved ones",
-      "Volunteer for a cause",
-      "Reflect on your strengths",
-      "Set a daily affirmation",
-      "Do a random act of kindness",
-      "Focus on posture",
-      "Set a digital detox day",
-      "Drink herbal tea",
-      "Write about your dreams",
-      "Spend time with a pet",
-      "Work on a personal project",
-      "Learn a new recipe",
+      "Exercise daily", "Read 20 minutes", "Write a journal", "Practice mindfulness",
+      "Learn a new skill", "Drink more water", "Declutter one area", "Plan tomorrow's tasks",
+      "Practice gratitude", "Stretch for 10 minutes", "Limit screen time", "Go for a walk",
+      "Meditate for 5 minutes", "Write a to-do list", "Call a friend or family member",
+      "Learn a new word", "Cook a healthy meal", "Practice deep breathing",
+      "Spend time in nature", "Reflect on your day", "Limit caffeine intake",
+      "Read a motivational quote", "Track your expenses", "Organize your workspace",
+      "Take a power nap", "Smile at a stranger", "Do 15 minutes of cardio",
+      "Write down a goal", "Compliment someone", "Focus on a single task",
+      "Avoid procrastination", "Limit social media", "Journal about gratitude",
+      "Set a new habit", "Break a bad habit", "Watch an educational video",
+      "Learn a hobby", "Spend time with loved ones", "Volunteer for a cause",
+      "Reflect on your strengths", "Set a daily affirmation",
+      "Do a random act of kindness", "Focus on posture", "Set a digital detox day",
+      "Drink herbal tea", "Write about your dreams", "Spend time with a pet",
+      "Work on a personal project", "Learn a new recipe",
     ];
 
     const rotateHabits = () => {
@@ -183,17 +150,71 @@ const Dashboard = () => {
       setHabits(shuffledHabits.slice(0, 3));
     };
 
-    rotateHabits(); // Initial shuffle
-    const interval = setInterval(rotateHabits, 5000); // Rotate every 5 seconds
+    rotateHabits();
+    const interval = setInterval(rotateHabits, 5000); 
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
   };
 
   const fetchEducationResources = async () => {
     try {
       setEducationResources([
-        { name: "FreeCodeCamp", link: "https://www.freecodecamp.org/" },
-        { name: "Khan Academy", link: "https://www.khanacademy.org/" },
+        // Programming & Web Development
+        { name: "freeCodeCamp", link: "https://www.freecodecamp.org/", category: "Programming & Web Development" },
+        { name: "MDN Web Docs", link: "https://developer.mozilla.org/", category: "Programming & Web Development" },
+        { name: "W3Schools", link: "https://www.w3schools.com/", category: "Programming & Web Development" },
+        { name: "GeeksforGeeks", link: "https://www.geeksforgeeks.org/", category: "Programming & Web Development" },
+        { name: "Codecademy", link: "https://www.codecademy.com/", category: "Programming & Web Development" },
+        { name: "The Odin Project", link: "https://www.theodinproject.com/", category: "Programming & Web Development" },
+
+        // Data Science & Machine Learning
+        { name: "Kaggle Learn", link: "https://www.kaggle.com/learn", category: "Data Science & Machine Learning" },
+        { name: "Fast.ai", link: "https://www.fast.ai/", category: "Data Science & Machine Learning" },
+        { name: "DataCamp", link: "https://www.datacamp.com/", category: "Data Science & Machine Learning" },
+        { name: "Coursera - Machine Learning by Andrew Ng", link: "https://www.coursera.org/learn/machine-learning", category: "Data Science & Machine Learning" },
+
+        // UI/UX & Design
+        { name: "Interaction Design Foundation", link: "https://www.interaction-design.org/", category: "UI/UX & Design" },
+        { name: "Figma Learn", link: "https://www.figma.com/resources/learn-design/", category: "UI/UX & Design" },
+        { name: "Adobe XD Ideas", link: "https://xd.adobe.com/ideas/", category: "UI/UX & Design" },
+        { name: "Canva Design School", link: "https://www.canva.com/learn/", category: "UI/UX & Design" },
+
+        // Mathematics & Sciences
+        { name: "Khan Academy (Math & Science)", link: "https://www.khanacademy.org/science", category: "Mathematics & Sciences" },
+        { name: "MIT OpenCourseWare", link: "https://ocw.mit.edu/", category: "Mathematics & Sciences" },
+        { name: "Brilliant", link: "https://www.brilliant.org/", category: "Mathematics & Sciences" },
+        { name: "Wolfram MathWorld", link: "https://mathworld.wolfram.com/", category: "Mathematics & Sciences" },
+
+        // Language Learning
+        { name: "Duolingo", link: "https://www.duolingo.com/", category: "Language Learning" },
+        { name: "Babbel", link: "https://www.babbel.com/", category: "Language Learning" },
+        { name: "LingQ", link: "https://www.lingq.com/", category: "Language Learning" },
+        { name: "italki", link: "https://www.italki.com/", category: "Language Learning" },
+
+        // Business & Finance
+        { name: "edX Business Courses", link: "https://www.edx.org/learn/business", category: "Business & Finance" },
+        { name: "Coursera Business Specializations", link: "https://www.coursera.org/browse/business", category: "Business & Finance" },
+        { name: "HubSpot Academy", link: "https://academy.hubspot.com/", category: "Business & Finance" },
+        { name: "Futureskilling (Udemy)", link: "https://www.udemy.com/topic/business/", category: "Business & Finance" },
+
+        // Creative Skills
+        { name: "Skillshare", link: "https://www.skillshare.com/", category: "Creative Skills" },
+        { name: "Domestika", link: "https://www.domestika.org/", category: "Creative Skills" },
+        { name: "MasterClass", link: "https://www.masterclass.com/", category: "Creative Skills" },
+        { name: "LinkedIn Learning (Creative Section)", link: "https://www.linkedin.com/learning/", category: "Creative Skills" },
+
+        // General Education & MOOCs
+        { name: "Khan Academy (General)", link: "https://www.khanacademy.org/", category: "General Education & MOOCs" },
+        { name: "Coursera", link: "https://www.coursera.org/", category: "General Education & MOOCs" },
+        { name: "edX", link: "https://www.edx.org/", category: "General Education & MOOCs" },
+        { name: "FutureLearn", link: "https://www.futurelearn.com/", category: "General Education & MOOCs" },
+        { name: "OpenLearn (Open University)", link: "https://www.open.edu/openlearn/", category: "General Education & MOOCs" },
+
+        // Career Development & Professional Skills
+        { name: "Google Digital Garage", link: "https://digitalgarage.withgoogle.com/", category: "Career Development & Professional Skills" },
+        { name: "Alison", link: "https://alison.com/", category: "Career Development & Professional Skills" },
+        { name: "Udemy Professional Skills Courses", link: "https://www.udemy.com/", category: "Career Development & Professional Skills" },
+        { name: "CareerFoundry", link: "https://careerfoundry.com/", category: "Career Development & Professional Skills" }
       ]);
     } catch (err) {
       console.error("Error fetching education resources:", err);
@@ -250,6 +271,15 @@ const Dashboard = () => {
     );
   }
 
+  // Group education resources by category
+  const categories = educationResources.reduce((acc, resource) => {
+    if (!acc[resource.category]) {
+      acc[resource.category] = [];
+    }
+    acc[resource.category].push(resource);
+    return acc;
+  }, {});
+
   return (
     <div className="dashboard-container">
       <h1>Dashboard</h1>
@@ -279,15 +309,20 @@ const Dashboard = () => {
 
       <div className="education-container">
         <h2>Education Resources</h2>
-        <ul>
-          {educationResources.map((resource, index) => (
-            <li key={index}>
-              <a href={resource.link} target="_blank" rel="noopener noreferrer">
-                {resource.name}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {Object.keys(categories).map((cat) => (
+          <div className="education-category" key={cat}>
+            <h3>{cat}</h3>
+            <ul>
+              {categories[cat].map((resource, index) => (
+                <li key={index}>
+                  <a href={resource.link} target="_blank" rel="noopener noreferrer">
+                    {resource.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
       <div className="chart-container">
@@ -312,27 +347,22 @@ const Dashboard = () => {
       </div>
 
       <div className="chart-container">
-        <h2></h2>
         <PredictiveForecastChart />
       </div>
-      
+
       <div className="chart-container">
-        <h2></h2>
         <InteractiveGlobe />
       </div>
 
       <div className="chart-container">
-        <h2></h2>
         <LiveTrendVisualizer />
       </div>
 
       <div className="chart-container">
-        <h2></h2>
         <LiveHeatmap />
       </div>
 
       <div className="chart-container">
-        <h2></h2>
         <AI_DecisionTreeVisualizer />
       </div>
 
