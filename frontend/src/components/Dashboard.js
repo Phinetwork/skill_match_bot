@@ -9,6 +9,7 @@ import LiveHeatmap from "./LiveHeatmap";
 import AI_DecisionTreeVisualizer from "./DecisionTree";
 import PredictiveForecastChart from "./PredictiveForecastChart";
 import InteractiveGlobe from "./InteractiveGlobe";
+import EconomicSectorBubbleMap from "./EconomicSectorBubbleMap";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -683,6 +684,10 @@ const Dashboard = () => {
 
       <div className="chart-container">
         <InteractiveGlobe />
+      </div>
+
+      <div className="chart-container">
+        <EconomicSectorBubbleMap />
       </div>
 
       <div className="chart-container">
