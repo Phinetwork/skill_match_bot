@@ -90,181 +90,25 @@ body {
 }
 
 /* Education resources container */
-.education-container {
-  margin: 40px auto;
-  max-width: 800px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-  padding: 30px;
-  color: #f0f8ff;
-  font-family: 'Roboto', sans-serif;
-}
-
-/* Main heading for education resources */
-.education-container > h2 {
-  font-size: 2rem;
-  color: #00d4ff;
-  text-shadow: 0px 4px 10px rgba(0, 212, 255, 0.5);
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-/* Individual category blocks (now using details/summary) */
-.education-category {
-  margin-bottom: 20px; /* Reduced spacing for a more compressed layout */
-  border-bottom: 1px solid #00d4ff;
-  padding-bottom: 10px;
-}
-
-/* Hide the default triangle disclosure icon of <summary> */
-.education-category summary::-webkit-details-marker {
-  display: none;
-}
-.education-category summary::-moz-list-bullet {
-  display: none;
-}
-
-/* Category heading (summary) styling */
-.education-category summary {
-  cursor: pointer;
-  font-size: 1.4rem;
-  color: #00faff;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  position: relative;
-  padding: 10px 0;
-  font-weight: bold;
-  
-  /* Add a custom indicator icon (arrow) */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* Indicator arrow */
-.education-category summary::after {
-  content: "▶";
-  color: #00d4ff;
-  font-size: 1.2rem;
-  transition: transform 0.3s ease;
-}
-
-/* Rotate arrow when open */
-.education-category[open] summary::after {
-  transform: rotate(90deg);
-}
-
-/* Resource list styling */
-.education-category ul {
+.education-container ul {
   list-style: none;
   padding: 0;
-  margin: 0;
-  overflow: hidden;
-
-  /* Hidden by default to enable smooth transitions */
-  max-height: 0;
-  opacity: 0;
-  transition: all 0.4s ease;
 }
 
-/* Reveal the list when details is open */
-.education-category[open] ul {
-  max-height: 500px; /* Large enough to accommodate content */
-  opacity: 1;
-}
-
-/* Resource items */
-.education-category li {
+.education-container li {
   margin: 10px 0;
-  font-size: 1.1rem;
-  position: relative;
-  padding-left: 20px;
+  font-size: 1.2rem;
 }
 
-/* Bullet before each resource */
-.education-category li::before {
-  content: "•";
-  color: #00d4ff;
-  position: absolute;
-  left: 0;
-  font-size: 1.5rem;
-  line-height: 1;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* Links to resources */
-.education-category a {
-  color: #00d4ff;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.education-category a:hover {
-  color: #00faff;
-  text-shadow: 0 0 8px #00faff;
-}
-
-/* Slightly smaller font and spacing on mobile for more compression */
-@media (max-width: 600px) {
-  .education-container > h2 {
-    font-size: 1.8rem;
-  }
-
-  .education-category summary {
-    font-size: 1.2rem;
-  }
-
-  .education-category li {
-    font-size: 1rem;
-  }
-}
-
-/* Subtle icon or bullet replacement (optional) */
-.education-category li::before {
-  content: "•";
-  color: #00d4ff;
-  position: absolute;
-  left: 0;
-  font-size: 1.5rem;
-  line-height: 1;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* Links to resources */
 .education-container a {
   color: #00d4ff;
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .education-container a:hover {
   color: #00faff;
-  text-shadow: 0 0 8px #00faff;
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .education-container {
-    padding: 20px;
-  }
-
-  .education-container > h2 {
-    font-size: 1.8rem;
-  }
-
-  .education-category h3 {
-    font-size: 1.5rem;
-  }
-
-  .education-category li {
-    font-size: 1.1rem;
-  }
+  text-decoration: underline;
 }
 
 /* Chart container */
