@@ -11,6 +11,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from datetime import datetime, timedelta
 import os
 import logging
+import openai
 import redis
 import json
 
@@ -32,7 +33,10 @@ app.logger.setLevel(logging.INFO)
 app.logger.info("Initializing the Skill Match Bot Backend")
 
 # Configure allowed origins for CORS
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://skill-match-bot-frontend.onrender.com").split(",")
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "https://skyriz.app/,https://skill-match-bot-frontend.onrender.com/"
+).split(",")
 ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS]
 CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 app.logger.info(f"CORS enabled for frontend URLs: {ALLOWED_ORIGINS}")
