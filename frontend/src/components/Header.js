@@ -25,11 +25,11 @@ const Header = () => {
         <div className="logo">
           {isAuthenticated ? (
             <Link to="/dashboard">
-              <img src={logo} alt="Skill Match Bot Logo" />
+              <img src={logo} alt="Skyriz Logo" />
             </Link>
           ) : (
             <Link to="/">
-              <img src={logo} alt="Skill Match Bot Logo" />
+              <img src={logo} alt="Skyriz Logo" />
             </Link>
           )}
         </div>

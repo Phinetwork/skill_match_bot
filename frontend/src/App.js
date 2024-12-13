@@ -51,13 +51,13 @@ function App() {
 
 const Home = () => {
   React.useEffect(() => {
-    document.title = "Skill Match Bot - Home";
+    document.title = "Skyriz - Home";
   }, []);
 
   return (
     <div style={styles.homeContent}>
-      <img src={logo} alt="Skill Match Bot Logo" style={styles.logo} />
-      <h1 style={styles.heading}>Welcome to Skill Match Bot</h1>
+      <img src={logo} alt="Skyriz Logo" style={styles.logo} />
+      <h1 style={styles.heading}>Welcome to Skyriz</h1>
       <p style={styles.paragraph}>
         Unlock personalized side hustle opportunities, master profitable skills, and build success-driven habits with an AI-powered platform that adapts to you.
       </p>

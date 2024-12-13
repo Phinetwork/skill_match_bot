@@ -6,7 +6,7 @@ const Services = () => {
     <div className="services-page">
       <div className="services-header">
         <h1>Our Services</h1>
-        <p>Explore how Skill Match Bot can help you achieve your goals.</p>
+        <p>Explore how Skyriz can help you achieve your goals.</p>
       </div>
       <div className="services-content">
         <div className="service-card">

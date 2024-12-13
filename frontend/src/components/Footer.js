@@ -5,7 +5,7 @@ import './Footer.css'; // Add CSS for styling the footer
 const Footer = () => {
   return (
     <footer className="footer">
-      <p>&copy; {new Date().getFullYear()} Skill Match Bot. All rights reserved.</p>
+      <p>&copy; {new Date().getFullYear()} Skyriz. All rights reserved.</p>
     </footer>
   );
 };

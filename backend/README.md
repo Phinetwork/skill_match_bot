@@ -1,6 +1,6 @@
-# Skill Match Bot - Backend
+# Skyriz - Backend
 
-This is the backend service for the **Skill Match Bot**, a platform that helps users discover side hustles, develop skills, and track habits to achieve their goals. The backend is built with **Flask**, integrates with a **PostgreSQL database**, and uses **Redis caching** for optimized performance.
+This is the backend service for the **Skyriz**, a platform that helps users discover side hustles, develop skills, and track habits to achieve their goals. The backend is built with **Flask**, integrates with a **PostgreSQL database**, and uses **Redis caching** for optimized performance.
 
 ## Features
 

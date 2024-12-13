@@ -29,7 +29,7 @@ jwt = JWTManager(app)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 app.logger.setLevel(logging.INFO)
-app.logger.info("Initializing the Skill Match Bot Backend")
+app.logger.info("Initializing the Skyriz Backend")
 
 # Configure allowed origins for CORS
 ALLOWED_ORIGINS = os.getenv(
@@ -246,7 +246,7 @@ def habit_tracker():
 @app.route("/", methods=["GET"])
 def home():
     app.logger.info("Root endpoint accessed")
-    return jsonify({"message": "Skill Match Bot Backend is running!"})
+    return jsonify({"message": "Skyriz Backend is running!"})
 
 # New Authentication Routes
 

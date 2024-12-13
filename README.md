@@ -1,6 +1,6 @@
-# Skill Match Bot
+# Skyriz
 
-The Skill Match Bot is a web application that helps users discover side hustles and skill development opportunities tailored to their unique skills and interests. The app uses advanced semantic similarity algorithms powered by the [Sentence Transformers](https://www.sbert.net/) model to recommend personalized side hustle options.
+The Skyriz is a web application that helps users discover side hustles and skill development opportunities tailored to their unique skills and interests. The app uses advanced semantic similarity algorithms powered by the [Sentence Transformers](https://www.sbert.net/) model to recommend personalized side hustle options.
 
 ## Features
 
