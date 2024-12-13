@@ -63,11 +63,11 @@ const Dashboard = () => {
           fetchEducationResources(),
         ]);
 
-        setLoading(false);
+        setLoading(false); 
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("An error occurred while loading data. Please try again later.");
-        setLoading(false);
+        setLoading(false); 
       }
     };
 
@@ -208,7 +208,7 @@ const Dashboard = () => {
     };
   
     return habitDetails[habit] || "Details not available.";
-  };  
+  }; 
 
   const fetchEducationResources = async () => {
     try {
@@ -325,6 +325,7 @@ const Dashboard = () => {
     );
   }
 
+  // Group education resources by category
   const categories = educationResources.reduce((acc, resource) => {
     if (!acc[resource.category]) {
       acc[resource.category] = [];

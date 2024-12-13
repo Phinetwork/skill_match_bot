@@ -1,6 +1,6 @@
 /* General body styling */
 body {
-  background: linear-gradient(to bottom, #0f2027, #00d4ff, #00274d);
+  background: linear-gradient(to bottom, #00d4ff80, #00d4ff, #00274d);
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
@@ -19,7 +19,7 @@ body {
 .dashboard-container h1 {
   font-size: 3rem;
   color: #00d4ff;
-  text-shadow: 0px 4px 10px rgba(0, 212, 255, 0.5);
+  text-shadow: 0px 4px 10px rgba(0, 212, 255, 0.502);
   margin-bottom: 20px;
 }
 
