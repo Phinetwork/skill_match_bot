@@ -90,25 +90,98 @@ body {
 }
 
 /* Education resources container */
-.education-container ul {
+.education-container {
+  margin: 40px auto;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  color: #f0f8ff;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Main heading for education resources */
+.education-container > h2 {
+  font-size: 2rem;
+  color: #00d4ff;
+  text-shadow: 0px 4px 10px rgba(0, 212, 255, 0.5);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Individual category blocks */
+.education-category {
+  margin-bottom: 40px;
+}
+
+.education-category h3 {
+  font-size: 1.8rem;
+  color: #00faff;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #00d4ff;
+  padding-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Resource List Styling */
+.education-category ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-.education-container li {
-  margin: 10px 0;
+.education-category li {
+  margin: 12px 0;
   font-size: 1.2rem;
+  position: relative;
+  padding-left: 20px;
 }
 
+/* Subtle icon or bullet replacement (optional) */
+.education-category li::before {
+  content: "•";
+  color: #00d4ff;
+  position: absolute;
+  left: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Links to resources */
 .education-container a {
   color: #00d4ff;
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .education-container a:hover {
   color: #00faff;
-  text-decoration: underline;
+  text-shadow: 0 0 8px #00faff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .education-container {
+    padding: 20px;
+  }
+
+  .education-container > h2 {
+    font-size: 1.8rem;
+  }
+
+  .education-category h3 {
+    font-size: 1.5rem;
+  }
+
+  .education-category li {
+    font-size: 1.1rem;
+  }
 }
 
 /* Chart container */
