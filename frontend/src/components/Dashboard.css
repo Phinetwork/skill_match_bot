@@ -31,6 +31,9 @@ body {
   height: 100vh;
   color: #00d4ff;
   font-size: 2rem;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
 }
 
 /* Card component styling */
@@ -166,4 +169,84 @@ body {
     font-size: 1rem;
     padding: 10px 20px;
   }
+}
+
+/* -------------------- */
+/* Additional Futuristic Loading Effects */
+/* -------------------- */
+
+/* Animated background pattern in loading state */
+.loading-container::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(#00d4ff 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: backgroundPan 6s linear infinite;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+@keyframes backgroundPan {
+  0% { transform: translate(0,0); }
+  100% { transform: translate(50px,50px); }
+}
+
+/* Neon rotating ring */
+.loader-ring {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  box-shadow: 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 60px #00d4ff;
+  animation: ringSpin 1.5s linear infinite;
+}
+
+.loader-ring::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top: 4px solid #00d4ff;
+  border-right: 4px solid #00d4ff;
+  border-radius: 50%;
+  animation: ringSpin 1.5s linear infinite reverse;
+}
+
+@keyframes ringSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Glitchy futuristic text */
+.glitch-text {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  color: #00d4ff;
+  text-shadow:
+    0 0 5px #00d4ff,
+    0 0 10px #00d4ff,
+    0 0 20px #00d4ff,
+    0 0 40px #00d4ff,
+    0 0 80px #00d4ff;
+  animation: glitch 2s infinite;
+}
+
+@keyframes glitch {
+  0% { transform: skew(0deg); opacity: 1; }
+  20% { transform: skew(-5deg); opacity: 0.9; }
+  40% { transform: skew(5deg); opacity: 1; }
+  60% { transform: skew(-3deg); opacity: 0.85; }
+  80% { transform: skew(3deg); opacity: 1; }
+  100% { transform: skew(0deg); opacity: 1; }
 }
