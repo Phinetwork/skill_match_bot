@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import axios from "axios";
+import './PredictiveForecastChart.css';
 
 const PredictiveForecastChart = () => {
   const [chartData, setChartData] = useState(null);
@@ -23,9 +24,9 @@ const PredictiveForecastChart = () => {
         const labels = ["Open", "High", "Low", "Current"];
         const prices = [data.o, data.h, data.l, data.c];
 
-        // Calculate predictions based on the rate of change
+        // Calculate predictions based on a simple mock rate of change
         const lastValue = data.c;
-        const secondLastValue = (data.o + data.l) / 2; // Mock previous value
+        const secondLastValue = (data.o + data.l) / 2; 
         const rateOfChange = lastValue - secondLastValue;
 
         const futureLabels = ["Day +1", "Day +2", "Day +3"];
@@ -35,12 +36,21 @@ const PredictiveForecastChart = () => {
           labels: [...labels, ...futureLabels],
           datasets: [
             {
-              label: "SPY Prices",
-              data: [...prices, ...futureValues],
-              borderColor: "#007BFF",
-              backgroundColor: "rgba(0, 123, 255, 0.2)",
+              label: "Historical & Current SPY Prices",
+              data: [...prices, null, null, null], // Keep future slots null to separate datasets visually
+              borderColor: "#00afff",
+              backgroundColor: "rgba(0, 175, 255, 0.2)",
               fill: true,
               tension: 0.4,
+            },
+            {
+              label: "Predicted Prices",
+              data: [null, null, null, data.c, ...futureValues],
+              borderColor: "#ff9900",
+              backgroundColor: "rgba(255, 153, 0, 0.2)",
+              fill: true,
+              tension: 0.4,
+              borderDash: [5, 5], // Dashed line for predictions
             },
           ],
         });
@@ -57,38 +67,24 @@ const PredictiveForecastChart = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className="chart-loading">Loading...</p>;
   }
 
   if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return <p className="chart-error">{error}</p>;
   }
 
   return (
-    <div
-      style={{
-        padding: "20px",
-        backgroundColor: "#1e1e2f",
-        borderRadius: "15px",
-        boxShadow: "0 6px 15px rgba(0, 0, 0, 0.5)",
-        color: "#fff",
-      }}
-    >
-      <h2
-        style={{
-          textAlign: "center",
-          fontFamily: "Roboto, sans-serif",
-          fontSize: "1.8rem",
-          color: "#fff",
-          textShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
-        }}
-      >
-        Predictive Forecast Chart
-      </h2>
+    <div className="chart-container">
+      <h2 className="chart-title">Predictive Forecast Chart</h2>
       <Line
         data={chartData}
         options={{
           responsive: true,
+          interaction: {
+            mode: "index",
+            intersect: false,
+          },
           plugins: {
             legend: {
               display: true,
@@ -102,6 +98,7 @@ const PredictiveForecastChart = () => {
               callbacks: {
                 label: (context) => {
                   const value = context.raw;
+                  if (value === null) return ""; 
                   return `Value: $${value.toFixed(2)}`;
                 },
               },
