@@ -5,22 +5,50 @@ const InteractiveGlobe = () => {
   const [points, setPoints] = useState([]);
 
   useEffect(() => {
-    // Fetch real-world data points (e.g., population, GDP, or events)
-    const fetchData = async () => {
-      const data = await fetch("https://search.worldbank.org/api/v3/wds?format=json&qterm=economic+indicators&fl=count,docdt,display_title,url,repnme&fct=count_exact&rows=50") // Replace with a real API
-        .then((response) => response.json())
-        .catch((error) => console.error("Error fetching data:", error));
-
-      if (data && data.points) {
-        setPoints(
-          data.points.map((point) => ({
-            lat: point.latitude,
-            lng: point.longitude,
-            size: point.metric / 100, // Adjust size based on a metric
-            color: point.metric > 50 ? "#FF5733" : "#33FF57", // Conditional coloring
-            label: `${point.name} - Metric: ${point.metric}`, // Tooltip information
-          }))
+    const fetchCoordinates = async (location) => {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`
         );
+        const data = await response.json();
+        if (data && data.length > 0) {
+          return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+        } else {
+          return { lat: 0, lng: 0 }; // Default to (0,0) if no coordinates found
+        }
+      } catch (error) {
+        console.error(`Error fetching coordinates for ${location}:`, error);
+        return { lat: 0, lng: 0 };
+      }
+    };
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://search.worldbank.org/api/v3/wds?format=json&qterm=economic+indicators&fl=count,docdt,display_title,url,repnme&fct=count_exact&rows=50"
+        );
+        const data = await response.json();
+
+        if (data && data.documents) {
+          const mappedPoints = await Promise.all(
+            Object.values(data.documents).map(async (item) => {
+              const coordinates = await fetchCoordinates(item.count || "World");
+              return {
+                lat: coordinates.lat,
+                lng: coordinates.lng,
+                size: Math.random() * 1.5 + 1, // Randomize size for visibility
+                color: "#33FF57", // Default color for all points
+                label: `${item.display_title || "Unknown Title"}`
+              };
+            })
+          );
+
+          setPoints(mappedPoints);
+        } else {
+          console.error("Unexpected API response structure.", data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -47,7 +75,7 @@ const InteractiveGlobe = () => {
         atmosphereColor="#3A9BFF"
         atmosphereAltitude={0.25}
         onPointClick={(point) => {
-          alert(`Clicked on: ${point.label}`); // Interaction feedback
+          alert(`Clicked on: ${point.label}`);
         }}
         htmlElementsData={points}
         htmlElement={(point) => {
