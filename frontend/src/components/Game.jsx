@@ -4,89 +4,92 @@ import "./Game.css";
 // Simulate backend APIs
 const fetchUserProfile = async () => ({
   name: "Player One",
-  streak: 5,
+  streak: Math.floor(Math.random() * 10) + 1,
   skillStats: {
-    timeManagement: 60,
-    problemSolving: 40,
-    mindfulness: 50,
+    timeManagement: Math.floor(Math.random() * 100),
+    problemSolving: Math.floor(Math.random() * 100),
+    mindfulness: Math.floor(Math.random() * 100),
   },
 });
 
 const fetchLeaderboard = async () => [
-  { name: "Alice", score: 120 },
-  { name: "Bob", score: 100 },
-  { name: "Player One", score: 80 },
+  { name: "Alice", score: Math.floor(Math.random() * 300) + 200 },
+  { name: "Bob", score: Math.floor(Math.random() * 300) + 200 },
+  { name: "Player One", score: Math.floor(Math.random() * 300) + 100 },
 ];
 
-const fetchMiniGames = () => [
+const generateRandomSequence = (length) => {
+  const colors = ["Red", "Blue", "Green", "Yellow", "Orange", "Purple"];
+  return Array.from({ length }, () => colors[Math.floor(Math.random() * colors.length)]);
+};
+
+const generateDynamicScenario = (userStats) => {
+  const templates = [
+    {
+      title: "Time Crunch",
+      description: "You have multiple tasks. How do you prioritize?",
+      options: [
+        { text: "Focus on urgent tasks", skill: "timeManagement" },
+        { text: "Delegate to others", skill: "problemSolving" },
+        { text: "Take a break", skill: "mindfulness" },
+      ],
+    },
+    {
+      title: "Financial Decision",
+      description: "You have unexpected expenses. What do you do?",
+      options: [
+        { text: "Save the money", skill: "mindfulness" },
+        { text: "Invest in a project", skill: "problemSolving" },
+        { text: "Spend it carefully", skill: "timeManagement" },
+      ],
+    },
+  ];
+
+  return templates.map((template) => {
+    const options = template.options.map((option) => ({
+      ...option,
+      text: `${option.text} (${Math.floor(Math.random() * 100)} points)`,
+      score: Math.floor(Math.random() * 20) + 5 + Math.floor(userStats[option.skill] / 10),
+    }));
+
+    return {
+      title: template.title,
+      description: template.description,
+      options,
+    };
+  });
+};
+
+const generateDynamicMiniGames = () => [
   {
     id: "memory",
     title: "Memory Blitz",
-    description: "Remember this sequence: Red, Blue, Green, Yellow. Repeat it.",
-    options: [
-      { text: "Red, Blue, Green, Yellow", correct: true },
-      { text: "Red, Green, Blue, Yellow", correct: false },
-      { text: "Yellow, Blue, Red, Green", correct: false },
-    ],
-  },
-  {
-    id: "logic",
-    title: "Logical Puzzle",
-    description: "A train leaves Station A at 6:00 PM and travels at 60 mph. How far does it go in 2 hours?",
-    options: [
-      { text: "60 miles", correct: false },
-      { text: "120 miles", correct: true },
-      { text: "90 miles", correct: false },
-    ],
+    description: "Memorize the sequence and repeat it.",
+    levels: Array.from({ length: 3 }, (_, i) => ({
+      sequence: generateRandomSequence(i + 3),
+      points: (i + 1) * 10,
+    })),
   },
   {
     id: "reaction",
     title: "Reaction Challenge",
     description: "Tap the button as quickly as you can when it appears!",
-    isReaction: true,
+    difficulty: Array.from({ length: 3 }, (_, i) => ({
+      delayRange: [300 + i * 200, 1000 - i * 200],
+      points: (i + 1) * 10,
+    })),
   },
   {
-    id: "calculation",
-    title: "Quick Math",
-    description: "Solve this: 12 + 15 = ?",
-    options: [
-      { text: "27", correct: true },
-      { text: "28", correct: false },
-      { text: "26", correct: false },
-    ],
+    id: "logic",
+    title: "Logical Puzzle",
+    description: "Solve multi-step challenges.",
+    levels: Array.from({ length: 3 }, (_, i) => ({
+      question: `What is ${(i + 1) * 10} + ${(i + 2) * 5}?`,
+      answer: `${(i + 1) * 10 + (i + 2) * 5}`,
+      points: (i + 1) * 15,
+    })),
   },
 ];
-
-const generateDynamicScenario = (level, userStats) => {
-  const baseScenarios = [
-    {
-      title: "Time Crunch",
-      description: "You have 3 tasks due at the same time. How do you prioritize?",
-      options: [
-        { text: "Finish the easiest task first", score: 5, skill: "timeManagement" },
-        { text: "Complete the hardest task first", score: 10, skill: "problemSolving" },
-        { text: "Delegate to your team", score: 8, skill: "timeManagement" },
-      ],
-    },
-    {
-      title: "Mindfulness Break",
-      description: "You’re feeling overwhelmed. What do you do?",
-      options: [
-        { text: "Meditate for 5 minutes", score: 10, skill: "mindfulness" },
-        { text: "Take a quick walk", score: 8, skill: "mindfulness" },
-        { text: "Power through and ignore it", score: 3, skill: "timeManagement" },
-      ],
-    },
-  ];
-
-  return baseScenarios.map((scenario) => {
-    const updatedOptions = scenario.options.map((option) => ({
-      ...option,
-      score: option.score + Math.floor(userStats[option.skill] / 10),
-    }));
-    return { ...scenario, options: updatedOptions };
-  });
-};
 
 function Game() {
   const [userProfile, setUserProfile] = useState(null);
@@ -96,25 +99,24 @@ function Game() {
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
-  const [feedback, setFeedback] = useState("");
-  const [gameOver, setGameOver] = useState(false);
   const [miniGameActive, setMiniGameActive] = useState(false);
   const [currentMiniGame, setCurrentMiniGame] = useState(null);
-  const [reactionTime, setReactionTime] = useState(null);
+  const [miniGameLevel, setMiniGameLevel] = useState(0);
+  const [feedback, setFeedback] = useState("");
 
   useEffect(() => {
     const initializeGame = async () => {
       const profile = await fetchUserProfile();
       setUserProfile(profile);
 
-      const dynamicScenarios = generateDynamicScenario(1, profile.skillStats);
-      setScenarios(dynamicScenarios);
+      const scenarios = generateDynamicScenario(profile.skillStats);
+      setScenarios(scenarios);
 
-      const leaderboardData = await fetchLeaderboard();
-      setLeaderboard(leaderboardData);
+      const leaderboard = await fetchLeaderboard();
+      setLeaderboard(leaderboard);
 
-      const games = fetchMiniGames();
-      setMiniGames(games);
+      const miniGames = generateDynamicMiniGames();
+      setMiniGames(miniGames);
     };
     initializeGame();
   }, []);
@@ -124,11 +126,10 @@ function Game() {
     setFeedback(`You earned ${option.score} points!`);
     setProgress(progress + 1);
 
-    // Proceed to the next scenario
     if (currentScenarioIndex + 1 < scenarios.length) {
       setCurrentScenarioIndex(currentScenarioIndex + 1);
     } else {
-      setGameOver(true);
+      setFeedback("You've completed all scenarios!");
     }
   };
 
@@ -136,41 +137,27 @@ function Game() {
     const randomGame = miniGames[Math.floor(Math.random() * miniGames.length)];
     setCurrentMiniGame(randomGame);
     setMiniGameActive(true);
-
-    // Set reaction game timing
-    if (randomGame.isReaction) {
-      setTimeout(() => {
-        setReactionTime(Date.now());
-      }, Math.random() * 2000 + 1000); // Random delay between 1-3 seconds
-    }
+    setMiniGameLevel(0);
   };
 
-  const handleMiniGameSubmit = (option) => {
-    if (currentMiniGame.isReaction) {
-      const timeTaken = Date.now() - reactionTime;
-      setScore(score + Math.max(0, 1000 - timeTaken));
-      setFeedback(`Reaction Time: ${timeTaken}ms. You earned ${Math.max(0, 1000 - timeTaken)} points!`);
-    } else if (option.correct) {
-      setScore(score + 20);
-      setFeedback("Correct! Bonus 20 points!");
+  const handleMiniGameSubmit = (answer) => {
+    const game = currentMiniGame;
+    const level = game.levels ? game.levels[miniGameLevel] : null;
+    const correct = level?.sequence ? answer === level.sequence.join(", ") : answer === level?.answer;
+
+    if (correct) {
+      setScore(score + level.points);
+      setFeedback(`Correct! You earned ${level.points} points!`);
+      if (miniGameLevel + 1 < (game.levels?.length || 0)) {
+        setMiniGameLevel(miniGameLevel + 1);
+      } else {
+        setMiniGameActive(false);
+      }
     } else {
       setFeedback("Oops! That was incorrect.");
+      setMiniGameActive(false);
     }
-    setMiniGameActive(false);
-    setReactionTime(null);
   };
-
-  const restartGame = () => {
-    setScore(0);
-    setProgress(0);
-    setCurrentScenarioIndex(0);
-    setFeedback("");
-    setGameOver(false);
-    setMiniGameActive(false);
-    setCurrentMiniGame(null);
-  };
-
-  const currentScenario = scenarios[currentScenarioIndex];
 
   return (
     <div className="game-container">
@@ -183,12 +170,12 @@ function Game() {
         </div>
       </header>
       <main className="game-area">
-        {!miniGameActive && !gameOver && currentScenario ? (
+        {!miniGameActive ? (
           <>
-            <h2>{currentScenario.title}</h2>
-            <p>{currentScenario.description}</p>
+            <h2>{scenarios[currentScenarioIndex]?.title}</h2>
+            <p>{scenarios[currentScenarioIndex]?.description}</p>
             <div className="options">
-              {currentScenario.options.map((option, index) => (
+              {scenarios[currentScenarioIndex]?.options.map((option, index) => (
                 <button
                   key={index}
                   className="option-button"
@@ -198,63 +185,39 @@ function Game() {
                 </button>
               ))}
             </div>
-            {feedback && <p className="feedback">{feedback}</p>}
             <button className="mini-game-button" onClick={startMiniGame}>
               Play Mini-Game for Bonus Points
             </button>
           </>
-        ) : miniGameActive && currentMiniGame ? (
+        ) : (
           <div className="mini-game">
             <h2>{currentMiniGame.title}</h2>
             <p>{currentMiniGame.description}</p>
-            {!currentMiniGame.isReaction ? (
+            {currentMiniGame.levels && currentMiniGame.levels[miniGameLevel]?.sequence ? (
               <div className="options">
-                {currentMiniGame.options.map((option, index) => (
+                {currentMiniGame.levels[miniGameLevel].sequence.map((seq, index) => (
                   <button
                     key={index}
                     className="option-button"
-                    onClick={() => handleMiniGameSubmit(option)}
+                    onClick={() => handleMiniGameSubmit(seq)}
                   >
-                    {option.text}
+                    {seq}
                   </button>
                 ))}
               </div>
             ) : (
-              <button
-                className="reaction-button"
-                onClick={() => handleMiniGameSubmit()}
-                disabled={!reactionTime}
-              >
-                Tap Here!
-              </button>
+              <input
+                type="text"
+                placeholder="Enter your answer"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleMiniGameSubmit(e.target.value);
+                }}
+              />
             )}
           </div>
-        ) : gameOver ? (
-          <div className="game-over">
-            <h2>Game Over!</h2>
-            <p>Your final score: {score}</p>
-            <h3>Leaderboard</h3>
-            <ul>
-              {leaderboard.map((entry, index) => (
-                <li key={index}>
-                  {entry.name}: {entry.score} points
-                </li>
-              ))}
-            </ul>
-            <button className="restart-button" onClick={restartGame}>
-              Play Again
-            </button>
-          </div>
-        ) : null}
+        )}
+        {feedback && <p className="feedback">{feedback}</p>}
       </main>
-      <footer className="game-footer">
-        <div className="progress-bar-container">
-          <div
-            className="progress-bar"
-            style={{ width: `${(progress / scenarios.length) * 100}%` }}
-          ></div>
-        </div>
-      </footer>
     </div>
   );
 }
