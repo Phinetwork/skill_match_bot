@@ -1,57 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./Game.css";
 
-// Scenarios grouped by levels
-const levelScenarios = {
-  1: [
-    {
-      id: 1,
-      title: "Time Crunch",
-      description: "You have 3 tasks due at the same time. How do you prioritize?",
-      options: [
-        { text: "Finish the easiest task first", score: 5 },
-        { text: "Complete the hardest task first", score: 10 },
-        { text: "Delegate to your team", score: 8 },
-      ],
-    },
-    {
-      id: 2,
-      title: "Budget Balancer",
-      description: "You have $500 left in your monthly budget. What do you do?",
-      options: [
-        { text: "Save for emergencies", score: 10 },
-        { text: "Invest in a course to improve skills", score: 8 },
-        { text: "Buy a new gadget", score: 3 },
-      ],
-    },
-  ],
-  2: [
-    {
-      id: 3,
-      title: "Conflict Resolver",
-      description: "Your team is in disagreement over a project direction. How do you handle it?",
-      options: [
-        { text: "Listen to everyone's input and find a compromise", score: 10 },
-        { text: "Decide quickly to avoid delays", score: 5 },
-        { text: "Let someone else decide", score: 2 },
-      ],
-    },
-    {
-      id: 4,
-      title: "Time vs Quality",
-      description: "You’re running out of time to finish a project. What do you prioritize?",
-      options: [
-        { text: "Submit as-is to meet the deadline", score: 5 },
-        { text: "Request more time to improve quality", score: 8 },
-        { text: "Split tasks with teammates", score: 10 },
-      ],
-    },
-  ],
-};
+// Simulate backend APIs
+const fetchUserProfile = async () => ({
+  name: "Player One",
+  streak: 5,
+  skillStats: {
+    timeManagement: 60,
+    problemSolving: 40,
+    mindfulness: 50,
+  },
+});
 
-// Mini-game questions (e.g., memory and problem-solving)
-const miniGames = {
-  memory: {
+const fetchLeaderboard = async () => [
+  { name: "Alice", score: 120 },
+  { name: "Bob", score: 100 },
+  { name: "Player One", score: 80 },
+];
+
+const fetchMiniGames = () => [
+  {
     id: "memory",
     title: "Memory Blitz",
     description: "Remember this sequence: Red, Blue, Green, Yellow. Repeat it.",
@@ -61,7 +29,7 @@ const miniGames = {
       { text: "Yellow, Blue, Red, Green", correct: false },
     ],
   },
-  logic: {
+  {
     id: "logic",
     title: "Logical Puzzle",
     description: "A train leaves Station A at 6:00 PM and travels at 60 mph. How far does it go in 2 hours?",
@@ -71,83 +39,151 @@ const miniGames = {
       { text: "90 miles", correct: false },
     ],
   },
+  {
+    id: "reaction",
+    title: "Reaction Challenge",
+    description: "Tap the button as quickly as you can when it appears!",
+    isReaction: true,
+  },
+  {
+    id: "calculation",
+    title: "Quick Math",
+    description: "Solve this: 12 + 15 = ?",
+    options: [
+      { text: "27", correct: true },
+      { text: "28", correct: false },
+      { text: "26", correct: false },
+    ],
+  },
+];
+
+const generateDynamicScenario = (level, userStats) => {
+  const baseScenarios = [
+    {
+      title: "Time Crunch",
+      description: "You have 3 tasks due at the same time. How do you prioritize?",
+      options: [
+        { text: "Finish the easiest task first", score: 5, skill: "timeManagement" },
+        { text: "Complete the hardest task first", score: 10, skill: "problemSolving" },
+        { text: "Delegate to your team", score: 8, skill: "timeManagement" },
+      ],
+    },
+    {
+      title: "Mindfulness Break",
+      description: "You’re feeling overwhelmed. What do you do?",
+      options: [
+        { text: "Meditate for 5 minutes", score: 10, skill: "mindfulness" },
+        { text: "Take a quick walk", score: 8, skill: "mindfulness" },
+        { text: "Power through and ignore it", score: 3, skill: "timeManagement" },
+      ],
+    },
+  ];
+
+  return baseScenarios.map((scenario) => {
+    const updatedOptions = scenario.options.map((option) => ({
+      ...option,
+      score: option.score + Math.floor(userStats[option.skill] / 10),
+    }));
+    return { ...scenario, options: updatedOptions };
+  });
 };
 
 function Game() {
+  const [userProfile, setUserProfile] = useState(null);
+  const [scenarios, setScenarios] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [miniGames, setMiniGames] = useState([]);
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [currentLevel, setCurrentLevel] = useState(1);
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0);
   const [feedback, setFeedback] = useState("");
-  const [achievements, setAchievements] = useState([]);
-  const [dailyStreak, setDailyStreak] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
   const [miniGameActive, setMiniGameActive] = useState(false);
-  const [miniGameResult, setMiniGameResult] = useState("");
+  const [currentMiniGame, setCurrentMiniGame] = useState(null);
+  const [reactionTime, setReactionTime] = useState(null);
 
-  const scenarios = levelScenarios[currentLevel];
-  const maxProgress = scenarios.length;
-
-  // Add to streak on component mount
   useEffect(() => {
-    setDailyStreak((prev) => prev + 1);
+    const initializeGame = async () => {
+      const profile = await fetchUserProfile();
+      setUserProfile(profile);
+
+      const dynamicScenarios = generateDynamicScenario(1, profile.skillStats);
+      setScenarios(dynamicScenarios);
+
+      const leaderboardData = await fetchLeaderboard();
+      setLeaderboard(leaderboardData);
+
+      const games = fetchMiniGames();
+      setMiniGames(games);
+    };
+    initializeGame();
   }, []);
 
-  const handleOptionClick = (optionScore) => {
-    setScore(score + optionScore);
+  const handleOptionClick = (option) => {
+    setScore(score + option.score);
+    setFeedback(`You earned ${option.score} points!`);
     setProgress(progress + 1);
-    setFeedback(`You earned ${optionScore} points!`);
 
-    // Check for achievements
-    if (score + optionScore >= 50 && !achievements.includes("Score Master")) {
-      setAchievements([...achievements, "Score Master"]);
-      setFeedback("Achievement Unlocked: Score Master!");
-    }
-
-    // Proceed to next scenario or level
+    // Proceed to the next scenario
     if (currentScenarioIndex + 1 < scenarios.length) {
       setCurrentScenarioIndex(currentScenarioIndex + 1);
-    } else if (currentLevel < Object.keys(levelScenarios).length) {
-      // Reset progress and advance level
-      setCurrentLevel(currentLevel + 1);
-      setCurrentScenarioIndex(0);
-      setProgress(0);
-      setFeedback("Level Up! Welcome to the next challenge!");
     } else {
-      setFeedback("Congratulations! You’ve completed all levels!");
-    }
-  };
-
-  const handleMiniGameSubmit = (isCorrect) => {
-    setMiniGameActive(false);
-    if (isCorrect) {
-      setScore(score + 20);
-      setMiniGameResult("Correct! Bonus 20 points!");
-    } else {
-      setMiniGameResult("Oops! That was incorrect.");
+      setGameOver(true);
     }
   };
 
   const startMiniGame = () => {
+    const randomGame = miniGames[Math.floor(Math.random() * miniGames.length)];
+    setCurrentMiniGame(randomGame);
     setMiniGameActive(true);
-    setMiniGameResult("");
+
+    // Set reaction game timing
+    if (randomGame.isReaction) {
+      setTimeout(() => {
+        setReactionTime(Date.now());
+      }, Math.random() * 2000 + 1000); // Random delay between 1-3 seconds
+    }
+  };
+
+  const handleMiniGameSubmit = (option) => {
+    if (currentMiniGame.isReaction) {
+      const timeTaken = Date.now() - reactionTime;
+      setScore(score + Math.max(0, 1000 - timeTaken));
+      setFeedback(`Reaction Time: ${timeTaken}ms. You earned ${Math.max(0, 1000 - timeTaken)} points!`);
+    } else if (option.correct) {
+      setScore(score + 20);
+      setFeedback("Correct! Bonus 20 points!");
+    } else {
+      setFeedback("Oops! That was incorrect.");
+    }
+    setMiniGameActive(false);
+    setReactionTime(null);
+  };
+
+  const restartGame = () => {
+    setScore(0);
+    setProgress(0);
+    setCurrentScenarioIndex(0);
+    setFeedback("");
+    setGameOver(false);
+    setMiniGameActive(false);
+    setCurrentMiniGame(null);
   };
 
   const currentScenario = scenarios[currentScenarioIndex];
-  const randomMiniGame = miniGames.memory;
 
   return (
     <div className="game-container">
       <header className="game-header">
         <h1>MindVault Quest</h1>
+        {userProfile && <p>Welcome, {userProfile.name}! Streak: {userProfile.streak} days</p>}
         <div className="stats">
           <p>Score: {score}</p>
-          <p>Level: {currentLevel}</p>
-          <p>Progress: {progress}/{maxProgress}</p>
-          <p>Daily Streak: {dailyStreak} Days</p>
+          <p>Progress: {progress}/{scenarios.length}</p>
         </div>
       </header>
       <main className="game-area">
-        {!miniGameActive && (progress < maxProgress || currentLevel < Object.keys(levelScenarios).length) ? (
+        {!miniGameActive && !gameOver && currentScenario ? (
           <>
             <h2>{currentScenario.title}</h2>
             <p>{currentScenario.description}</p>
@@ -156,7 +192,7 @@ function Game() {
                 <button
                   key={index}
                   className="option-button"
-                  onClick={() => handleOptionClick(option.score)}
+                  onClick={() => handleOptionClick(option)}
                 >
                   {option.text}
                 </button>
@@ -167,53 +203,55 @@ function Game() {
               Play Mini-Game for Bonus Points
             </button>
           </>
-        ) : miniGameActive ? (
+        ) : miniGameActive && currentMiniGame ? (
           <div className="mini-game">
-            <h2>{randomMiniGame.title}</h2>
-            <p>{randomMiniGame.description}</p>
-            <div className="options">
-              {randomMiniGame.options.map((option, index) => (
-                <button
-                  key={index}
-                  className="option-button"
-                  onClick={() => handleMiniGameSubmit(option.correct)}
-                >
-                  {option.text}
-                </button>
-              ))}
-            </div>
+            <h2>{currentMiniGame.title}</h2>
+            <p>{currentMiniGame.description}</p>
+            {!currentMiniGame.isReaction ? (
+              <div className="options">
+                {currentMiniGame.options.map((option, index) => (
+                  <button
+                    key={index}
+                    className="option-button"
+                    onClick={() => handleMiniGameSubmit(option)}
+                  >
+                    {option.text}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <button
+                className="reaction-button"
+                onClick={() => handleMiniGameSubmit()}
+                disabled={!reactionTime}
+              >
+                Tap Here!
+              </button>
+            )}
           </div>
-        ) : (
+        ) : gameOver ? (
           <div className="game-over">
-            <h2>Congratulations!</h2>
+            <h2>Game Over!</h2>
             <p>Your final score: {score}</p>
+            <h3>Leaderboard</h3>
             <ul>
-              {achievements.map((ach, index) => (
-                <li key={index}>{ach}</li>
+              {leaderboard.map((entry, index) => (
+                <li key={index}>
+                  {entry.name}: {entry.score} points
+                </li>
               ))}
             </ul>
-            <button
-              className="restart-button"
-              onClick={() => {
-                setScore(0);
-                setProgress(0);
-                setCurrentLevel(1);
-                setCurrentScenarioIndex(0);
-                setFeedback("");
-                setAchievements([]);
-              }}
-            >
+            <button className="restart-button" onClick={restartGame}>
               Play Again
             </button>
           </div>
-        )}
-        {miniGameResult && <p className="feedback">{miniGameResult}</p>}
+        ) : null}
       </main>
       <footer className="game-footer">
         <div className="progress-bar-container">
           <div
             className="progress-bar"
-            style={{ width: `${(progress / maxProgress) * 100}%` }}
+            style={{ width: `${(progress / scenarios.length) * 100}%` }}
           ></div>
         </div>
       </footer>
