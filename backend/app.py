@@ -3,8 +3,7 @@ load_dotenv()  # Load environment variables first
 
 from flask import Flask, request, jsonify, g
 from flask_cors import CORS
-from flask import Flask, send_from_directory
-from database import SessionLocal, Base, User  # Import after loading .env
+from database import SessionLocal, Base, User, Profile, Badge
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -38,7 +37,11 @@ CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 app.logger.info(f"CORS enabled for frontend URLs: {ALLOWED_ORIGINS}")
 
 # Initialize Redis client
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")  # Default to local Redis
+REDIS_URL = os.getenv(
+    "REDIS_URL", 
+    "redis://:2xctaLdMYomYsJJ2drVp9Ylj5GDnJdZQ@redis-19847.c256.us-east-1-2.ec2.redns.redis-cloud.com:19847/0"
+)  # Default to your Redis public URL with credentials
+
 try:
     redis_client = redis.Redis.from_url(REDIS_URL)
     redis_client.ping()
@@ -49,9 +52,6 @@ except Exception as e:
 
 # Helper Functions for Caching
 def get_cached_matches(skills):
-    """
-    Retrieve cached matches from Redis based on the provided skills.
-    """
     if not redis_client:
         return None
     try:
@@ -68,9 +68,6 @@ def get_cached_matches(skills):
         return None
 
 def set_cached_matches(skills, matches):
-    """
-    Cache the matches in Redis for future requests.
-    """
     if not redis_client:
         return
     try:
@@ -92,10 +89,83 @@ def shutdown_session(exception=None):
         db.close()
 
 # Existing Routes
-
 from matching_engine import get_side_hustles
 from skill_engine import recommend_skills
 from habit_engine import get_habit_recommendations
+
+# Profile Management Routes
+@app.route("/api/profile", methods=["GET", "PUT"])
+@jwt_required()
+def manage_profile():
+    user_id = get_jwt_identity()
+    try:
+        user = g.db.query(User).filter_by(id=user_id).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        if request.method == "GET":
+            if not user.profile:
+                return jsonify({"error": "Profile not found"}), 404
+            return jsonify({
+                "bio": user.profile.bio,
+                "avatar_url": user.profile.avatar_url
+            }), 200
+
+        if request.method == "PUT":
+            data = request.get_json()
+            bio = data.get("bio")
+            avatar_url = data.get("avatar_url")
+
+            if not user.profile:
+                user.profile = Profile(bio=bio, avatar_url=avatar_url, user_id=user_id)
+            else:
+                user.profile.bio = bio
+                user.profile.avatar_url = avatar_url
+
+            g.db.commit()
+            return jsonify({"message": "Profile updated successfully"}), 200
+    except Exception as e:
+        app.logger.error(f"Error in /api/profile: {e}", exc_info=True)
+        return jsonify({"error": "An unexpected error occurred"}), 500
+
+# Badge Management Routes
+@app.route("/api/badges", methods=["GET", "POST", "DELETE"])
+@jwt_required()
+def manage_badges():
+    user_id = get_jwt_identity()
+    try:
+        user = g.db.query(User).filter_by(id=user_id).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        if request.method == "GET":
+            badges = [{"id": badge.id, "name": badge.name, "description": badge.description} for badge in user.badges]
+            return jsonify(badges), 200
+
+        if request.method == "POST":
+            data = request.get_json()
+            name = data.get("name")
+            description = data.get("description")
+            if not name:
+                return jsonify({"error": "Badge name is required"}), 400
+
+            new_badge = Badge(name=name, description=description, user_id=user_id)
+            g.db.add(new_badge)
+            g.db.commit()
+            return jsonify({"message": "Badge added successfully"}), 201
+
+        if request.method == "DELETE":
+            badge_id = request.args.get("id")
+            badge = g.db.query(Badge).filter_by(id=badge_id, user_id=user_id).first()
+            if not badge:
+                return jsonify({"error": "Badge not found"}), 404
+
+            g.db.delete(badge)
+            g.db.commit()
+            return jsonify({"message": "Badge deleted successfully"}), 200
+    except Exception as e:
+        app.logger.error(f"Error in /api/badges: {e}", exc_info=True)
+        return jsonify({"error": "An unexpected error occurred"}), 500
 
 @app.route("/api/matches", methods=["POST"])
 def side_hustle_matches():
@@ -294,11 +364,13 @@ def login():
         app.logger.error(f"Error in /api/login: {e}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500
 
+# Consolidated Dashboard Route
 @app.route("/api/dashboard", methods=["GET"])
 @jwt_required()
 def dashboard():
     app.logger.info("Request received at /api/dashboard")
     try:
+        # Extract the user ID from the token
         user_id = get_jwt_identity()
         app.logger.info(f"Extracted user_id from token: {user_id}")
 
@@ -308,14 +380,27 @@ def dashboard():
             app.logger.warning("User not found!")
             return jsonify({"error": "User not found!"}), 404
 
-        # Example user-specific data; adjust as needed
+        # Handle user profile, ensuring it's safe to access even if not set
+        profile = {
+            "bio": user.profile.bio if user.profile else None,
+            "avatar_url": user.profile.avatar_url if user.profile else None
+        }
+
+        # Handle badges, ensuring the app works even if no badges are earned yet
+        badges = [{"id": badge.id, "name": badge.name, "description": badge.description} for badge in user.badges] if user.badges else []
+
+        # Consolidated data including user, profile, and badges
         data = {
             "username": user.username,
             "email": user.email,
-            "created_at": user.created_at.isoformat()
+            "created_at": user.created_at.isoformat(),
+            "profile": profile,
+            "badges": badges
         }
         app.logger.info(f"Dashboard data for user_id {user_id}: {data}")
+
         return jsonify(data), 200
+
     except Exception as e:
         app.logger.error(f"Error in /api/dashboard: {e}", exc_info=True)
         return jsonify({"error": "An unexpected error occurred"}), 500

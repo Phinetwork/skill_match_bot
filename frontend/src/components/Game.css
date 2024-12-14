@@ -1,0 +1,104 @@
+/* Game Container */
+.game-container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #f9f9f9;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Header */
+  .game-header {
+    background-color: #6200ea;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+  
+  .stats p {
+    margin: 0;
+  }
+  
+  /* Game Area */
+  .game-area {
+    padding: 20px;
+  }
+  
+  h2 {
+    margin-bottom: 10px;
+  }
+  
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .option-button {
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .option-button:hover {
+    background-color: #3700b3;
+  }
+  
+  .feedback {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #4caf50;
+  }
+  
+  /* Footer */
+  .game-footer {
+    margin-top: 20px;
+  }
+  
+  .progress-bar-container {
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    background-color: #6200ea;
+    height: 10px;
+    transition: width 0.3s ease;
+  }
+  
+  /* Game Over Section */
+  .game-over {
+    padding: 20px;
+  }
+  
+  .restart-button {
+    background-color: #03dac6;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .restart-button:hover {
+    background-color: #018786;
+  }
+  
