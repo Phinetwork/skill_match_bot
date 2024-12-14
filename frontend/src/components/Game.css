@@ -1,21 +1,38 @@
-/* Game Container */
-.game-container {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background: #f9f9f9;
-    padding: 20px;
+/* General Styles */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #e0f7fa, #80deea);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  /* Game Container */
+  .game-container {
+    width: 90%;
     max-width: 600px;
-    margin: 0 auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
   }
   
   /* Header */
   .game-header {
-    background-color: #6200ea;
-    color: #fff;
-    padding: 10px;
-    border-radius: 10px 10px 0 0;
+    background-color: #00796b;
+    color: #ffffff;
+    padding: 20px;
+    border-bottom: 3px solid #004d40;
+  }
+  
+  .game-header h1 {
+    margin: 0;
+    font-size: 24px;
   }
   
   .stats {
@@ -25,7 +42,8 @@
   }
   
   .stats p {
-    margin: 0;
+    margin: 5px 0;
+    font-weight: bold;
   }
   
   /* Game Area */
@@ -34,52 +52,93 @@
   }
   
   h2 {
-    margin-bottom: 10px;
+    font-size: 20px;
+    color: #004d40;
   }
   
   .options {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin: 20px 0;
   }
   
   .option-button {
-    background-color: #6200ea;
+    background-color: #00796b;
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 12px 20px;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
   
   .option-button:hover {
-    background-color: #3700b3;
+    background-color: #004d40;
+    transform: scale(1.05);
   }
   
   .feedback {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #4caf50;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #388e3c;
+    animation: fadeIn 0.3s ease-in-out;
   }
   
-  /* Footer */
-  .game-footer {
+  .mini-game-button {
+    background-color: #ff7043;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     margin-top: 20px;
   }
   
-  .progress-bar-container {
+  .mini-game-button:hover {
+    background-color: #e64a19;
+    transform: scale(1.1);
+  }
+  
+  /* Mini-Game */
+  .mini-game {
+    padding: 20px;
+  }
+  
+  .mini-game h2 {
+    color: #d32f2f;
+  }
+  
+  .mini-game .option-button {
+    background-color: #d32f2f;
+  }
+  
+  .mini-game .option-button:hover {
+    background-color: #b71c1c;
+  }
+  
+  /* Progress Bar */
+  .game-footer {
+    padding: 10px 20px;
     background-color: #e0e0e0;
-    border-radius: 10px;
+  }
+  
+  .progress-bar-container {
+    width: 100%;
+    background-color: #bdbdbd;
+    border-radius: 6px;
     height: 10px;
     overflow: hidden;
   }
   
   .progress-bar {
-    background-color: #6200ea;
     height: 10px;
-    transition: width 0.3s ease;
+    background-color: #00796b;
+    width: 0;
+    transition: width 0.3s ease-in-out;
   }
   
   /* Game Over Section */
@@ -87,18 +146,54 @@
     padding: 20px;
   }
   
+  .game-over h2 {
+    color: #00796b;
+  }
+  
   .restart-button {
-    background-color: #03dac6;
+    background-color: #03a9f4;
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 12px 20px;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
   }
   
   .restart-button:hover {
-    background-color: #018786;
+    background-color: #0288d1;
+    transform: scale(1.1);
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .game-container {
+      width: 100%;
+      margin: 10px;
+    }
+  
+    .option-button,
+    .mini-game-button,
+    .restart-button {
+      font-size: 14px;
+      padding: 10px;
+    }
+  
+    h2 {
+      font-size: 18px;
+    }
   }
   
