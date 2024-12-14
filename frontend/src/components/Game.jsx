@@ -9,7 +9,6 @@ const fetchUserProfile = async () => ({
     problemSolving: 40,
     mindfulness: 50,
   },
-  level: 1,
 });
 
 const fetchLeaderboard = async () => [
@@ -57,8 +56,7 @@ const fetchMiniGames = () => [
   },
 ];
 
-// Enhanced Scenarios with Levels
-const generateDynamicScenarios = (level, userStats, feedbackData) => {
+const generateDynamicScenario = (level, userStats) => {
   const baseScenarios = [
     {
       title: "Time Crunch",
@@ -68,7 +66,6 @@ const generateDynamicScenarios = (level, userStats, feedbackData) => {
         { text: "Complete the hardest task first", score: 10, skill: "problemSolving" },
         { text: "Delegate to your team", score: 8, skill: "timeManagement" },
       ],
-      difficulty: 1,
     },
     {
       title: "Mindfulness Break",
@@ -78,54 +75,16 @@ const generateDynamicScenarios = (level, userStats, feedbackData) => {
         { text: "Take a quick walk", score: 8, skill: "mindfulness" },
         { text: "Power through and ignore it", score: 3, skill: "timeManagement" },
       ],
-      difficulty: 1,
-    },
-    // Add more base scenarios with varying difficulties
-    {
-      title: "Complex Decision",
-      description: "You need to choose between increasing your team size or improving existing processes. What do you do?",
-      options: [
-        { text: "Increase team size", score: 7, skill: "teamManagement" },
-        { text: "Improve existing processes", score: 9, skill: "processImprovement" },
-        { text: "Balance both equally", score: 8, skill: "balanceSkills" },
-      ],
-      difficulty: 2,
-    },
-    {
-      title: "Stress Management",
-      description: "Deadlines are approaching fast. How do you manage your stress?",
-      options: [
-        { text: "Prioritize tasks and delegate", score: 10, skill: "timeManagement" },
-        { text: "Work longer hours to get everything done", score: 4, skill: "workEthic" },
-        { text: "Take regular short breaks to stay refreshed", score: 8, skill: "mindfulness" },
-      ],
-      difficulty: 2,
     },
   ];
 
-  // Filter scenarios based on level and feedback
-  const filteredScenarios = baseScenarios.filter(
-    (scenario) => scenario.difficulty <= level
-  );
-
-  // Randomize scenarios
-  const randomizedScenarios = filteredScenarios.sort(() => 0.5 - Math.random());
-
-  // Adjust scenarios based on user feedback (simulated adaptive learning)
-  const adaptedScenarios = randomizedScenarios.map((scenario) => {
-    // Example: If user feedback indicates difficulty with time management, increase related scenario complexity
-    if (feedbackData.timeManagementDifficulty) {
-      scenario.options = scenario.options.map((option) => {
-        if (option.skill === "timeManagement") {
-          option.score += 2; // Adjust scores based on difficulty
-        }
-        return option;
-      });
-    }
-    return scenario;
+  return baseScenarios.map((scenario) => {
+    const updatedOptions = scenario.options.map((option) => ({
+      ...option,
+      score: option.score + Math.floor(userStats[option.skill] / 10),
+    }));
+    return { ...scenario, options: updatedOptions };
   });
-
-  return adaptedScenarios;
 };
 
 function Game() {
@@ -141,24 +100,13 @@ function Game() {
   const [miniGameActive, setMiniGameActive] = useState(false);
   const [currentMiniGame, setCurrentMiniGame] = useState(null);
   const [reactionTime, setReactionTime] = useState(null);
-  const [level, setLevel] = useState(1);
-  const [feedbackData, setFeedbackData] = useState({
-    timeManagementDifficulty: false,
-    problemSolvingDifficulty: false,
-    mindfulnessDifficulty: false,
-  });
 
   useEffect(() => {
     const initializeGame = async () => {
       const profile = await fetchUserProfile();
       setUserProfile(profile);
-      setLevel(profile.level);
 
-      const dynamicScenarios = generateDynamicScenarios(
-        profile.level,
-        profile.skillStats,
-        feedbackData
-      );
+      const dynamicScenarios = generateDynamicScenario(1, profile.skillStats);
       setScenarios(dynamicScenarios);
 
       const leaderboardData = await fetchLeaderboard();
@@ -168,37 +116,18 @@ function Game() {
       setMiniGames(games);
     };
     initializeGame();
-  }, [level, feedbackData]);
+  }, []);
 
   const handleOptionClick = (option) => {
     setScore(score + option.score);
     setFeedback(`You earned ${option.score} points!`);
     setProgress(progress + 1);
 
-    // Update user skills based on the option selected
-    setUserProfile((prevProfile) => ({
-      ...prevProfile,
-      skillStats: {
-        ...prevProfile.skillStats,
-        [option.skill]: prevProfile.skillStats[option.skill] + option.score,
-      },
-    }));
-
-    // Collect feedback data for adaptive learning
-    if (option.skill === "timeManagement" && option.score < 5) {
-      setFeedbackData((prev) => ({ ...prev, timeManagementDifficulty: true }));
-    }
-
-    // Proceed to the next scenario or level up
+    // Proceed to the next scenario
     if (currentScenarioIndex + 1 < scenarios.length) {
       setCurrentScenarioIndex(currentScenarioIndex + 1);
     } else {
-      // Level completed, increase level and generate new scenarios
-      setLevel(level + 1);
-      setCurrentScenarioIndex(0);
-      setProgress(0);
-      setFeedback("");
-      // Optionally, save progress to backend here
+      setGameOver(true);
     }
   };
 
@@ -238,13 +167,6 @@ function Game() {
     setGameOver(false);
     setMiniGameActive(false);
     setCurrentMiniGame(null);
-    setLevel(1);
-    setFeedbackData({
-      timeManagementDifficulty: false,
-      problemSolvingDifficulty: false,
-      mindfulnessDifficulty: false,
-    });
-    // Optionally, reset user profile
   };
 
   const currentScenario = scenarios[currentScenarioIndex];
@@ -253,11 +175,7 @@ function Game() {
     <div className="game-container">
       <header className="game-header">
         <h1>MindVault Quest</h1>
-        {userProfile && (
-          <p>
-            Welcome, {userProfile.name}! Streak: {userProfile.streak} days | Level: {level}
-          </p>
-        )}
+        {userProfile && <p>Welcome, {userProfile.name}! Streak: {userProfile.streak} days</p>}
         <div className="stats">
           <p>Score: {score}</p>
           <p>Progress: {progress}/{scenarios.length}</p>
