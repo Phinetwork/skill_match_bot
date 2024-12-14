@@ -1,0 +1,22 @@
+.maze-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+  }
+  
+  h1 {
+    color: #6200ea;
+  }
+  
+  p {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  canvas {
+    display: block;
+    margin: 0 auto;
+    border: 2px solid #6200ea;
+    border-radius: 8px;
+  }
+  

@@ -11,6 +11,7 @@ import PredictiveForecastChart from "./PredictiveForecastChart";
 import InteractiveGlobe from "./InteractiveGlobe";
 import EconomicSectorBubbleMap from "./EconomicSectorBubbleMap";
 import Game from "./Game";
+import MazeGame from "./MazeGame";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -677,6 +678,10 @@ const Dashboard = () => {
         ) : (
           <Bar data={generatePlaceholderChartData()} options={chartOptions} />
         )}
+      </div>
+
+      <div className="chart-container">
+        <MazeGame />
       </div>
       
       <div className="chart-container">
