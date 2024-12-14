@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Stage, Layer, Rect, Circle, Text } from "react-konva";
-import "./MazeGame.css";
 
 // Maze dimensions and cell size
 const GRID_SIZE = 10;
