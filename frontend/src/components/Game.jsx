@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./Game.css";
 
 // Expanded Scenarios grouped by levels
 const levelScenarios = {
